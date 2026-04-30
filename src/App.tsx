@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import {
   ArrowUpRight,
   ChevronLeft,
@@ -19,6 +19,7 @@ type MediaItem = {
   year?: string;
   featured?: boolean;
   orientation?: "landscape" | "portrait";
+  previewAutoPlay?: boolean;
 };
 
 type CampaignStat = {
@@ -35,6 +36,15 @@ type CampaignRole = {
 };
 
 type CampaignMediaTab = "videos" | "reels";
+
+type ExternalCampaignEmbed = {
+  id: string;
+  title: string;
+  context: string;
+  category: string;
+  src: string;
+  orientation?: "landscape" | "portrait";
+};
 
 const profile = {
   name: "Rohan Hammond",
@@ -174,6 +184,52 @@ const campaignVideoItems: MediaItem[] = [
   },
 ];
 
+const externalCampaignEmbeds: ExternalCampaignEmbed[] = [
+  {
+    id: "liam-trish-vince-broll",
+    title: "Liam, Trish & Vince B-roll",
+    context: "Federal / Candidate Video",
+    category: "Liam, Trish & Vince",
+    src: "https://1drv.ms/v/c/9d9f7c4362637c48/IQRUul58E3usQLbSR6B8gEy1AZm8L9BobVHzsEMbX4Gcjms?width=1920&height=1080",
+  },
+  {
+    id: "jonathan-huston-door-knocking",
+    title: "Jonathan Huston Door Knocking",
+    context: "State Campaign Video",
+    category: "Jonathan Huston",
+    src: "https://1drv.ms/v/c/9d9f7c4362637c48/IQSiaTAmA04yR5iYTG0ZkaQkAZQv5V7RTDSoiG8PPGHjABk?width=3840&height=2160",
+  },
+  {
+    id: "hayley-edwards-presser",
+    title: "Hayley Edwards Presser",
+    context: "State Campaign Video",
+    category: "Hayley Edwards + Libby Mettam",
+    src: "https://1drv.ms/v/c/9d9f7c4362637c48/IQQQ926QY6NjQYdaPgW-YG5jAT4wxJVaIwO3xIZQTXhEJYQ?width=1920&height=1080",
+  },
+  {
+    id: "sean-ayres-field-work",
+    title: "Sean Ayres Campaign Field Work",
+    context: "Federal Campaign Photography",
+    category: "Sean Ayres for Burt",
+    src: "https://1drv.ms/i/c/9d9f7c4362637c48/IQTRlGg3NdGxRZGbuZp7qciNAdlEKJgJy0DCtO2I9GVzq6w?width=5933&height=3955",
+  },
+  {
+    id: "nitin-vashisht-local-club",
+    title: "Nitin Vashisht Local Club Piece",
+    context: "Candidate Campaign Video",
+    category: "Nitin Vashisht",
+    src: "https://1drv.ms/v/c/9d9f7c4362637c48/IQQSYxP_w-dBQqj4sRDlHHuHAWxK8bGaz_eRiBjDeGx8Dhk?width=3840&height=2160",
+  },
+  {
+    id: "sandra-brewer-coverage",
+    title: "Sandra Brewer Campaign Coverage",
+    context: "State Campaign Photography",
+    category: "Sandra Brewer",
+    src: "https://1drv.ms/i/c/9d9f7c4362637c48/IQTlRO_MKOFtSbLqUpcXPTBZAe7KmqVql53oCXWknrVIh6Q?width=2773&height=4160",
+    orientation: "portrait",
+  },
+];
+
 const portfolioMediaItems: MediaItem[] = [
   {
     id: "campaign-video",
@@ -184,34 +240,8 @@ const portfolioMediaItems: MediaItem[] = [
     category: "Video",
     year: "2025",
     featured: true,
-  },
-  {
-    id: "corporate-event",
-    type: "image",
-    src: "/media/amalfi-event-hall.jpg",
-    title: "Corporate Event Coverage",
-    category: "Photography",
-    year: "2025",
-    featured: true,
-  },
-  {
-    id: "public-speaking",
-    type: "image",
-    src: "/media/amalfi-speaking.jpg",
-    title: "Speaker & Workshop Coverage",
-    category: "Event Story",
-    year: "2025",
-    featured: true,
-  },
-  {
-    id: "west-co",
-    type: "video",
-    src: "/media/amalfi-west-co.mp4",
-    poster: "/media/amalfi-west-co-poster.jpg",
-    title: "West Co The Label",
-    category: "Brand Video",
-    year: "2025",
-    featured: true,
+    orientation: "landscape",
+    previewAutoPlay: true,
   },
   {
     id: "interview",
@@ -521,6 +551,24 @@ function App() {
               <MediaCard key={item.id} item={item} onOpen={openItem} />
             ))}
           </div>
+
+          <div
+            className="external-campaign-block"
+            aria-labelledby="external-campaign-title"
+          >
+            <div className="subsection-heading">
+              <p className="eyebrow">Archive Samples</p>
+              <h3 id="external-campaign-title">
+                Selected state and federal pieces from the wider campaign archive.
+              </h3>
+            </div>
+
+            <div className="external-campaign-grid">
+              {externalCampaignEmbeds.map((item) => (
+                <ExternalCampaignCard key={item.id} item={item} />
+              ))}
+            </div>
+          </div>
         </section>
 
         <section className="featured-band" id="work" aria-labelledby="work-title">
@@ -634,6 +682,7 @@ function MediaCard({ item, compact = false, onOpen }: MediaCardProps) {
     "media-card",
     compact ? "compact" : "",
     item.orientation ? `is-${item.orientation}` : "",
+    item.previewAutoPlay ? "is-autoplay" : "",
   ]
     .filter(Boolean)
     .join(" ");
@@ -654,6 +703,13 @@ function MediaCard({ item, compact = false, onOpen }: MediaCardProps) {
       >
         {item.type === "image" ? (
           <img src={item.src} alt="" loading="lazy" />
+        ) : item.previewAutoPlay ? (
+          <>
+            <AutoPlayVideo item={item} />
+            <span className="play-indicator" aria-hidden="true">
+              <Play size={18} fill="currentColor" />
+            </span>
+          </>
         ) : (
           <>
             <img src={item.poster} alt="" loading="lazy" />
@@ -671,6 +727,77 @@ function MediaCard({ item, compact = false, onOpen }: MediaCardProps) {
         </div>
         {item.year && <span>{item.year}</span>}
       </div>
+    </article>
+  );
+}
+
+function AutoPlayVideo({ item }: { item: MediaItem }) {
+  const videoRef = useRef<HTMLVideoElement | null>(null);
+
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video) return;
+
+    video.defaultMuted = true;
+    video.muted = true;
+    void video.play().catch(() => undefined);
+  }, []);
+
+  return (
+    <video
+      ref={videoRef}
+      src={item.src}
+      poster={item.poster}
+      muted
+      loop
+      playsInline
+      autoPlay
+      preload="auto"
+      aria-hidden="true"
+      onCanPlay={(event) => {
+        event.currentTarget.defaultMuted = true;
+        event.currentTarget.muted = true;
+        void event.currentTarget.play().catch(() => undefined);
+      }}
+    />
+  );
+}
+
+function ExternalCampaignCard({ item }: { item: ExternalCampaignEmbed }) {
+  const frameClassName = [
+    "external-campaign-frame",
+    item.orientation === "portrait" ? "is-portrait" : "",
+  ]
+    .filter(Boolean)
+    .join(" ");
+
+  return (
+    <article className="external-campaign-card">
+      <div className={frameClassName}>
+        <iframe
+          src={item.src}
+          title={item.title}
+          loading="lazy"
+          allow="autoplay; fullscreen; encrypted-media"
+          allowFullScreen
+        />
+      </div>
+
+      <div className="external-campaign-meta">
+        <div>
+          <h3>{item.title}</h3>
+          <p>{item.context}</p>
+        </div>
+        <a
+          href={item.src}
+          target="_blank"
+          rel="noreferrer"
+          aria-label={`Open ${item.title} in OneDrive`}
+        >
+          <ExternalLink size={18} aria-hidden="true" />
+        </a>
+      </div>
+      <span>{item.category}</span>
     </article>
   );
 }
