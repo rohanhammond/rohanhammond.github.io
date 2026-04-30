@@ -1393,39 +1393,24 @@ function App() {
           id="campaigns"
           aria-labelledby="campaigns-title"
         >
-          <div className="section-heading">
+          <div className="section-heading compact">
             <p className="eyebrow">Experience</p>
-            <h2 id="campaigns-title">
-              Digital media for Liberal candidates and elected members.
-            </h2>
+            <h2 id="campaigns-title">Resume.</h2>
           </div>
 
-          <div className="campaign-layout">
-            <div className="campaign-summary">
-              <p>
-                I help Liberal candidates and elected members show up online
-                with clearer, more regular content.
-              </p>
-              <p>
-                Advice first. Then filming, photography, editing, and posting
-                support.
-              </p>
-            </div>
-
-            <div className="role-list">
-              {campaignRoles.map((role) => (
-                <article className="role-item" key={role.role}>
-                  <div className="role-kicker">{role.period}</div>
-                  <h3>{role.role}</h3>
-                  <p>{role.context}</p>
-                  <ul>
-                    {role.points.map((point) => (
-                      <li key={point}>{point}</li>
-                    ))}
-                  </ul>
-                </article>
-              ))}
-            </div>
+          <div className="role-list">
+            {campaignRoles.map((role) => (
+              <article className="role-item" key={role.role}>
+                <div className="role-kicker">{role.period}</div>
+                <h3>{role.role}</h3>
+                <p>{role.context}</p>
+                <ul>
+                  {role.points.map((point) => (
+                    <li key={point}>{point}</li>
+                  ))}
+                </ul>
+              </article>
+            ))}
           </div>
         </section>
 
