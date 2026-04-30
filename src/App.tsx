@@ -37,7 +37,7 @@ type CampaignRole = {
   points: string[];
 };
 
-type CampaignMediaTab = "videos" | "reels" | "photos";
+type CampaignMediaTab = "all" | "videos" | "reels" | "photos";
 
 type ExternalCampaignEmbed = {
   id: string;
@@ -49,7 +49,7 @@ type ExternalCampaignEmbed = {
 };
 
 type ArchiveMediaItem = ExternalCampaignEmbed & {
-  kind?: "embed" | "video";
+  kind?: "embed" | "video" | "photo";
   poster?: string;
 };
 
@@ -82,11 +82,11 @@ const PHOTO_PREVIEW_MAX_SIZE = 1800;
 
 const profile = {
   name: "Rohan Hammond",
-  brand: "Video / Photo",
-  tagline: "Hi, I'm Rohan. I make videos and photos.",
+  brand: "Digital Campaign Media",
+  tagline: "Rohan Hammond.",
   intro:
-    "I've worked inside Parliament and on election campaigns, and I'm studying Psychology and Commerce at UWA while running Amalfi Media in Perth.",
-  location: "Perth / Video / Photo / Politics / Brands",
+    "I advise, film, and photograph Liberal candidates and elected members so their digital presence feels clear, current, and real.",
+  location: "Perth / Liberal Digital Media",
   contactLabel: "rohan@amalfi.media",
   contactHref: "mailto:rohan@amalfi.media",
 };
@@ -96,66 +96,71 @@ const contactDetails = {
   address: "2 Park Road, Crawley",
   mapsUrl:
     "https://www.google.com/maps/search/?api=1&query=2%20Park%20Road%20Crawley%20WA",
-  mapsEmbedUrl:
-    "https://www.google.com/maps?q=2%20Park%20Road%20Crawley%20WA&output=embed",
 };
 
 const services = [
-  "Video",
+  "Digital advice",
+  "Filming",
   "Photography",
   "Editing",
-  "Social media",
 ];
+
+const oneDriveClientExportUrl = (folder: string, file: string) => {
+  const parent = `/personal/9d9f7c4362637c48/Documents/Client Exports/${folder}`;
+  const params = new URLSearchParams({
+    id: `${parent}/${file}`,
+    parent,
+  });
+
+  return `https://onedrive.live.com/?${params.toString()}`;
+};
 
 const campaignStats: CampaignStat[] = [
   {
     value: "25",
-    label: "state seats",
-    detail: "Video, photo, and media support during the 2025 WA campaign.",
+    label: "state campaigns",
+    detail: "Video and photo support across local campaigns.",
   },
   {
     value: "4",
-    label: "federal seats",
-    detail: "Candidate videos, field days, and event coverage around Perth.",
+    label: "federal campaigns",
+    detail: "Candidate videos, field days, and leader visits.",
   },
   {
     value: "Office",
-    label: "ongoing media",
-    detail: "Local updates, reels, photos, and day-to-day electorate work.",
+    label: "elected-member media",
+    detail: "Reels, photos, local updates, and day-to-day presence.",
   },
   {
     value: "Perth",
     label: "home base",
-    detail: "Available for politics, brands, and community work.",
+    detail: "Working with Liberal candidates and elected members.",
   },
 ];
 
 const campaignRoles: CampaignRole[] = [
   {
-    role: "Electorate Office Media",
+    role: "Elected Member Digital Media",
     context: "Jonathan Huston",
     period: "Sep 2025 - Present",
     points: [
-      "Video, photography, editing, and day-to-day media.",
-      "Local updates, events, social content, and day-to-day material.",
+      "Advice, filming, photography, editing, and regular local content.",
     ],
   },
   {
-    role: "Leader's Office Media",
+    role: "State Campaign Media",
     context: "2025 WA State Election",
     period: "Jan 2025 - Mar 2025",
     points: [
-      "Short-form video, field coverage, and press conference clips.",
-      "Worked around travel, media days, and campaign events.",
+      "Field coverage, short videos, and campaign-day content.",
     ],
   },
   {
-    role: "Amalfi Media",
+    role: "Digital Marketing Support",
     context: "Amalfi Media",
     period: "Nov 2024 - Present",
     points: [
-      "Video, photos, and editing for politics, small businesses, and personal brands.",
-      "A small studio for work that needs to be clear, useful, and well made.",
+      "Small, practical media support for candidates, members, and public-facing people.",
     ],
   },
 ];
@@ -223,7 +228,7 @@ const campaignVideoItems: MediaItem[] = [
   },
 ];
 
-const stateCampaignEmbeds: ExternalCampaignEmbed[] = [
+const stateCampaignEmbeds: ArchiveMediaItem[] = [
   {
     id: "jonathan-huston-door-knocking",
     title: "Jonathan Huston Door Knocking",
@@ -296,6 +301,91 @@ const stateCampaignEmbeds: ExternalCampaignEmbed[] = [
     src: "https://1drv.ms/i/c/9d9f7c4362637c48/IQQhbFLYPXtETqh0B4QHLiAPAWztncKorXPdt1RPH5Z-0fs?width=5560&height=3707",
   },
   {
+    id: "sandra-brewer-parliament-one",
+    title: "Sandra Brewer Parliament Still",
+    context: "Photo",
+    category: "Sandra Brewer",
+    kind: "photo",
+    src: oneDriveClientExportUrl("Sandra Brewer", "_DSC0028-Enhanced-NR.jpg"),
+  },
+  {
+    id: "sandra-brewer-parliament-two",
+    title: "Sandra Brewer Chamber Still",
+    context: "Photo",
+    category: "Sandra Brewer",
+    kind: "photo",
+    src: oneDriveClientExportUrl("Sandra Brewer", "_DSC0121-Enhanced-NR.jpg"),
+  },
+  {
+    id: "sandra-brewer-parliament-three",
+    title: "Sandra Brewer Field Still",
+    context: "Photo",
+    category: "Sandra Brewer",
+    kind: "photo",
+    src: oneDriveClientExportUrl("Sandra Brewer", "_DSC0168-Enhanced-NR.jpg"),
+  },
+  {
+    id: "sandra-brewer-parliament-four",
+    title: "Sandra Brewer Event Still",
+    context: "Photo",
+    category: "Sandra Brewer",
+    kind: "photo",
+    src: oneDriveClientExportUrl("Sandra Brewer", "_DSC0251-Enhanced-NR.jpg"),
+  },
+  {
+    id: "chris-dowson-swimming-club",
+    title: "Chris Dowson Swimming Club",
+    context: "Video",
+    category: "Chris Dowson",
+    src: oneDriveClientExportUrl("Chris Dowson", "1. Swimming Club.mov"),
+  },
+  {
+    id: "chris-dowson-local-parks",
+    title: "Chris Dowson Local Parks",
+    context: "Video",
+    category: "Chris Dowson",
+    src: oneDriveClientExportUrl("Chris Dowson", "2. Local Parks.mov"),
+  },
+  {
+    id: "chris-dowson-small-business",
+    title: "Chris Dowson Small Business",
+    context: "Video",
+    category: "Chris Dowson",
+    src: oneDriveClientExportUrl("Chris Dowson", "3. Small Businesses-.mov"),
+  },
+  {
+    id: "chris-dowson-photo-one",
+    title: "Chris Dowson Still",
+    context: "Photo",
+    category: "Chris Dowson",
+    kind: "photo",
+    src: oneDriveClientExportUrl("Chris Dowson", "_DSC0654.jpg"),
+  },
+  {
+    id: "chris-dowson-photo-two",
+    title: "Chris Dowson Field Still",
+    context: "Photo",
+    category: "Chris Dowson",
+    kind: "photo",
+    src: oneDriveClientExportUrl("Chris Dowson", "_DSC0661.jpg"),
+  },
+  {
+    id: "chris-dowson-photo-three",
+    title: "Chris Dowson Community Still",
+    context: "Photo",
+    category: "Chris Dowson",
+    kind: "photo",
+    src: oneDriveClientExportUrl("Chris Dowson", "_DSC0663.jpg"),
+  },
+  {
+    id: "chris-dowson-photo-four",
+    title: "Chris Dowson Event Still",
+    context: "Photo",
+    category: "Chris Dowson",
+    kind: "photo",
+    src: oneDriveClientExportUrl("Chris Dowson", "_DSC0668.jpg"),
+  },
+  {
     id: "andra-piece-to-camera",
     title: "Andra Biondi Piece-to-Camera",
     context: "Video",
@@ -322,6 +412,79 @@ const stateCampaignEmbeds: ExternalCampaignEmbed[] = [
     context: "Photo",
     category: "Morley",
     src: "https://1drv.ms/i/c/9d9f7c4362637c48/IQQ5qfwpfliESYi4uYXmV1pnAb3TGbBINFg9CpEhMlhfJMY?width=5021&height=3347",
+  },
+  {
+    id: "michelle-hoffman-video-one",
+    kind: "video",
+    title: "Michelle Hoffman Video 1",
+    context: "Video",
+    category: "Michelle Hoffman",
+    src: "/media/michelle-hoffman/michelle-video-1.mp4",
+    poster: "/media/michelle-hoffman/michelle-video-1-poster.jpg",
+    orientation: "portrait",
+  },
+  {
+    id: "michelle-hoffman-video-two",
+    kind: "video",
+    title: "Michelle Hoffman Video 2",
+    context: "Video",
+    category: "Michelle Hoffman",
+    src: "/media/michelle-hoffman/michelle-video-2.mp4",
+    poster: "/media/michelle-hoffman/michelle-video-2-poster.jpg",
+    orientation: "portrait",
+  },
+  {
+    id: "michelle-hoffman-video-three",
+    kind: "video",
+    title: "Michelle Hoffman Video 3",
+    context: "Video",
+    category: "Michelle Hoffman",
+    src: "/media/michelle-hoffman/michelle-video-3.mp4",
+    poster: "/media/michelle-hoffman/michelle-video-3-poster.jpg",
+    orientation: "portrait",
+  },
+  {
+    id: "michelle-hoffman-video-four",
+    kind: "video",
+    title: "Michelle Hoffman Video 4",
+    context: "Video",
+    category: "Michelle Hoffman",
+    src: "/media/michelle-hoffman/michelle-video-4.mp4",
+    poster: "/media/michelle-hoffman/michelle-video-4-poster.jpg",
+    orientation: "portrait",
+  },
+  {
+    id: "michelle-hoffman-photo-one",
+    kind: "photo",
+    title: "Michelle Hoffman Portrait",
+    context: "Photo",
+    category: "Michelle Hoffman",
+    src: "/media/michelle-hoffman/michelle-photo-1.jpg",
+    orientation: "portrait",
+  },
+  {
+    id: "michelle-hoffman-photo-two",
+    kind: "photo",
+    title: "Michelle Hoffman Parliament Still",
+    context: "Photo",
+    category: "Michelle Hoffman",
+    src: "/media/michelle-hoffman/michelle-photo-2.jpg",
+  },
+  {
+    id: "michelle-hoffman-photo-three",
+    kind: "photo",
+    title: "Michelle Hoffman Interview Still",
+    context: "Photo",
+    category: "Michelle Hoffman",
+    src: "/media/michelle-hoffman/michelle-photo-3.jpg",
+  },
+  {
+    id: "michelle-hoffman-photo-four",
+    kind: "photo",
+    title: "Michelle Hoffman Field Still",
+    context: "Photo",
+    category: "Michelle Hoffman",
+    src: "/media/michelle-hoffman/michelle-photo-4.jpg",
   },
   {
     id: "lisa-olsson-video",
@@ -503,8 +666,8 @@ const stateCandidateArchives: ArchiveCandidate[] = [
     section: "state",
     name: "Jonathan Huston",
     seat: "Nedlands",
-    eyebrow: "2025 / Electorate office",
-    summary: "Local issue videos, reels, photos, and ongoing office media.",
+    eyebrow: "Elected member media",
+    summary: "Local updates, issue videos, reels, and photos.",
     media: [
       ...getLocalCampaignVideos(),
       ...getCampaignEmbeds(stateCampaignEmbeds, [
@@ -518,7 +681,7 @@ const stateCandidateArchives: ArchiveCandidate[] = [
     name: "Hayley Edwards",
     seat: "Field coverage",
     eyebrow: "2025",
-    summary: "Press conference clips, field photos, and local coverage.",
+    summary: "Press clips, field photos, and campaign coverage.",
     media: getCampaignEmbeds(stateCampaignEmbeds, [
       "hayley-edwards-presser",
       "hayley-edwards-photo-one",
@@ -531,7 +694,7 @@ const stateCandidateArchives: ArchiveCandidate[] = [
     name: "Nitin Vashisht",
     seat: "Riverton",
     eyebrow: "2025",
-    summary: "Community sport, local clubs, traffic, and school pieces.",
+    summary: "Local issue videos and community coverage.",
     media: getCampaignEmbeds(stateCampaignEmbeds, [
       "nitin-vashisht-local-club",
       "nitin-vashisht-school",
@@ -544,7 +707,7 @@ const stateCandidateArchives: ArchiveCandidate[] = [
     name: "Sandra Brewer",
     seat: "Cottesloe",
     eyebrow: "2025",
-    summary: "Photos and event coverage from the archive.",
+    summary: "Photos and campaign event coverage.",
     media: getCampaignEmbeds(stateCampaignEmbeds, [
       "sandra-brewer-coverage",
       "sandra-brewer-photo-one",
@@ -557,7 +720,7 @@ const stateCandidateArchives: ArchiveCandidate[] = [
     name: "Andra Biondi",
     seat: "Victoria Park",
     eyebrow: "2025",
-    summary: "Videos and local issue coverage.",
+    summary: "Candidate videos and local issue coverage.",
     media: getCampaignEmbeds(stateCampaignEmbeds, [
       "andra-piece-to-camera",
       "andra-racecourse-libby",
@@ -569,7 +732,7 @@ const stateCandidateArchives: ArchiveCandidate[] = [
     name: "Aswath Chavittupara",
     seat: "Morley",
     eyebrow: "2025",
-    summary: "Stills and local field photography.",
+    summary: "Field photography and local campaign stills.",
     media: getCampaignEmbeds(stateCampaignEmbeds, [
       "aswath-comms-photo",
       "aswath-comms-field-photo",
@@ -581,7 +744,7 @@ const stateCandidateArchives: ArchiveCandidate[] = [
     name: "Lisa Olsson",
     seat: "Hillarys",
     eyebrow: "2025",
-    summary: "Video, portraits, and field work.",
+    summary: "Video, portraits, and field coverage.",
     media: getCampaignEmbeds(stateCampaignEmbeds, [
       "lisa-olsson-video",
       "lisa-olsson-photo",
@@ -593,7 +756,7 @@ const stateCandidateArchives: ArchiveCandidate[] = [
     name: "Scott Edwardes",
     seat: "Kingsley",
     eyebrow: "2025",
-    summary: "Short clips across roads, students, police, and health.",
+    summary: "Short videos for local issues and community updates.",
     media: getCampaignEmbeds(stateCampaignEmbeds, [
       "scott-edwardes-road",
       "scott-edwardes-student",
@@ -610,7 +773,7 @@ const federalCandidateArchives: ArchiveCandidate[] = [
     name: "Tom White",
     seat: "Curtin",
     eyebrow: "2025",
-    summary: "Piece-to-camera videos and square social cuts.",
+    summary: "Piece-to-camera videos and social cuts.",
     media: getCampaignEmbeds(federalCampaignEmbeds, [
       "tom-white-ptc-5",
       "tom-white-ptc-2",
@@ -635,7 +798,7 @@ const federalCandidateArchives: ArchiveCandidate[] = [
     name: "Matt Moran",
     seat: "Bullwinkel",
     eyebrow: "2025",
-    summary: "Leader-visit stills and field coverage.",
+    summary: "Leader-visit stills and event coverage.",
     media: getCampaignEmbeds(federalCampaignEmbeds, [
       "matt-moran-dutton-photo",
     ]),
@@ -646,7 +809,7 @@ const federalCandidateArchives: ArchiveCandidate[] = [
     name: "Mic Fels",
     seat: "Swan",
     eyebrow: "2025",
-    summary: "Photos, local commitment videos, and event work.",
+    summary: "Photos, local videos, and event coverage.",
     media: getCampaignEmbeds(federalCampaignEmbeds, [
       "mic-fels-dutton-photo",
       "mic-fels-playground-upgrades",
@@ -659,7 +822,7 @@ const federalCandidateArchives: ArchiveCandidate[] = [
     name: "Sean Ayres",
     seat: "Burt",
     eyebrow: "2025",
-    summary: "Field photography from Burt.",
+    summary: "Field photography and campaign stills.",
     media: getCampaignEmbeds(federalCampaignEmbeds, [
       "sean-ayres-field-work",
       "sean-ayres-photo-one",
@@ -684,7 +847,7 @@ const federalCandidateArchives: ArchiveCandidate[] = [
     name: "Peter Dutton events",
     seat: "Leader visits",
     eyebrow: "2025",
-    summary: "Event coverage across Perth stops.",
+    summary: "Leader-visit coverage across Perth stops.",
     media: getCampaignEmbeds(federalCampaignEmbeds, [
       "mic-fels-dutton-photo",
       "matt-moran-dutton-photo",
@@ -789,22 +952,18 @@ const contactPhotos = [
   {
     src: "/media/rohan-contact/rohan-headshot-01.jpg",
     alt: "Rohan Hammond portrait",
-    label: "Rohan",
   },
   {
     src: "/media/rohan-contact/rohan-on-shoot-01.jpg",
     alt: "Rohan filming an interview",
-    label: "On a shoot",
   },
   {
     src: "/media/rohan-contact/rohan-on-shoot-02.jpg",
     alt: "Rohan filming in a public building",
-    label: "Field work",
   },
   {
     src: "/media/rohan-contact/rohan-speaking-01.jpg",
     alt: "Rohan speaking at an event",
-    label: "Speaking",
   },
 ];
 
@@ -993,23 +1152,14 @@ function App() {
         </button>
 
         <nav className={menuOpen ? "nav-links is-open" : "nav-links"}>
-          <a href="#work" onClick={() => setMenuOpen(false)}>
-            Work
-          </a>
           <a href="#campaigns" onClick={() => setMenuOpen(false)}>
             Experience
           </a>
           <a href="#campaign-media" onClick={() => setMenuOpen(false)}>
             Media
           </a>
-          <a href="#services" onClick={() => setMenuOpen(false)}>
-            What I do
-          </a>
           <a href="#about" onClick={() => setMenuOpen(false)}>
             About
-          </a>
-          <a href="#contact" onClick={() => setMenuOpen(false)}>
-            Contact
           </a>
         </nav>
       </header>
@@ -1030,8 +1180,8 @@ function App() {
                 Experience
                 <ArrowUpRight size={18} aria-hidden="true" />
               </a>
-              <a className="text-link" href="#work">
-                Work
+              <a className="text-link" href="#campaign-media">
+                Media
                 <ArrowUpRight size={16} aria-hidden="true" />
               </a>
             </div>
@@ -1040,15 +1190,15 @@ function App() {
           <aside className="hero-visual" aria-label="About image">
             <img src="/media/amalfi-founder.jpg" alt="" />
             <div className="hero-note">
-              <span>Amalfi Media / Perth</span>
-              <strong>Political work, brand work, people work.</strong>
+              <span>Liberal digital media</span>
+              <strong>Advice. Film. Photos.</strong>
             </div>
           </aside>
         </section>
 
         <section className="proof-strip" aria-labelledby="proof-title">
           <p className="eyebrow" id="proof-title">
-            Work so far
+            Background
           </p>
           <div className="proof-grid">
             {campaignStats.map((stat) => (
@@ -1068,18 +1218,20 @@ function App() {
         >
           <div className="section-heading">
             <p className="eyebrow">Experience</p>
-            <h2 id="campaigns-title">Video, photos, and media work.</h2>
+            <h2 id="campaigns-title">
+              Digital media for Liberal candidates and elected members.
+            </h2>
           </div>
 
           <div className="campaign-layout">
             <div className="campaign-summary">
               <p>
-                Most of the work sits around people: candidates, founders,
-                events, community groups, and local issues.
+                I help Liberal candidates and elected members show up online
+                with clearer, more regular content.
               </p>
               <p>
-                I film, photograph, edit, write when needed, and help get the
-                piece out.
+                Advice first. Then filming, photography, editing, and posting
+                support.
               </p>
             </div>
 
@@ -1103,8 +1255,8 @@ function App() {
         <CampaignMediaSection
           id="campaign-media"
           eyebrow="Federal work"
-          title="Videos, reels, and photos."
-          summary="Selected federal videos, events, and field work."
+          title="Federal candidates."
+          summary="Videos, reels, photos, and event coverage."
           clients={federalCandidateArchives}
           items={federalCampaignMedia}
         />
@@ -1112,130 +1264,90 @@ function App() {
         <CampaignMediaSection
           id="state-media"
           eyebrow="State work"
-          title="Videos, reels, and photos."
-          summary="A mix of candidate videos, local issues, field days, and stills."
+          title="State candidates."
+          summary="Campaign videos, local issues, field days, and stills."
           clients={stateCandidateArchives}
           items={stateCampaignMedia}
         />
 
-        <section className="studio-section" id="work" aria-labelledby="work-title">
-          <div className="section-heading">
-            <p className="eyebrow">Selected work</p>
+        <section className="about-section" id="about" aria-labelledby="about-title">
+          <div className="section-heading about-heading">
+            <p className="eyebrow">About</p>
             <div>
-              <h2 id="work-title">Photos, video, and what I do.</h2>
+              <h2 id="about-title">Rohan Hammond.</h2>
               <p className="section-summary">
-                A shorter snapshot of the work, the services, and the person
-                behind the camera.
+                Perth-based digital media for Liberal candidates and elected
+                members.
               </p>
             </div>
           </div>
 
-          <div className="studio-layout">
-            <div className="studio-aside">
-              <div className="studio-panel" id="about">
-                <p className="eyebrow">About</p>
-                <h2 id="about-title">About Rohan.</h2>
-                <div className="about-copy">
-                  <p>
-                    I am a Perth videographer and photographer. Most of my
-                    recent work has been around politics, campaigns, local
-                    issues, and small brands.
-                  </p>
-                  <p>
-                    I like work that is clear, useful, and human. I can shoot
-                    it, edit it, write around it, and help get it out.
-                  </p>
-                  <a
-                    className="contact-link"
-                    href={profile.contactHref}
-                    rel="noreferrer"
-                    target="_blank"
-                  >
-                    {profile.contactLabel}
-                    <ExternalLink size={18} aria-hidden="true" />
-                  </a>
-                </div>
+          <div className="about-layout">
+            <div className="about-copy-panel">
+              <div className="about-copy">
+                <p>
+                  I advise, film, and photograph Liberal candidates and elected
+                  members who need a stronger digital presence.
+                </p>
+                <p>
+                  It started with volunteering on state campaigns and being
+                  asked to take photos. It grew from there.
+                </p>
               </div>
 
-              <div className="studio-panel" id="services">
-                <p className="eyebrow">What I do</p>
-                <div className="studio-capabilities">
-                  {services.map((service) => (
-                    <div className="studio-capability" key={service}>
-                      {service}
-                    </div>
+              <div className="studio-capabilities" aria-label="Capabilities">
+                {services.map((service) => (
+                  <div className="studio-capability" key={service}>
+                    {service}
+                  </div>
+                ))}
+              </div>
+
+              <div className="contact-details">
+                <div className="contact-detail">
+                  <span>Email</span>
+                  <a href={profile.contactHref}>{contactDetails.email}</a>
+                </div>
+                <div className="contact-detail">
+                  <span>Location</span>
+                  <p>{contactDetails.address}</p>
+                </div>
+                <a
+                  className="contact-link"
+                  href={contactDetails.mapsUrl}
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  Open in Google Maps
+                  <ExternalLink size={18} aria-hidden="true" />
+                </a>
+              </div>
+            </div>
+
+            <div className="about-media-panel">
+              <div className="contact-photo-grid" aria-label="Rohan at work">
+                {contactPhotos.map((photo) => (
+                  <figure className="contact-photo" key={photo.src}>
+                    <img src={photo.src} alt={photo.alt} loading="lazy" />
+                  </figure>
+                ))}
+              </div>
+
+              <div className="studio-media" aria-label="Portfolio samples">
+                <div className="studio-media-grid">
+                  {[...featuredItems, ...archiveItems].map((item) => (
+                    <MediaCard
+                      key={item.id}
+                      item={item}
+                      onOpen={openItem}
+                      compact={!item.featured}
+                    />
                   ))}
                 </div>
               </div>
             </div>
-
-            <div className="studio-media" aria-label="Selected portfolio work">
-              <div className="studio-media-grid">
-                {[...featuredItems, ...archiveItems].map((item) => (
-                  <MediaCard
-                    key={item.id}
-                    item={item}
-                    onOpen={openItem}
-                    compact={!item.featured}
-                  />
-                ))}
-              </div>
-            </div>
-          </div>
-        </section>
-
-        <section className="contact-section" id="contact" aria-labelledby="contact-title">
-          <div className="section-heading">
-            <p className="eyebrow">Contact</p>
-            <div>
-              <h2 id="contact-title">Get in contact.</h2>
-              <p className="section-summary">
-                For shoots, campaign work, brand work, or anything that needs a
-                camera and a bit of common sense.
-              </p>
-            </div>
           </div>
 
-          <div className="contact-layout">
-            <div className="contact-photo-grid" aria-label="Rohan at work">
-              {contactPhotos.map((photo) => (
-                <figure className="contact-photo" key={photo.src}>
-                  <img src={photo.src} alt={photo.alt} loading="lazy" />
-                  <figcaption>{photo.label}</figcaption>
-                </figure>
-              ))}
-            </div>
-
-            <div className="contact-details">
-              <div className="contact-detail">
-                <span>Email</span>
-                <a href={profile.contactHref}>{contactDetails.email}</a>
-              </div>
-              <div className="contact-detail">
-                <span>Location</span>
-                <p>{contactDetails.address}</p>
-              </div>
-              <a
-                className="contact-link"
-                href={contactDetails.mapsUrl}
-                target="_blank"
-                rel="noreferrer"
-              >
-                Open in Google Maps
-                <ExternalLink size={18} aria-hidden="true" />
-              </a>
-            </div>
-          </div>
-
-          <div className="contact-map">
-            <iframe
-              title="Map to 2 Park Road, Crawley"
-              src={contactDetails.mapsEmbedUrl}
-              loading="lazy"
-              referrerPolicy="no-referrer-when-downgrade"
-              allowFullScreen
-            />
-          </div>
         </section>
           </>
         )}
@@ -1555,22 +1667,6 @@ function CampaignCollectionPreviewVisual({
     return <img src={getPhotoPreviewSrc(item.src)} alt="" loading="lazy" />;
   }
 
-  if (item.src.startsWith("http")) {
-    return (
-      <span className="collection-preview-embed-wrap">
-        <iframe
-          className="collection-preview-embed"
-          src={item.src}
-          title={`${item.title} preview`}
-          loading="lazy"
-          allow="autoplay; fullscreen; encrypted-media"
-          tabIndex={-1}
-          aria-hidden="true"
-        />
-      </span>
-    );
-  }
-
   return (
     <span className="collection-preview-placeholder" aria-hidden="true" />
   );
@@ -1751,9 +1847,11 @@ function ArchiveMediaCard({
           <video
             src={item.src}
             poster={item.poster}
-            controls
+            muted
+            loop
+            autoPlay
             playsInline
-            preload="none"
+            preload="metadata"
           />
         ) : (
           <iframe
