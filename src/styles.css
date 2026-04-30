@@ -798,7 +798,9 @@ h1 {
 }
 
 .external-campaign-frame {
-  aspect-ratio: 16 / 9;
+  display: grid;
+  aspect-ratio: var(--media-aspect, 16 / 9);
+  place-items: center;
   overflow: hidden;
   border: 1px solid rgba(42, 37, 31, 0.16);
   border-radius: 6px;
@@ -806,33 +808,43 @@ h1 {
 }
 
 .external-campaign-frame.is-photo {
-  aspect-ratio: 3 / 2;
-  background: #e7ded0;
+  aspect-ratio: var(--media-aspect, 3 / 2);
+  background: #f7f4ee;
 }
 
 .external-campaign-frame.is-portrait {
-  aspect-ratio: 4 / 5;
+  aspect-ratio: var(--media-aspect, 4 / 5);
 }
 
 .external-campaign-frame.is-video.is-portrait {
-  aspect-ratio: 9 / 16;
+  aspect-ratio: var(--media-aspect, 9 / 16);
 }
 
 .external-campaign-frame.is-photo.is-portrait {
-  aspect-ratio: 2 / 3;
+  aspect-ratio: var(--media-aspect, 2 / 3);
 }
 
 .external-campaign-frame.is-square {
-  aspect-ratio: 1;
+  aspect-ratio: var(--media-aspect, 1 / 1);
 }
 
 .external-campaign-frame iframe,
+.external-campaign-frame img,
 .external-campaign-frame video {
   display: block;
   width: 100%;
   height: 100%;
   border: 0;
+}
+
+.external-campaign-frame iframe,
+.external-campaign-frame video {
   background: #111;
+}
+
+.external-campaign-frame img {
+  object-fit: contain;
+  background: #f7f4ee;
 }
 
 .external-campaign-frame video {

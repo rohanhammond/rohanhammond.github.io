@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from "react";
+import type { CSSProperties } from "react";
 import {
   ArrowUpRight,
   ChevronLeft,
@@ -73,6 +74,12 @@ type ArchiveRoute = {
   section: "state" | "federal";
   candidateId: string;
 } | null;
+
+type ExternalMediaFrameStyle = CSSProperties & {
+  "--media-aspect"?: string;
+};
+
+const PHOTO_PREVIEW_MAX_SIZE = 1800;
 
 const profile = {
   name: "Rohan Hammond",
@@ -836,6 +843,58 @@ function getArchiveRoute(): ArchiveRoute {
   };
 }
 
+function isOneDrivePhoto(src: string) {
+  return src.includes("/i/");
+}
+
+function getExternalMediaDimensions(src: string) {
+  try {
+    const url = new URL(src);
+    const width = Number(url.searchParams.get("width"));
+    const height = Number(url.searchParams.get("height"));
+
+    if (!Number.isFinite(width) || !Number.isFinite(height)) return null;
+    if (width <= 0 || height <= 0) return null;
+
+    return { width, height };
+  } catch {
+    return null;
+  }
+}
+
+function getExternalMediaFrameStyle(
+  src: string,
+): ExternalMediaFrameStyle | undefined {
+  const dimensions = getExternalMediaDimensions(src);
+
+  if (!dimensions) return undefined;
+
+  return {
+    "--media-aspect": `${dimensions.width} / ${dimensions.height}`,
+  };
+}
+
+function getPhotoPreviewSrc(src: string) {
+  const dimensions = getExternalMediaDimensions(src);
+
+  if (!dimensions) return src;
+
+  try {
+    const url = new URL(src);
+    const longestSide = Math.max(dimensions.width, dimensions.height);
+    const scale = Math.min(PHOTO_PREVIEW_MAX_SIZE / longestSide, 1);
+    const width = Math.round(dimensions.width * scale);
+    const height = Math.round(dimensions.height * scale);
+
+    url.searchParams.set("width", String(width));
+    url.searchParams.set("height", String(height));
+
+    return url.toString();
+  } catch {
+    return src;
+  }
+}
+
 function App() {
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
   const [menuOpen, setMenuOpen] = useState(false);
@@ -1442,9 +1501,40 @@ function CandidateArchivePage({ candidate }: { candidate: ArchiveCandidate }) {
   );
 }
 
+function ExternalPhotoPreview({
+  item,
+}: {
+  item: Pick<ExternalCampaignEmbed, "src" | "title">;
+}) {
+  const [imageFailed, setImageFailed] = useState(false);
+
+  if (imageFailed) {
+    return (
+      <iframe
+        src={item.src}
+        title={item.title}
+        loading="lazy"
+        allow="autoplay; fullscreen; encrypted-media"
+        allowFullScreen
+      />
+    );
+  }
+
+  return (
+    <img
+      src={getPhotoPreviewSrc(item.src)}
+      alt={item.title}
+      loading="lazy"
+      decoding="async"
+      onError={() => setImageFailed(true)}
+    />
+  );
+}
+
 function ArchiveMediaCard({ item }: { item: ArchiveMediaItem }) {
-  const isPhoto = item.src.includes("/i/");
+  const isPhoto = isOneDrivePhoto(item.src);
   const isExternal = item.src.startsWith("http");
+  const frameStyle = getExternalMediaFrameStyle(item.src);
   const frameClassName = [
     "external-campaign-frame",
     item.kind === "video" ? "is-video" : isPhoto ? "is-photo" : "is-video",
@@ -1462,7 +1552,7 @@ function ArchiveMediaCard({ item }: { item: ArchiveMediaItem }) {
 
   return (
     <article className={cardClassName}>
-      <div className={frameClassName}>
+      <div className={frameClassName} style={frameStyle}>
         {item.kind === "video" ? (
           <video
             src={item.src}
@@ -1471,6 +1561,8 @@ function ArchiveMediaCard({ item }: { item: ArchiveMediaItem }) {
             playsInline
             preload="metadata"
           />
+        ) : isPhoto ? (
+          <ExternalPhotoPreview item={item} />
         ) : (
           <iframe
             src={item.src}
@@ -1504,7 +1596,8 @@ function ArchiveMediaCard({ item }: { item: ArchiveMediaItem }) {
 }
 
 function ExternalCampaignCard({ item }: { item: ExternalCampaignEmbed }) {
-  const isPhoto = item.src.includes("/i/");
+  const isPhoto = isOneDrivePhoto(item.src);
+  const frameStyle = getExternalMediaFrameStyle(item.src);
   const frameClassName = [
     "external-campaign-frame",
     isPhoto ? "is-photo" : "is-video",
@@ -1521,14 +1614,18 @@ function ExternalCampaignCard({ item }: { item: ExternalCampaignEmbed }) {
 
   return (
     <article className={cardClassName}>
-      <div className={frameClassName}>
-        <iframe
-          src={item.src}
-          title={item.title}
-          loading="lazy"
-          allow="autoplay; fullscreen; encrypted-media"
-          allowFullScreen
-        />
+      <div className={frameClassName} style={frameStyle}>
+        {isPhoto ? (
+          <ExternalPhotoPreview item={item} />
+        ) : (
+          <iframe
+            src={item.src}
+            title={item.title}
+            loading="lazy"
+            allow="autoplay; fullscreen; encrypted-media"
+            allowFullScreen
+          />
+        )}
       </div>
 
       <div className="external-campaign-meta">
