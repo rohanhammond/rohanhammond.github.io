@@ -46,6 +46,11 @@ type ExternalCampaignEmbed = {
   orientation?: "landscape" | "portrait" | "square";
 };
 
+type ArchiveMediaItem = ExternalCampaignEmbed & {
+  kind?: "embed" | "video";
+  poster?: string;
+};
+
 type CampaignArchiveSection = {
   id: "state" | "federal";
   eyebrow: string;
@@ -53,6 +58,21 @@ type CampaignArchiveSection = {
   summary: string;
   items: ExternalCampaignEmbed[];
 };
+
+type ArchiveCandidate = {
+  id: string;
+  section: "state" | "federal";
+  name: string;
+  seat: string;
+  eyebrow: string;
+  summary: string;
+  media: ArchiveMediaItem[];
+};
+
+type ArchiveRoute = {
+  section: "state" | "federal";
+  candidateId: string;
+} | null;
 
 const profile = {
   name: "Rohan Hammond",
@@ -192,28 +212,6 @@ const campaignVideoItems: MediaItem[] = [
   },
 ];
 
-const stateCampaignRoster = [
-  "Andra Biondi",
-  "Aswath Chavittupara",
-  "Hayley Edwards",
-  "Jonathan Huston",
-  "Liam Staltari",
-  "Lisa Olsson",
-  "Nitin Vashisht",
-  "Paula Tan",
-  "Sandra Brewer",
-  "Scott Edwardes",
-];
-
-const federalCampaignRoster = [
-  "Matt Moran",
-  "Mic Fels",
-  "Sean Ayres",
-  "Tom White",
-  "Vince Connelly",
-  "Peter Dutton campaign events",
-];
-
 const stateCampaignEmbeds: ExternalCampaignEmbed[] = [
   {
     id: "jonathan-huston-door-knocking",
@@ -230,11 +228,39 @@ const stateCampaignEmbeds: ExternalCampaignEmbed[] = [
     src: "https://1drv.ms/v/c/9d9f7c4362637c48/IQQQ926QY6NjQYdaPgW-YG5jAT4wxJVaIwO3xIZQTXhEJYQ?width=1920&height=1080",
   },
   {
+    id: "hayley-edwards-photo-one",
+    title: "Hayley Edwards Campaign Still",
+    context: "State Campaign Photography",
+    category: "Hayley Edwards + Libby Mettam",
+    src: "https://1drv.ms/i/c/9d9f7c4362637c48/IQSo1lJbuFtXQafaDJQrWKo2AS7yA6_uGLWm5uRuMeOfQhY?width=5629&height=3753",
+  },
+  {
+    id: "hayley-edwards-photo-two",
+    title: "Hayley Edwards Field Coverage",
+    context: "State Campaign Photography",
+    category: "Hayley Edwards + Libby Mettam",
+    src: "https://1drv.ms/i/c/9d9f7c4362637c48/IQS3RMv7JNr7SZ6TZO8KKF0HAZzNo5ePRe4PSdoZ3x5fumI?width=5673&height=3782",
+  },
+  {
     id: "nitin-vashisht-local-club",
     title: "Nitin Vashisht Local Club Piece",
     context: "Candidate Campaign Video",
     category: "Nitin Vashisht",
     src: "https://1drv.ms/v/c/9d9f7c4362637c48/IQQSYxP_w-dBQqj4sRDlHHuHAWxK8bGaz_eRiBjDeGx8Dhk?width=3840&height=2160",
+  },
+  {
+    id: "nitin-vashisht-school",
+    title: "Nitin Vashisht School Piece",
+    context: "Candidate Campaign Video",
+    category: "Nitin Vashisht",
+    src: "https://1drv.ms/v/c/9d9f7c4362637c48/IQSn0xXmh8v4SLZ6J824eUZuAe5oX8t-_6Kpz3rxsmZsvuo?width=3840&height=2160",
+  },
+  {
+    id: "nitin-vashisht-traffic",
+    title: "Nitin Vashisht Traffic Piece",
+    context: "Candidate Campaign Video",
+    category: "Nitin Vashisht",
+    src: "https://1drv.ms/v/c/9d9f7c4362637c48/IQTVc_maXyqYQbm9qtEbOcO0AeCQg5h7u4bf4PfDJyBdmO4",
   },
   {
     id: "sandra-brewer-coverage",
@@ -243,6 +269,20 @@ const stateCampaignEmbeds: ExternalCampaignEmbed[] = [
     category: "Sandra Brewer",
     src: "https://1drv.ms/i/c/9d9f7c4362637c48/IQTlRO_MKOFtSbLqUpcXPTBZAe7KmqVql53oCXWknrVIh6Q?width=2773&height=4160",
     orientation: "portrait",
+  },
+  {
+    id: "sandra-brewer-photo-one",
+    title: "Sandra Brewer Campaign Still",
+    context: "State Campaign Photography",
+    category: "Sandra Brewer",
+    src: "https://1drv.ms/i/c/9d9f7c4362637c48/IQQ-VAgTL9YHSqqyDkQQs0gAAYFOA6kpVPR4laS-tMIADEc?width=5739&height=3826",
+  },
+  {
+    id: "sandra-brewer-photo-two",
+    title: "Sandra Brewer Field Coverage",
+    context: "State Campaign Photography",
+    category: "Sandra Brewer",
+    src: "https://1drv.ms/i/c/9d9f7c4362637c48/IQQhbFLYPXtETqh0B4QHLiAPAWztncKorXPdt1RPH5Z-0fs?width=5560&height=3707",
   },
   {
     id: "andra-piece-to-camera",
@@ -344,11 +384,32 @@ const federalCampaignEmbeds: ExternalCampaignEmbed[] = [
     src: "https://1drv.ms/v/c/9d9f7c4362637c48/IQRUul58E3usQLbSR6B8gEy1AZm8L9BobVHzsEMbX4Gcjms?width=1920&height=1080",
   },
   {
+    id: "liam-trish-vince-vince-broll",
+    title: "Vince Connelly B-roll",
+    context: "Cross-Campaign B-roll",
+    category: "Candidate Travel",
+    src: "https://1drv.ms/v/c/9d9f7c4362637c48/IQS2jIJcHfhBSZZIN6cpeIGRAci2LfMqut3b8C4qdSP-UxY?width=3840&height=2160",
+  },
+  {
     id: "sean-ayres-field-work",
     title: "Sean Ayres Campaign Field Work",
     context: "Federal Campaign Photography",
     category: "Burt",
     src: "https://1drv.ms/i/c/9d9f7c4362637c48/IQTRlGg3NdGxRZGbuZp7qciNAdlEKJgJy0DCtO2I9GVzq6w?width=5933&height=3955",
+  },
+  {
+    id: "sean-ayres-photo-one",
+    title: "Sean Ayres Campaign Still",
+    context: "Federal Campaign Photography",
+    category: "Burt",
+    src: "https://1drv.ms/i/c/9d9f7c4362637c48/IQSmGapYlrfrQYny4O1QQb9rATPRAsinXvH7nI2DMyEVbXU?width=5755&height=3837",
+  },
+  {
+    id: "sean-ayres-photo-two",
+    title: "Sean Ayres Field Coverage",
+    context: "Federal Campaign Photography",
+    category: "Burt",
+    src: "https://1drv.ms/i/c/9d9f7c4362637c48/IQSzDeSIUv77Rp0P0JrgtndaARF3YPN_TBYoCyxGdGY283Q?width=6000&height=4000",
   },
   {
     id: "tom-white-ptc-5",
@@ -459,6 +520,259 @@ const campaignArchiveSections: CampaignArchiveSection[] = [
   },
 ];
 
+const isDefined = <T,>(item: T | undefined): item is T => Boolean(item);
+
+const getCampaignEmbeds = (
+  items: ExternalCampaignEmbed[],
+  ids: string[],
+): ArchiveMediaItem[] =>
+  ids.map((id) => items.find((item) => item.id === id)).filter(isDefined);
+
+const getLocalCampaignVideos = (): ArchiveMediaItem[] =>
+  campaignVideoItems.map((item) => ({
+    id: item.id,
+    kind: "video",
+    title: item.title,
+    context: item.category,
+    category: item.year ? `${item.year} / Jonathan Huston` : "Jonathan Huston",
+    src: item.src,
+    poster: item.poster,
+    orientation: item.orientation,
+  }));
+
+const stateCandidateArchives: ArchiveCandidate[] = [
+  {
+    id: "jonathan-huston",
+    section: "state",
+    name: "Jonathan Huston",
+    seat: "Nedlands",
+    eyebrow: "2025 WA State Election / Electorate Office",
+    summary:
+      "Local issue videos, reels, field coverage, community explainers, and continuing electorate media for one of the strongest WA Liberal social audiences.",
+    media: [
+      ...getLocalCampaignVideos(),
+      ...getCampaignEmbeds(stateCampaignEmbeds, [
+        "jonathan-huston-door-knocking",
+      ]),
+    ],
+  },
+  {
+    id: "hayley-edwards",
+    section: "state",
+    name: "Hayley Edwards",
+    seat: "State campaign coverage",
+    eyebrow: "2025 WA State Election",
+    summary:
+      "Press conference and campaign coverage produced around leader-level field activity and local campaign moments.",
+    media: getCampaignEmbeds(stateCampaignEmbeds, [
+      "hayley-edwards-presser",
+      "hayley-edwards-photo-one",
+      "hayley-edwards-photo-two",
+    ]),
+  },
+  {
+    id: "nitin-vashisht",
+    section: "state",
+    name: "Nitin Vashisht",
+    seat: "Riverton",
+    eyebrow: "2025 WA State Election",
+    summary:
+      "Community sport and local club campaign coverage packaged for social distribution and candidate storytelling.",
+    media: getCampaignEmbeds(stateCampaignEmbeds, [
+      "nitin-vashisht-local-club",
+      "nitin-vashisht-school",
+      "nitin-vashisht-traffic",
+    ]),
+  },
+  {
+    id: "sandra-brewer",
+    section: "state",
+    name: "Sandra Brewer",
+    seat: "Cottesloe",
+    eyebrow: "2025 WA State Election",
+    summary:
+      "Candidate photography and event coverage from the campaign archive, built for fast social and campaign collateral use.",
+    media: getCampaignEmbeds(stateCampaignEmbeds, [
+      "sandra-brewer-coverage",
+      "sandra-brewer-photo-one",
+      "sandra-brewer-photo-two",
+    ]),
+  },
+  {
+    id: "andra-biondi",
+    section: "state",
+    name: "Andra Biondi",
+    seat: "Victoria Park",
+    eyebrow: "2025 WA State Election",
+    summary:
+      "Candidate pieces, local issue filming, and leader-adjacent field coverage from the Victoria Park campaign archive.",
+    media: getCampaignEmbeds(stateCampaignEmbeds, [
+      "andra-piece-to-camera",
+      "andra-racecourse-libby",
+    ]),
+  },
+  {
+    id: "aswath-chavittupara",
+    section: "state",
+    name: "Aswath Chavittupara",
+    seat: "Morley",
+    eyebrow: "2025 WA State Election",
+    summary:
+      "Campaign stills and communications plan photography for social, local campaign material, and candidate-facing assets.",
+    media: getCampaignEmbeds(stateCampaignEmbeds, [
+      "aswath-comms-photo",
+      "aswath-comms-field-photo",
+    ]),
+  },
+  {
+    id: "lisa-olsson",
+    section: "state",
+    name: "Lisa Olsson",
+    seat: "Hillarys",
+    eyebrow: "2025 WA State Election",
+    summary:
+      "A mixed candidate archive of video, portraiture, and campaign field material for a targeted local race.",
+    media: getCampaignEmbeds(stateCampaignEmbeds, [
+      "lisa-olsson-video",
+      "lisa-olsson-photo",
+    ]),
+  },
+  {
+    id: "paula-tan",
+    section: "state",
+    name: "Paula Tan",
+    seat: "Maylands",
+    eyebrow: "2025 WA State Election",
+    summary:
+      "Longer-form candidate video and community-facing campaign material cut for candidate positioning and local social use.",
+    media: getCampaignEmbeds(stateCampaignEmbeds, [
+      "paula-tan-preselection",
+      "paula-tan-aus-day",
+    ]),
+  },
+  {
+    id: "scott-edwardes",
+    section: "state",
+    name: "Scott Edwardes",
+    seat: "Kingsley",
+    eyebrow: "2025 WA State Election",
+    summary:
+      "A deeper set of short campaign clips across roads, students, police, and health, built for fast local issue messaging.",
+    media: getCampaignEmbeds(stateCampaignEmbeds, [
+      "scott-edwardes-road",
+      "scott-edwardes-student",
+      "scott-edwardes-police",
+      "scott-edwardes-health",
+    ]),
+  },
+];
+
+const federalCandidateArchives: ArchiveCandidate[] = [
+  {
+    id: "liam-trish-vince",
+    section: "federal",
+    name: "Liam, Trish & Vince",
+    seat: "Cross-candidate campaign b-roll",
+    eyebrow: "2025 Federal Campaign",
+    summary:
+      "Multi-candidate b-roll and field material built to give the federal campaign archive more motion, texture, and reusable visual coverage.",
+    media: getCampaignEmbeds(federalCampaignEmbeds, [
+      "liam-trish-vince-broll",
+      "liam-trish-vince-vince-broll",
+    ]),
+  },
+  {
+    id: "sean-ayres",
+    section: "federal",
+    name: "Sean Ayres",
+    seat: "Burt",
+    eyebrow: "2025 Federal Election",
+    summary:
+      "Federal campaign field photography from Burt, focused on showing candidate presence, ground activity, and campaign atmosphere.",
+    media: getCampaignEmbeds(federalCampaignEmbeds, [
+      "sean-ayres-field-work",
+      "sean-ayres-photo-one",
+      "sean-ayres-photo-two",
+    ]),
+  },
+  {
+    id: "tom-white",
+    section: "federal",
+    name: "Tom White",
+    seat: "Curtin",
+    eyebrow: "2025 Federal Election",
+    summary:
+      "Piece-to-camera and square social cuts for a high-attention metropolitan federal campaign.",
+    media: getCampaignEmbeds(federalCampaignEmbeds, [
+      "tom-white-ptc-5",
+      "tom-white-ptc-2",
+    ]),
+  },
+  {
+    id: "vince-connelly",
+    section: "federal",
+    name: "Vince Connelly",
+    seat: "Moore",
+    eyebrow: "2025 Federal Election",
+    summary:
+      "Candidate video, drone coverage, and campaign stills spanning local lifestyle, field footage, and electorate-facing campaign visuals.",
+    media: getCampaignEmbeds(federalCampaignEmbeds, [
+      "vince-connelly-surfing",
+      "vince-connelly-drone",
+      "vince-connelly-photo",
+    ]),
+  },
+  {
+    id: "mic-fels",
+    section: "federal",
+    name: "Mic Fels",
+    seat: "Swan",
+    eyebrow: "2025 Federal Election",
+    summary:
+      "Federal campaign photography and local commitment videos covering candidate activity, Dutton campaign events, and social-first local issues.",
+    media: getCampaignEmbeds(federalCampaignEmbeds, [
+      "mic-fels-dutton-photo",
+      "mic-fels-playground-upgrades",
+      "mic-fels-foreshore-lighting",
+    ]),
+  },
+  {
+    id: "matt-moran",
+    section: "federal",
+    name: "Matt Moran",
+    seat: "Bullwinkel",
+    eyebrow: "2025 Federal Election",
+    summary:
+      "A broader Bullwinkel campaign archive across leader visits, local commitments, community settings, video, and still photography.",
+    media: getCampaignEmbeds(federalCampaignEmbeds, [
+      "matt-moran-dutton-photo",
+      "matt-moran-sussan-photo",
+      "matt-moran-brown-park-video",
+      "matt-moran-brown-park-photo",
+    ]),
+  },
+  {
+    id: "leader-visits",
+    section: "federal",
+    name: "Peter Dutton campaign events",
+    seat: "Federal campaign events",
+    eyebrow: "2025 Federal Campaign",
+    summary:
+      "Leader-visit material across multiple candidates, showing event coverage, candidate positioning, and national campaign moments in WA.",
+    media: getCampaignEmbeds(federalCampaignEmbeds, [
+      "mic-fels-dutton-photo",
+      "matt-moran-dutton-photo",
+      "liam-trish-vince-broll",
+      "liam-trish-vince-vince-broll",
+    ]),
+  },
+];
+
+const candidateArchives = [
+  ...stateCandidateArchives,
+  ...federalCandidateArchives,
+];
+
 const portfolioMediaItems: MediaItem[] = [
   {
     id: "campaign-video",
@@ -470,7 +784,6 @@ const portfolioMediaItems: MediaItem[] = [
     year: "2025",
     featured: true,
     orientation: "landscape",
-    previewAutoPlay: true,
   },
   {
     id: "interview",
@@ -508,9 +821,27 @@ const portfolioMediaItems: MediaItem[] = [
 
 const mediaItems = [...campaignVideoItems, ...portfolioMediaItems];
 
+function getArchiveRoute(): ArchiveRoute {
+  if (typeof window === "undefined") return null;
+
+  const match = window.location.hash.match(
+    /^#archive\/(state|federal)\/([^?]+)/,
+  );
+
+  if (!match) return null;
+
+  return {
+    section: match[1] as "state" | "federal",
+    candidateId: decodeURIComponent(match[2]),
+  };
+}
+
 function App() {
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
   const [menuOpen, setMenuOpen] = useState(false);
+  const [archiveRoute, setArchiveRoute] = useState<ArchiveRoute>(
+    getArchiveRoute,
+  );
   const [campaignMediaTab, setCampaignMediaTab] =
     useState<CampaignMediaTab>("videos");
 
@@ -535,8 +866,36 @@ function App() {
     () => (campaignMediaTab === "videos" ? campaignVideos : campaignReels),
     [campaignMediaTab, campaignReels, campaignVideos],
   );
+  const activeArchive = useMemo(
+    () =>
+      archiveRoute
+        ? candidateArchives.find(
+            (candidate) =>
+              candidate.section === archiveRoute.section &&
+              candidate.id === archiveRoute.candidateId,
+          )
+        : null,
+    [archiveRoute],
+  );
 
   const activeItem = activeIndex === null ? null : mediaItems[activeIndex];
+
+  useEffect(() => {
+    const handleHashChange = () => {
+      const nextRoute = getArchiveRoute();
+      setArchiveRoute(nextRoute);
+
+      if (nextRoute) {
+        window.scrollTo({ top: 0 });
+      }
+    };
+
+    window.addEventListener("hashchange", handleHashChange);
+
+    return () => {
+      window.removeEventListener("hashchange", handleHashChange);
+    };
+  }, []);
 
   useEffect(() => {
     if (activeIndex === null) return;
@@ -634,6 +993,10 @@ function App() {
       </header>
 
       <main id="top">
+        {activeArchive ? (
+          <CandidateArchivePage candidate={activeArchive} />
+        ) : (
+          <>
         <section className="hero-section" aria-labelledby="hero-title">
           <div className="hero-copy">
             <p className="eyebrow">{profile.location}</p>
@@ -796,16 +1159,26 @@ function App() {
               <div className="roster-column">
                 <h4>State campaign roster</h4>
                 <div className="roster-list">
-                  {stateCampaignRoster.map((candidate) => (
-                    <span key={candidate}>{candidate}</span>
+                  {stateCandidateArchives.map((candidate) => (
+                    <a
+                      href={`#archive/${candidate.section}/${candidate.id}`}
+                      key={candidate.id}
+                    >
+                      {candidate.name}
+                    </a>
                   ))}
                 </div>
               </div>
               <div className="roster-column">
                 <h4>Federal campaign roster</h4>
                 <div className="roster-list">
-                  {federalCampaignRoster.map((candidate) => (
-                    <span key={candidate}>{candidate}</span>
+                  {federalCandidateArchives.map((candidate) => (
+                    <a
+                      href={`#archive/${candidate.section}/${candidate.id}`}
+                      key={candidate.id}
+                    >
+                      {candidate.name}
+                    </a>
                   ))}
                 </div>
               </div>
@@ -919,6 +1292,8 @@ function App() {
             </div>
           </div>
         </section>
+          </>
+        )}
       </main>
 
       <footer className="site-footer">
@@ -1030,16 +1405,122 @@ function AutoPlayVideo({ item }: { item: MediaItem }) {
   );
 }
 
-function ExternalCampaignCard({ item }: { item: ExternalCampaignEmbed }) {
+function CandidateArchivePage({ candidate }: { candidate: ArchiveCandidate }) {
+  const sectionLabel =
+    candidate.section === "state" ? "State archive" : "Federal archive";
+
+  return (
+    <section
+      className="candidate-archive-page"
+      aria-labelledby="candidate-archive-title"
+    >
+      <a className="archive-back-link" href="#campaign-media">
+        <ChevronLeft size={18} aria-hidden="true" />
+        Campaign proof wall
+      </a>
+
+      <div className="candidate-archive-hero">
+        <div>
+          <p className="eyebrow">{candidate.eyebrow}</p>
+          <h1 id="candidate-archive-title">{candidate.name}</h1>
+          <p>{candidate.summary}</p>
+        </div>
+
+        <aside className="candidate-archive-stats">
+          <span>{sectionLabel}</span>
+          <strong>{candidate.seat}</strong>
+          <span>{candidate.media.length} selected samples</span>
+        </aside>
+      </div>
+
+      <div className="candidate-archive-grid">
+        {candidate.media.map((item) => (
+          <ArchiveMediaCard item={item} key={item.id} />
+        ))}
+      </div>
+    </section>
+  );
+}
+
+function ArchiveMediaCard({ item }: { item: ArchiveMediaItem }) {
+  const isPhoto = item.src.includes("/i/");
+  const isExternal = item.src.startsWith("http");
   const frameClassName = [
     "external-campaign-frame",
+    item.kind === "video" ? "is-video" : isPhoto ? "is-photo" : "is-video",
     item.orientation ? `is-${item.orientation}` : "",
+  ]
+    .filter(Boolean)
+    .join(" ");
+  const cardClassName = [
+    "external-campaign-card",
+    "archive-media-card",
+    item.kind === "video" ? "is-video" : isPhoto ? "is-photo" : "is-video",
   ]
     .filter(Boolean)
     .join(" ");
 
   return (
-    <article className="external-campaign-card">
+    <article className={cardClassName}>
+      <div className={frameClassName}>
+        {item.kind === "video" ? (
+          <video
+            src={item.src}
+            poster={item.poster}
+            controls
+            playsInline
+            preload="metadata"
+          />
+        ) : (
+          <iframe
+            src={item.src}
+            title={item.title}
+            loading="lazy"
+            allow="autoplay; fullscreen; encrypted-media"
+            allowFullScreen
+          />
+        )}
+      </div>
+
+      <div className="external-campaign-meta">
+        <div>
+          <h3>{item.title}</h3>
+          <p>{item.context}</p>
+        </div>
+        {isExternal && (
+          <a
+            href={item.src}
+            target="_blank"
+            rel="noreferrer"
+            aria-label={`Open ${item.title} in OneDrive`}
+          >
+            <ExternalLink size={18} aria-hidden="true" />
+          </a>
+        )}
+      </div>
+      <span>{item.category}</span>
+    </article>
+  );
+}
+
+function ExternalCampaignCard({ item }: { item: ExternalCampaignEmbed }) {
+  const isPhoto = item.src.includes("/i/");
+  const frameClassName = [
+    "external-campaign-frame",
+    isPhoto ? "is-photo" : "is-video",
+    item.orientation ? `is-${item.orientation}` : "",
+  ]
+    .filter(Boolean)
+    .join(" ");
+  const cardClassName = [
+    "external-campaign-card",
+    isPhoto ? "is-photo" : "is-video",
+  ]
+    .filter(Boolean)
+    .join(" ");
+
+  return (
+    <article className={cardClassName}>
       <div className={frameClassName}>
         <iframe
           src={item.src}
