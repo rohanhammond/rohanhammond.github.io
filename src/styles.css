@@ -606,19 +606,12 @@ h1 {
   text-wrap: balance;
 }
 
-.campaign-roster {
-  display: grid;
-  grid-template-columns: minmax(0, 1.3fr) minmax(0, 0.9fr);
-  gap: clamp(0.85rem, 1.7vw, 1.35rem);
-  margin-bottom: clamp(2.5rem, 5vw, 4.5rem);
-}
-
 .campaign-clients {
   max-width: 1040px;
   margin: calc(clamp(2rem, 5vw, 4rem) * -0.25) 0 clamp(1.5rem, 3vw, 2.5rem);
 }
 
-.roster-column {
+.client-column {
   min-width: 0;
   border: 1px solid rgba(42, 37, 31, 0.14);
   border-radius: 6px;
@@ -626,7 +619,7 @@ h1 {
   padding: clamp(1rem, 2vw, 1.35rem);
 }
 
-.roster-column h4,
+.client-column h4,
 .archive-proof-header h4 {
   margin: 0;
   font-family: Georgia, "Times New Roman", serif;
@@ -634,19 +627,19 @@ h1 {
   letter-spacing: 0;
 }
 
-.roster-column h4 {
+.client-column h4 {
   margin-bottom: 0.85rem;
   font-size: clamp(1.15rem, 1.8vw, 1.55rem);
   line-height: 1.1;
 }
 
-.roster-list {
+.client-list {
   display: flex;
   flex-wrap: wrap;
   gap: 0.45rem;
 }
 
-.roster-list a {
+.client-list a {
   display: inline-flex;
   align-items: center;
   min-height: 34px;
@@ -667,8 +660,8 @@ h1 {
     background 180ms ease;
 }
 
-.roster-list a:hover,
-.roster-list a:focus-visible {
+.client-list a:hover,
+.client-list a:focus-visible {
   border-color: rgba(42, 37, 31, 0.46);
   background: #241f1a;
   color: #fffdf8;
@@ -857,6 +850,18 @@ h1 {
 .external-campaign-frame iframe,
 .external-campaign-frame video {
   background: #111;
+}
+
+.external-campaign-frame.is-embed-video iframe {
+  height: calc(100% + 46px);
+  transform: translateY(-46px);
+}
+
+.external-campaign-frame.is-photo iframe {
+  width: 200%;
+  height: 200%;
+  transform: scale(0.5);
+  transform-origin: top left;
 }
 
 .external-campaign-frame img {
@@ -1204,7 +1209,6 @@ h1 {
   .proof-strip,
   .section-heading,
   .subsection-heading,
-  .campaign-roster,
   .archive-proof-header,
   .candidate-archive-hero,
   .campaign-layout,
@@ -1416,7 +1420,7 @@ h1 {
     padding-top: 0.75rem;
   }
 
-  .roster-list a {
+  .client-list a {
     min-height: 32px;
     padding-inline: 0.62rem;
     font-size: 0.72rem;

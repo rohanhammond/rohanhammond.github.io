@@ -71,6 +71,8 @@ type ExternalMediaFrameStyle = CSSProperties & {
   "--media-aspect"?: string;
 };
 
+const PHOTO_PREVIEW_MAX_SIZE = 1800;
+
 const profile = {
   name: "Rohan Hammond",
   brand: "Amalfi Media",
@@ -832,6 +834,27 @@ function getExternalMediaFrameStyle(
   };
 }
 
+function getPhotoPreviewSrc(src: string) {
+  const dimensions = getExternalMediaDimensions(src);
+
+  if (!dimensions) return src;
+
+  try {
+    const url = new URL(src);
+    const longestSide = Math.max(dimensions.width, dimensions.height);
+    const scale = Math.min(PHOTO_PREVIEW_MAX_SIZE / longestSide, 1);
+    const width = Math.round(dimensions.width * scale);
+    const height = Math.round(dimensions.height * scale);
+
+    url.searchParams.set("width", String(width));
+    url.searchParams.set("height", String(height));
+
+    return url.toString();
+  } catch {
+    return src;
+  }
+}
+
 function App() {
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
   const [menuOpen, setMenuOpen] = useState(false);
@@ -1257,9 +1280,9 @@ function CampaignMediaSection({
       </div>
 
       <div className="campaign-clients" aria-label={clientHeading}>
-        <div className="roster-column">
+        <div className="client-column">
           <h4>{clientHeading}</h4>
-          <div className="roster-list">
+          <div className="client-list">
             {clients.map((candidate) => (
               <a
                 href={`#archive/${candidate.section}/${candidate.id}`}
@@ -1467,7 +1490,7 @@ function ArchiveMediaCard({ item }: { item: ArchiveMediaItem }) {
           />
         ) : (
           <iframe
-            src={item.src}
+            src={isPhoto ? getPhotoPreviewSrc(item.src) : item.src}
             title={item.title}
             loading="lazy"
             allow="autoplay; fullscreen; encrypted-media"
@@ -1520,7 +1543,7 @@ function ExternalCampaignCard({ item }: { item: ExternalCampaignEmbed }) {
     <article className={cardClassName}>
       <div className={frameClassName} style={frameStyle}>
         <iframe
-          src={item.src}
+          src={isPhoto ? getPhotoPreviewSrc(item.src) : item.src}
           title={item.title}
           loading="lazy"
           allow="autoplay; fullscreen; encrypted-media"
