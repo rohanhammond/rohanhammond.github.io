@@ -712,6 +712,27 @@ const stateCandidateArchives: ArchiveCandidate[] = [
       "sandra-brewer-coverage",
       "sandra-brewer-photo-one",
       "sandra-brewer-photo-two",
+      "sandra-brewer-parliament-one",
+      "sandra-brewer-parliament-two",
+      "sandra-brewer-parliament-three",
+      "sandra-brewer-parliament-four",
+    ]),
+  },
+  {
+    id: "chris-dowson",
+    section: "state",
+    name: "Chris Dowson",
+    seat: "State work",
+    eyebrow: "2025",
+    summary: "Local issue videos, stills, and field coverage.",
+    media: getCampaignEmbeds(stateCampaignEmbeds, [
+      "chris-dowson-swimming-club",
+      "chris-dowson-local-parks",
+      "chris-dowson-small-business",
+      "chris-dowson-photo-one",
+      "chris-dowson-photo-two",
+      "chris-dowson-photo-three",
+      "chris-dowson-photo-four",
     ]),
   },
   {
@@ -736,6 +757,24 @@ const stateCandidateArchives: ArchiveCandidate[] = [
     media: getCampaignEmbeds(stateCampaignEmbeds, [
       "aswath-comms-photo",
       "aswath-comms-field-photo",
+    ]),
+  },
+  {
+    id: "michelle-hoffman",
+    section: "state",
+    name: "Michelle Hoffman",
+    seat: "State work",
+    eyebrow: "2025",
+    summary: "Short videos, portraits, and campaign stills.",
+    media: getCampaignEmbeds(stateCampaignEmbeds, [
+      "michelle-hoffman-video-one",
+      "michelle-hoffman-video-two",
+      "michelle-hoffman-video-three",
+      "michelle-hoffman-video-four",
+      "michelle-hoffman-photo-one",
+      "michelle-hoffman-photo-two",
+      "michelle-hoffman-photo-three",
+      "michelle-hoffman-photo-four",
     ]),
   },
   {
@@ -902,8 +941,27 @@ const stateCampaignMedia: ArchiveMediaItem[] = [
     "sandra-brewer-coverage",
     "sandra-brewer-photo-one",
     "sandra-brewer-photo-two",
+    "sandra-brewer-parliament-one",
+    "sandra-brewer-parliament-two",
+    "sandra-brewer-parliament-three",
+    "sandra-brewer-parliament-four",
+    "chris-dowson-swimming-club",
+    "chris-dowson-local-parks",
+    "chris-dowson-small-business",
+    "chris-dowson-photo-one",
+    "chris-dowson-photo-two",
+    "chris-dowson-photo-three",
+    "chris-dowson-photo-four",
     "aswath-comms-photo",
     "aswath-comms-field-photo",
+    "michelle-hoffman-video-one",
+    "michelle-hoffman-video-two",
+    "michelle-hoffman-video-three",
+    "michelle-hoffman-video-four",
+    "michelle-hoffman-photo-one",
+    "michelle-hoffman-photo-two",
+    "michelle-hoffman-photo-three",
+    "michelle-hoffman-photo-four",
     "lisa-olsson-photo",
   ]),
 ];
@@ -1371,19 +1429,25 @@ function App() {
 }
 
 const campaignMediaTabs: { id: CampaignMediaTab; label: string }[] = [
+  { id: "all", label: "All" },
   { id: "videos", label: "Videos" },
   { id: "reels", label: "Reels" },
   { id: "photos", label: "Photos" },
 ];
 
+function isArchivePhoto(item: ArchiveMediaItem) {
+  return item.kind === "photo" || isOneDrivePhoto(item.src);
+}
+
 function getCampaignMediaTab(item: ArchiveMediaItem): CampaignMediaTab {
-  if (isOneDrivePhoto(item.src)) return "photos";
+  if (isArchivePhoto(item)) return "photos";
   if (item.orientation === "portrait") return "reels";
 
   return "videos";
 }
 
 function getCampaignMediaCountLabel(tab: CampaignMediaTab, count: number) {
+  if (tab === "all") return `${count} ${count === 1 ? "piece" : "pieces"}`;
   if (tab === "photos") return `${count} ${count === 1 ? "photo" : "photos"}`;
   if (tab === "reels") return `${count} ${count === 1 ? "reel" : "reels"}`;
 
@@ -1391,6 +1455,7 @@ function getCampaignMediaCountLabel(tab: CampaignMediaTab, count: number) {
 }
 
 function getCampaignMediaSetLabel(tab: CampaignMediaTab) {
+  if (tab === "all") return "Media set";
   if (tab === "photos") return "Photo set";
   if (tab === "reels") return "Reel set";
 
@@ -1407,9 +1472,10 @@ function getCampaignMediaCollections(
 ): CampaignMediaCollection[] {
   return clients
     .map((candidate) => {
-      const mediaItems = candidate.media.filter(
-        (item) => getCampaignMediaTab(item) === tab,
-      );
+      const mediaItems =
+        tab === "all"
+          ? candidate.media
+          : candidate.media.filter((item) => getCampaignMediaTab(item) === tab);
       const preview = getCampaignMediaPreviewItem(mediaItems);
 
       if (!preview) return undefined;
@@ -1440,12 +1506,13 @@ function CampaignMediaSection({
   clients,
   items,
 }: CampaignMediaSectionProps) {
-  const [activeTab, setActiveTab] = useState<CampaignMediaTab>("videos");
+  const [activeTab, setActiveTab] = useState<CampaignMediaTab>("all");
   const [expandedCollectionId, setExpandedCollectionId] = useState<
     string | null
   >(null);
   const itemsByTab = useMemo(
     () => ({
+      all: items,
       videos: items.filter((item) => getCampaignMediaTab(item) === "videos"),
       reels: items.filter((item) => getCampaignMediaTab(item) === "reels"),
       photos: items.filter((item) => getCampaignMediaTab(item) === "photos"),
@@ -1454,6 +1521,7 @@ function CampaignMediaSection({
   );
   const collectionsByTab = useMemo(
     () => ({
+      all: getCampaignMediaCollections(clients, "all"),
       videos: getCampaignMediaCollections(clients, "videos"),
       reels: getCampaignMediaCollections(clients, "reels"),
       photos: getCampaignMediaCollections(clients, "photos"),
@@ -1605,7 +1673,7 @@ function CampaignCollectionCard({
   const buttonClassName = [
     "collection-preview-button",
     isPhoto ? "is-photo" : "is-video",
-    tab === "reels"
+    preview.orientation === "portrait"
       ? "is-portrait"
       : preview.orientation === "square"
         ? "is-square"
@@ -1665,6 +1733,26 @@ function CampaignCollectionPreviewVisual({
 
   if (isOneDrivePhoto(item.src)) {
     return <img src={getPhotoPreviewSrc(item.src)} alt="" loading="lazy" />;
+  }
+
+  if (isArchivePhoto(item) && !item.src.startsWith("http")) {
+    return <img src={item.src} alt="" loading="lazy" />;
+  }
+
+  if (item.src.startsWith("http")) {
+    return (
+      <span className="collection-preview-embed-wrap">
+        <iframe
+          className="collection-preview-embed"
+          src={item.src}
+          title={`${item.title} preview`}
+          loading="lazy"
+          allow="autoplay; fullscreen; encrypted-media"
+          tabIndex={-1}
+          aria-hidden="true"
+        />
+      </span>
+    );
   }
 
   return (
@@ -1814,13 +1902,16 @@ function ArchiveMediaCard({
   item: ArchiveMediaItem;
   ownerName?: string;
 }) {
-  const isPhoto = isOneDrivePhoto(item.src);
+  const isPhoto = isArchivePhoto(item);
+  const isLocalPhoto = item.kind === "photo" && !item.src.startsWith("http");
   const isExternal = item.src.startsWith("http");
   const isEmbeddedVideo = isExternal && !isPhoto && item.kind !== "video";
-  const openHref = isExternal || item.kind === "video" ? item.src : null;
+  const openHref = isExternal || item.kind === "video" || isLocalPhoto ? item.src : null;
   const openLabel = isExternal
     ? `Open ${item.title} in OneDrive`
-    : `Open ${item.title} video`;
+    : isLocalPhoto
+      ? `Open ${item.title} photo`
+      : `Open ${item.title} video`;
   const hoverName = ownerName ?? item.category;
   const frameStyle = getExternalMediaFrameStyle(item.src);
   const frameClassName = [
@@ -1853,6 +1944,8 @@ function ArchiveMediaCard({
             playsInline
             preload="metadata"
           />
+        ) : isLocalPhoto ? (
+          <img src={item.src} alt="" loading="lazy" />
         ) : (
           <iframe
             src={isPhoto ? getPhotoPreviewSrc(item.src) : item.src}
