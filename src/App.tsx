@@ -1460,11 +1460,16 @@ function ArchiveMediaCard({ item }: { item: ArchiveMediaItem }) {
   const isPhoto = isOneDrivePhoto(item.src);
   const isExternal = item.src.startsWith("http");
   const isEmbeddedVideo = isExternal && !isPhoto && item.kind !== "video";
+  const openHref = isExternal || item.kind === "video" ? item.src : null;
+  const openLabel = isExternal
+    ? `Open ${item.title} in OneDrive`
+    : `Open ${item.title} video`;
   const frameStyle = getExternalMediaFrameStyle(item.src);
   const frameClassName = [
     "external-campaign-frame",
     item.kind === "video" ? "is-video" : isPhoto ? "is-photo" : "is-video",
     isEmbeddedVideo ? "is-embed-video" : "",
+    item.kind === "video" ? "is-local-video" : "",
     item.orientation ? `is-${item.orientation}` : "",
   ]
     .filter(Boolean)
@@ -1484,7 +1489,9 @@ function ArchiveMediaCard({ item }: { item: ArchiveMediaItem }) {
           <video
             src={item.src}
             poster={item.poster}
-            controls
+            muted
+            loop
+            autoPlay
             playsInline
             preload="metadata"
           />
@@ -1504,12 +1511,12 @@ function ArchiveMediaCard({ item }: { item: ArchiveMediaItem }) {
           <h3>{item.title}</h3>
           <p>{item.context}</p>
         </div>
-        {isExternal && (
+        {openHref && (
           <a
-            href={item.src}
+            href={openHref}
             target="_blank"
             rel="noreferrer"
-            aria-label={`Open ${item.title} in OneDrive`}
+            aria-label={openLabel}
           >
             <ExternalLink size={18} aria-hidden="true" />
           </a>

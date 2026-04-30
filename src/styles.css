@@ -853,8 +853,8 @@ h1 {
 }
 
 .external-campaign-frame.is-embed-video iframe {
-  height: calc(100% + 46px);
-  transform: translateY(-46px);
+  height: 100%;
+  transform: none;
 }
 
 .external-campaign-frame.is-photo iframe {
@@ -872,6 +872,12 @@ h1 {
 .external-campaign-frame video {
   object-fit: cover;
 }
+.external-campaign-frame.is-local-video video::-webkit-media-controls,
+.external-campaign-frame.is-local-video video::-webkit-media-controls-enclosure,
+.external-campaign-frame.is-local-video video::-webkit-media-controls-panel {
+  display: none !important;
+}
+
 
 .external-campaign-meta {
   display: flex;
