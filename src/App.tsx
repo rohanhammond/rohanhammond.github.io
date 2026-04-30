@@ -1278,6 +1278,13 @@ function getCampaignMediaCountLabel(tab: CampaignMediaTab, count: number) {
   return `${count} ${count === 1 ? "video" : "videos"}`;
 }
 
+function getCampaignMediaSetLabel(tab: CampaignMediaTab) {
+  if (tab === "photos") return "Photo set";
+  if (tab === "reels") return "Reel set";
+
+  return "Video set";
+}
+
 function getCampaignMediaPreviewItem(items: ArchiveMediaItem[]) {
   return items.find((item) => Boolean(item.poster)) ?? items[0];
 }
@@ -1486,7 +1493,11 @@ function CampaignCollectionCard({
   const buttonClassName = [
     "collection-preview-button",
     isPhoto ? "is-photo" : "is-video",
-    tab === "reels" ? "is-portrait" : "",
+    tab === "reels"
+      ? "is-portrait"
+      : preview.orientation === "square"
+        ? "is-square"
+        : "",
     isExpanded ? "is-expanded" : "",
   ]
     .filter(Boolean)
@@ -1504,13 +1515,10 @@ function CampaignCollectionCard({
         aria-label={`Open ${candidate.name} ${tab}`}
         onClick={onToggle}
       >
-        <CampaignCollectionPreviewVisual
-          collectionName={candidate.name}
-          item={preview}
-          tab={tab}
-        />
-        <span className="media-hover-name" aria-hidden="true">
-          {candidate.name}
+        <CampaignCollectionPreviewVisual item={preview} />
+        <span className="collection-preview-title" aria-hidden="true">
+          <span>{getCampaignMediaSetLabel(tab)}</span>
+          <strong>{candidate.name}</strong>
         </span>
         <span className="collection-media-icon" aria-hidden="true">
           {isPhoto ? (
@@ -1533,32 +1541,38 @@ function CampaignCollectionCard({
 }
 
 type CampaignCollectionPreviewVisualProps = {
-  collectionName: string;
   item: ArchiveMediaItem;
-  tab: CampaignMediaTab;
 };
 
 function CampaignCollectionPreviewVisual({
-  collectionName,
   item,
-  tab,
 }: CampaignCollectionPreviewVisualProps) {
-  const label =
-    tab === "photos"
-      ? "Photo set"
-      : tab === "reels"
-        ? "Reel set"
-        : "Video set";
-
   if (item.poster) {
     return <img src={item.poster} alt="" loading="lazy" />;
   }
 
+  if (isOneDrivePhoto(item.src)) {
+    return <img src={getPhotoPreviewSrc(item.src)} alt="" loading="lazy" />;
+  }
+
+  if (item.src.startsWith("http")) {
+    return (
+      <span className="collection-preview-embed-wrap">
+        <iframe
+          className="collection-preview-embed"
+          src={item.src}
+          title={`${item.title} preview`}
+          loading="lazy"
+          allow="autoplay; fullscreen; encrypted-media"
+          tabIndex={-1}
+          aria-hidden="true"
+        />
+      </span>
+    );
+  }
+
   return (
-    <span className="collection-preview-placeholder">
-      <span>{label}</span>
-      <strong>{collectionName}</strong>
-    </span>
+    <span className="collection-preview-placeholder" aria-hidden="true" />
   );
 }
 
