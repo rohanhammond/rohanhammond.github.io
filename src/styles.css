@@ -518,20 +518,22 @@ h1 {
     transform 180ms ease;
 }
 
-.collection-preview-button.is-photo {
+.collection-preview-button.is-tab-all,
+.collection-preview-button.is-tab-videos {
+  aspect-ratio: 16 / 9;
+}
+
+.collection-preview-button.is-tab-photos {
   aspect-ratio: 3 / 2;
 }
 
-.collection-preview-button.is-square {
-  aspect-ratio: 1 / 1;
-}
-
-.collection-preview-button.is-portrait {
+.collection-preview-button.is-tab-reels,
+.collection-preview-button.is-tab-reels.is-portrait {
   aspect-ratio: 9 / 16;
 }
 
-.collection-preview-button.is-photo.is-portrait {
-  aspect-ratio: 2 / 3;
+.collection-preview-button.is-tab-reels.is-square {
+  aspect-ratio: 1 / 1;
 }
 
 .collection-preview-button:hover,
@@ -562,13 +564,17 @@ h1 {
 }
 
 .collection-preview-button img,
-.collection-preview-placeholder {
+.collection-preview-placeholder,
+.collection-preview-embed-wrap,
+.collection-preview-embed {
   display: block;
   width: 100%;
   height: 100%;
 }
 
 .collection-preview-button img {
+  position: relative;
+  z-index: 0;
   object-fit: cover;
   transition:
     filter 220ms ease,
@@ -582,6 +588,24 @@ h1 {
 }
 
 .collection-preview-placeholder {
+  position: relative;
+  z-index: 0;
+  background:
+    radial-gradient(circle at 20% 18%, rgba(255, 253, 248, 0.12), transparent 34%),
+    linear-gradient(135deg, #2f2a23 0%, #17130f 100%);
+}
+
+.collection-preview-embed-wrap {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  background: #241f1a;
+  pointer-events: none;
+}
+
+.collection-preview-embed {
+  border: 0;
   background: #241f1a;
 }
 

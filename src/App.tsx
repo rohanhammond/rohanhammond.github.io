@@ -535,7 +535,7 @@ const stateCampaignEmbeds: ArchiveMediaItem[] = [
   },
 ];
 
-const federalCampaignEmbeds: ExternalCampaignEmbed[] = [
+const federalCampaignEmbeds: ArchiveMediaItem[] = [
   {
     id: "liam-trish-vince-broll",
     title: "Liam, Trish & Vince B-roll",
@@ -570,6 +570,70 @@ const federalCampaignEmbeds: ExternalCampaignEmbed[] = [
     context: "Photo",
     category: "Burt",
     src: "https://1drv.ms/i/c/9d9f7c4362637c48/IQSzDeSIUv77Rp0P0JrgtndaARF3YPN_TBYoCyxGdGY283Q?width=6000&height=4000",
+  },
+  {
+    id: "sean-ayres-photo-three",
+    title: "Sean Ayres Still",
+    context: "Photo",
+    category: "Burt",
+    kind: "photo",
+    src: oneDriveClientExportUrl("Sean Ayres for Burt", "_DSC4617.jpg"),
+  },
+  {
+    id: "sean-ayres-photo-four",
+    title: "Sean Ayres Field Still",
+    context: "Photo",
+    category: "Burt",
+    kind: "photo",
+    src: oneDriveClientExportUrl("Sean Ayres for Burt", "_DSC4626.jpg"),
+  },
+  {
+    id: "sean-ayres-photo-five",
+    title: "Sean Ayres Community Still",
+    context: "Photo",
+    category: "Burt",
+    kind: "photo",
+    src: oneDriveClientExportUrl("Sean Ayres for Burt", "_DSC4637.jpg"),
+  },
+  {
+    id: "sean-ayres-photo-six",
+    title: "Sean Ayres Campaign Still",
+    context: "Photo",
+    category: "Burt",
+    kind: "photo",
+    src: oneDriveClientExportUrl("Sean Ayres for Burt", "_DSC4646.jpg"),
+  },
+  {
+    id: "sean-ayres-photo-seven",
+    title: "Sean Ayres Doorstop Still",
+    context: "Photo",
+    category: "Burt",
+    kind: "photo",
+    src: oneDriveClientExportUrl("Sean Ayres for Burt", "_DSC4674.jpg"),
+  },
+  {
+    id: "sean-ayres-photo-eight",
+    title: "Sean Ayres Event Still",
+    context: "Photo",
+    category: "Burt",
+    kind: "photo",
+    src: oneDriveClientExportUrl("Sean Ayres for Burt", "_DSC4729.jpg"),
+  },
+  {
+    id: "sean-ayres-photo-nine",
+    title: "Sean Ayres Street Still",
+    context: "Photo",
+    category: "Burt",
+    kind: "photo",
+    src: oneDriveClientExportUrl("Sean Ayres for Burt", "_DSC4760.jpg"),
+  },
+  {
+    id: "sean-ayres-photo-ten",
+    title: "Sean Ayres Campaign Photo",
+    context: "Photo",
+    category: "Burt",
+    kind: "photo",
+    src: oneDriveClientExportUrl("Sean Ayres for Burt", "_DSC4802.jpg"),
   },
   {
     id: "tom-white-ptc-5",
@@ -637,6 +701,50 @@ const federalCampaignEmbeds: ExternalCampaignEmbed[] = [
     context: "Photo",
     category: "Bullwinkel",
     src: "https://1drv.ms/i/c/9d9f7c4362637c48/IQRT_F3t7LglQKXuWSsXNbTkAe8-krqh372A6dRDo5HwRQQ?width=5760&height=3840",
+  },
+  {
+    id: "matt-moran-dutton-photo-two",
+    title: "Matt Moran Dutton Still",
+    context: "Photo",
+    category: "Bullwinkel",
+    kind: "photo",
+    src: oneDriveClientExportUrl(
+      "Matt Moran Media/Dutton Photos",
+      "_DSC2496-Enhanced-NR-2.jpg",
+    ),
+  },
+  {
+    id: "matt-moran-dutton-photo-three",
+    title: "Matt Moran Event Still",
+    context: "Photo",
+    category: "Bullwinkel",
+    kind: "photo",
+    src: oneDriveClientExportUrl(
+      "Matt Moran Media/Dutton Photos",
+      "_DSC2511-Enhanced-NR-2.jpg",
+    ),
+  },
+  {
+    id: "matt-moran-dutton-photo-four",
+    title: "Matt Moran Field Still",
+    context: "Photo",
+    category: "Bullwinkel",
+    kind: "photo",
+    src: oneDriveClientExportUrl(
+      "Matt Moran Media/Dutton Photos",
+      "_DSC2514-Enhanced-NR-2.jpg",
+    ),
+  },
+  {
+    id: "matt-moran-dutton-photo-five",
+    title: "Matt Moran Campaign Still",
+    context: "Photo",
+    category: "Bullwinkel",
+    kind: "photo",
+    src: oneDriveClientExportUrl(
+      "Matt Moran Media/Dutton Photos",
+      "_DSC2522-Enhanced-NR-2.jpg",
+    ),
   },
 ];
 
@@ -840,6 +948,10 @@ const federalCandidateArchives: ArchiveCandidate[] = [
     summary: "Leader-visit stills and event coverage.",
     media: getCampaignEmbeds(federalCampaignEmbeds, [
       "matt-moran-dutton-photo",
+      "matt-moran-dutton-photo-two",
+      "matt-moran-dutton-photo-three",
+      "matt-moran-dutton-photo-four",
+      "matt-moran-dutton-photo-five",
     ]),
   },
   {
@@ -866,6 +978,14 @@ const federalCandidateArchives: ArchiveCandidate[] = [
       "sean-ayres-field-work",
       "sean-ayres-photo-one",
       "sean-ayres-photo-two",
+      "sean-ayres-photo-three",
+      "sean-ayres-photo-four",
+      "sean-ayres-photo-five",
+      "sean-ayres-photo-six",
+      "sean-ayres-photo-seven",
+      "sean-ayres-photo-eight",
+      "sean-ayres-photo-nine",
+      "sean-ayres-photo-ten",
     ]),
   },
   {
@@ -890,6 +1010,8 @@ const federalCandidateArchives: ArchiveCandidate[] = [
     media: getCampaignEmbeds(federalCampaignEmbeds, [
       "mic-fels-dutton-photo",
       "matt-moran-dutton-photo",
+      "matt-moran-dutton-photo-two",
+      "matt-moran-dutton-photo-three",
       "liam-trish-vince-broll",
       "liam-trish-vince-vince-broll",
     ]),
@@ -914,10 +1036,22 @@ const federalCampaignMedia: ArchiveMediaItem[] = getCampaignEmbeds(
     "mic-fels-foreshore-lighting",
     "vince-connelly-photo",
     "matt-moran-dutton-photo",
+    "matt-moran-dutton-photo-two",
+    "matt-moran-dutton-photo-three",
+    "matt-moran-dutton-photo-four",
+    "matt-moran-dutton-photo-five",
     "mic-fels-dutton-photo",
     "sean-ayres-field-work",
     "sean-ayres-photo-one",
     "sean-ayres-photo-two",
+    "sean-ayres-photo-three",
+    "sean-ayres-photo-four",
+    "sean-ayres-photo-five",
+    "sean-ayres-photo-six",
+    "sean-ayres-photo-seven",
+    "sean-ayres-photo-eight",
+    "sean-ayres-photo-nine",
+    "sean-ayres-photo-ten",
   ],
 );
 
@@ -1006,24 +1140,10 @@ const portfolioMediaItems: MediaItem[] = [
 
 const mediaItems = [...campaignVideoItems, ...portfolioMediaItems];
 
-const contactPhotos = [
-  {
-    src: "/media/rohan-contact/rohan-headshot-01.jpg",
-    alt: "Rohan Hammond portrait",
-  },
-  {
-    src: "/media/rohan-contact/rohan-on-shoot-01.jpg",
-    alt: "Rohan filming an interview",
-  },
-  {
-    src: "/media/rohan-contact/rohan-on-shoot-02.jpg",
-    alt: "Rohan filming in a public building",
-  },
-  {
-    src: "/media/rohan-contact/rohan-speaking-01.jpg",
-    alt: "Rohan speaking at an event",
-  },
-];
+const aboutPhoto = {
+  src: "/media/rohan-contact/rohan-headshot-01.jpg",
+  alt: "Rohan Hammond portrait",
+};
 
 function getArchiveRoute(): ArchiveRoute {
   if (typeof window === "undefined") return null;
@@ -1263,7 +1383,6 @@ function App() {
               <article className="proof-item" key={stat.label}>
                 <strong>{stat.value}</strong>
                 <span>{stat.label}</span>
-                <p>{stat.detail}</p>
               </article>
             ))}
           </div>
@@ -1348,17 +1467,9 @@ function App() {
                   members who need a stronger digital presence.
                 </p>
                 <p>
-                  It started with volunteering on state campaigns and being
-                  asked to take photos. It grew from there.
+                  It started with volunteering on state campaigns and being asked
+                  to take photos.
                 </p>
-              </div>
-
-              <div className="studio-capabilities" aria-label="Capabilities">
-                {services.map((service) => (
-                  <div className="studio-capability" key={service}>
-                    {service}
-                  </div>
-                ))}
               </div>
 
               <div className="contact-details">
@@ -1366,43 +1477,13 @@ function App() {
                   <span>Email</span>
                   <a href={profile.contactHref}>{contactDetails.email}</a>
                 </div>
-                <div className="contact-detail">
-                  <span>Location</span>
-                  <p>{contactDetails.address}</p>
-                </div>
-                <a
-                  className="contact-link"
-                  href={contactDetails.mapsUrl}
-                  target="_blank"
-                  rel="noreferrer"
-                >
-                  Open in Google Maps
-                  <ExternalLink size={18} aria-hidden="true" />
-                </a>
               </div>
             </div>
 
             <div className="about-media-panel">
-              <div className="contact-photo-grid" aria-label="Rohan at work">
-                {contactPhotos.map((photo) => (
-                  <figure className="contact-photo" key={photo.src}>
-                    <img src={photo.src} alt={photo.alt} loading="lazy" />
-                  </figure>
-                ))}
-              </div>
-
-              <div className="studio-media" aria-label="Portfolio samples">
-                <div className="studio-media-grid">
-                  {[...featuredItems, ...archiveItems].map((item) => (
-                    <MediaCard
-                      key={item.id}
-                      item={item}
-                      onOpen={openItem}
-                      compact={!item.featured}
-                    />
-                  ))}
-                </div>
-              </div>
+              <figure className="about-portrait-card">
+                <img src={aboutPhoto.src} alt={aboutPhoto.alt} loading="lazy" />
+              </figure>
             </div>
           </div>
 
@@ -1463,7 +1544,24 @@ function getCampaignMediaSetLabel(tab: CampaignMediaTab) {
 }
 
 function getCampaignMediaPreviewItem(items: ArchiveMediaItem[]) {
-  return items.find((item) => Boolean(item.poster)) ?? items[0];
+  return (
+    items.find((item) => Boolean(item.poster)) ??
+    items.find((item) => Boolean(getCollectionPreviewImageSrc(item))) ??
+    items.find((item) => isEmbeddableOneDriveShare(item.src)) ??
+    items[0]
+  );
+}
+
+function isEmbeddableOneDriveShare(src: string) {
+  return src.startsWith("https://1drv.ms/");
+}
+
+function getCollectionPreviewImageSrc(item: ArchiveMediaItem) {
+  if (item.poster) return item.poster;
+  if (isOneDrivePhoto(item.src)) return getPhotoPreviewSrc(item.src);
+  if (isArchivePhoto(item) && !item.src.startsWith("http")) return item.src;
+
+  return null;
 }
 
 function getCampaignMediaCollections(
@@ -1672,10 +1770,11 @@ function CampaignCollectionCard({
   const isPhoto = getCampaignMediaTab(preview) === "photos";
   const buttonClassName = [
     "collection-preview-button",
-    isPhoto ? "is-photo" : "is-video",
-    preview.orientation === "portrait"
+    `is-tab-${tab}`,
+    isPhoto ? "has-photo" : "has-video",
+    tab === "reels" && preview.orientation === "portrait"
       ? "is-portrait"
-      : preview.orientation === "square"
+      : tab === "reels" && preview.orientation === "square"
         ? "is-square"
         : "",
     isExpanded ? "is-expanded" : "",
@@ -1727,19 +1826,21 @@ type CampaignCollectionPreviewVisualProps = {
 function CampaignCollectionPreviewVisual({
   item,
 }: CampaignCollectionPreviewVisualProps) {
-  if (item.poster) {
-    return <img src={item.poster} alt="" loading="lazy" />;
+  const previewImageSrc = getCollectionPreviewImageSrc(item);
+  const [failedImageSrc, setFailedImageSrc] = useState<string | null>(null);
+
+  if (previewImageSrc && failedImageSrc !== previewImageSrc) {
+    return (
+      <img
+        src={previewImageSrc}
+        alt=""
+        loading="lazy"
+        onError={() => setFailedImageSrc(previewImageSrc)}
+      />
+    );
   }
 
-  if (isOneDrivePhoto(item.src)) {
-    return <img src={getPhotoPreviewSrc(item.src)} alt="" loading="lazy" />;
-  }
-
-  if (isArchivePhoto(item) && !item.src.startsWith("http")) {
-    return <img src={item.src} alt="" loading="lazy" />;
-  }
-
-  if (item.src.startsWith("http")) {
+  if (isEmbeddableOneDriveShare(item.src)) {
     return (
       <span className="collection-preview-embed-wrap">
         <iframe
