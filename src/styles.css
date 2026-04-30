@@ -486,6 +486,7 @@ h1 {
   align-items: start;
 }
 
+.campaign-collection-grid.is-all,
 .campaign-collection-grid.is-videos,
 .campaign-collection-grid.is-photos {
   grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -870,6 +871,7 @@ h1 {
   align-items: start;
 }
 
+.campaign-video-grid.is-all,
 .campaign-video-grid.is-videos {
   grid-template-columns: repeat(3, minmax(0, 1fr));
 }
@@ -1673,8 +1675,10 @@ h1 {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
+  .campaign-collection-grid.is-all,
   .campaign-collection-grid.is-videos,
   .campaign-collection-grid.is-photos,
+  .campaign-video-grid.is-all,
   .campaign-video-grid.is-videos,
   .campaign-video-grid.is-photos {
     grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -1835,8 +1839,10 @@ h1 {
   .about-media-panel .studio-media-grid,
   .contact-photo-grid,
   .proof-grid,
+  .campaign-collection-grid.is-all,
   .campaign-collection-grid.is-videos,
   .campaign-collection-grid.is-photos,
+  .campaign-video-grid.is-all,
   .campaign-video-grid.is-videos,
   .campaign-video-grid.is-photos,
   .external-campaign-grid {
