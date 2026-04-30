@@ -5,6 +5,7 @@ import {
   ChevronLeft,
   ChevronRight,
   ExternalLink,
+  Images,
   Menu,
   Play,
   X,
@@ -62,6 +63,12 @@ type ArchiveCandidate = {
   media: ArchiveMediaItem[];
 };
 
+type CampaignMediaCollection = {
+  candidate: ArchiveCandidate;
+  items: ArchiveMediaItem[];
+  preview: ArchiveMediaItem;
+};
+
 type ArchiveRoute = {
   section: "state" | "federal";
   candidateId: string;
@@ -75,75 +82,80 @@ const PHOTO_PREVIEW_MAX_SIZE = 1800;
 
 const profile = {
   name: "Rohan Hammond",
-  brand: "Amalfi Media",
-  tagline: "Campaign media for Liberal teams that need speed, reach, and discipline.",
+  brand: "Video / Photo",
+  tagline: "Hi, I'm Rohan. I make videos and photos.",
   intro:
-    "Perth-based media producer working across WA Liberal state campaigns, federal campaign events, parliamentary offices, and community storytelling through fast-turnaround video, photography, press materials, and paid/social strategy.",
-  location: "Perth / Liberal Campaigns / Photo / Video / Strategy",
-  contactLabel: "amalfi.media",
-  contactHref: "https://amalfi.media",
+    "I've worked inside Parliament and on election campaigns, and I'm studying Psychology and Commerce at UWA while running Amalfi Media in Perth.",
+  location: "Perth / Video / Photo / Politics / Brands",
+  contactLabel: "rohan@amalfi.media",
+  contactHref: "mailto:rohan@amalfi.media",
+};
+
+const contactDetails = {
+  email: "rohan@amalfi.media",
+  address: "2 Park Road, Crawley",
+  mapsUrl:
+    "https://www.google.com/maps/search/?api=1&query=2%20Park%20Road%20Crawley%20WA",
+  mapsEmbedUrl:
+    "https://www.google.com/maps?q=2%20Park%20Road%20Crawley%20WA&output=embed",
 };
 
 const services = [
-  "Rapid reels and same-day campaign edits",
-  "Candidate photography and event coverage",
-  "Press releases, statements, and talking points",
-  "Paid Meta creative and social strategy",
+  "Video",
+  "Photography",
+  "Editing",
+  "Social media",
 ];
 
 const campaignStats: CampaignStat[] = [
   {
     value: "25",
-    label: "WA Liberal state campaigns supported",
-    detail:
-      "Contracted across the 2025 state election, contributing media and communications in varying capacities to every seat won by the WA Liberals.",
+    label: "state seats",
+    detail: "Video, photo, and media support during the 2025 WA campaign.",
   },
   {
     value: "4",
-    label: "Metropolitan Liberal federal campaigns",
-    detail:
-      "Supported the 2025 federal campaign cycle and photographed Hon. Peter Dutton MP across multiple campaign events.",
+    label: "federal seats",
+    detail: "Candidate videos, field days, and event coverage around Perth.",
   },
   {
-    value: "Millions",
-    label: "Organic short-form video views",
-    detail:
-      "Produced reels and social-first video across Instagram, TikTok, and Facebook for campaign and parliamentary audiences.",
+    value: "Office",
+    label: "ongoing media",
+    detail: "Local updates, reels, photos, and day-to-day electorate work.",
   },
   {
-    value: "7,000+",
-    label: "Facebook following grown from zero",
-    detail:
-      "Built the Jonathan Huston Facebook audience into one of the strongest followings in the WA Liberal parliamentary team.",
+    value: "Perth",
+    label: "home base",
+    detail: "Available for politics, brands, and community work.",
   },
 ];
 
 const campaignRoles: CampaignRole[] = [
   {
-    role: "Electorate Officer & Media Producer",
+    role: "Electorate Office Media",
     context: "Jonathan Huston",
     period: "Sep 2025 - Present",
     points: [
-      "Leads full-stack media operations: filming, photography, editing, creative direction, and social-first content strategy.",
-      "Runs paid advertising across Meta, newspaper, and YouTube while supporting electorate work, stakeholder liaison, and media enquiries.",
+      "Video, photography, editing, and day-to-day media.",
+      "Local updates, events, social content, and day-to-day material.",
     ],
   },
   {
-    role: "Media Producer to the Leader of the WA Liberals",
-    context: "Hon. Libby Mettam MLA / 2025 WA State Election",
+    role: "Leader's Office Media",
+    context: "2025 WA State Election",
     period: "Jan 2025 - Mar 2025",
     points: [
-      "Embedded in the Leader's office during the state campaign, delivering rapid reels, highlight videos, press conference coverage, and community event content.",
-      "Researched news cycles, voter concerns, and public sector reports to shape content that could move quickly and land clearly.",
+      "Short-form video, field coverage, and press conference clips.",
+      "Worked around travel, media days, and campaign events.",
     ],
   },
   {
-    role: "Founder & Director",
+    role: "Amalfi Media",
     context: "Amalfi Media",
     period: "Nov 2024 - Present",
     points: [
-      "Built a Perth media agency specialising in political leaders, eCommerce founders, personal brands, and high-trust public-facing content.",
-      "Supported 25 Liberal state campaigns and four metropolitan federal campaigns through production, campaign content, and communications support.",
+      "Video, photos, and editing for politics, small businesses, and personal brands.",
+      "A small studio for work that needs to be clear, useful, and well made.",
     ],
   },
 ];
@@ -194,8 +206,8 @@ const campaignVideoItems: MediaItem[] = [
     type: "video",
     src: "/media/campaign-videos/jono-iga-door-knocking.mp4",
     poster: "/media/campaign-videos/jono-iga-door-knocking-poster.jpg",
-    title: "IGA Door Knocking Ad",
-    category: "Field Campaign",
+    title: "IGA Door Knocking",
+    category: "Field work",
     year: "2024",
     orientation: "landscape",
   },
@@ -215,113 +227,113 @@ const stateCampaignEmbeds: ExternalCampaignEmbed[] = [
   {
     id: "jonathan-huston-door-knocking",
     title: "Jonathan Huston Door Knocking",
-    context: "State Campaign Video",
+    context: "Video",
     category: "Jonathan Huston",
     src: "https://1drv.ms/v/c/9d9f7c4362637c48/IQSiaTAmA04yR5iYTG0ZkaQkAZQv5V7RTDSoiG8PPGHjABk?width=3840&height=2160",
   },
   {
     id: "hayley-edwards-presser",
     title: "Hayley Edwards Presser",
-    context: "State Campaign Video",
+    context: "Video",
     category: "Hayley Edwards + Libby Mettam",
     src: "https://1drv.ms/v/c/9d9f7c4362637c48/IQQQ926QY6NjQYdaPgW-YG5jAT4wxJVaIwO3xIZQTXhEJYQ?width=1920&height=1080",
   },
   {
     id: "hayley-edwards-photo-one",
-    title: "Hayley Edwards Campaign Still",
-    context: "State Campaign Photography",
+    title: "Hayley Edwards Still",
+    context: "Photo",
     category: "Hayley Edwards + Libby Mettam",
     src: "https://1drv.ms/i/c/9d9f7c4362637c48/IQSo1lJbuFtXQafaDJQrWKo2AS7yA6_uGLWm5uRuMeOfQhY?width=5629&height=3753",
   },
   {
     id: "hayley-edwards-photo-two",
     title: "Hayley Edwards Field Coverage",
-    context: "State Campaign Photography",
+    context: "Photo",
     category: "Hayley Edwards + Libby Mettam",
     src: "https://1drv.ms/i/c/9d9f7c4362637c48/IQS3RMv7JNr7SZ6TZO8KKF0HAZzNo5ePRe4PSdoZ3x5fumI?width=5673&height=3782",
   },
   {
     id: "nitin-vashisht-local-club",
     title: "Nitin Vashisht Local Club Piece",
-    context: "Candidate Campaign Video",
+    context: "Video",
     category: "Nitin Vashisht",
     src: "https://1drv.ms/v/c/9d9f7c4362637c48/IQQSYxP_w-dBQqj4sRDlHHuHAWxK8bGaz_eRiBjDeGx8Dhk?width=3840&height=2160",
   },
   {
     id: "nitin-vashisht-school",
     title: "Nitin Vashisht School Piece",
-    context: "Candidate Campaign Video",
+    context: "Video",
     category: "Nitin Vashisht",
     src: "https://1drv.ms/v/c/9d9f7c4362637c48/IQSn0xXmh8v4SLZ6J824eUZuAe5oX8t-_6Kpz3rxsmZsvuo?width=3840&height=2160",
   },
   {
     id: "nitin-vashisht-traffic",
     title: "Nitin Vashisht Traffic Piece",
-    context: "Candidate Campaign Video",
+    context: "Video",
     category: "Nitin Vashisht",
     src: "https://1drv.ms/v/c/9d9f7c4362637c48/IQTVc_maXyqYQbm9qtEbOcO0AeCQg5h7u4bf4PfDJyBdmO4",
   },
   {
     id: "sandra-brewer-coverage",
-    title: "Sandra Brewer Campaign Coverage",
-    context: "State Campaign Photography",
+    title: "Sandra Brewer Coverage",
+    context: "Photo",
     category: "Sandra Brewer",
     src: "https://1drv.ms/i/c/9d9f7c4362637c48/IQTlRO_MKOFtSbLqUpcXPTBZAe7KmqVql53oCXWknrVIh6Q?width=2773&height=4160",
     orientation: "portrait",
   },
   {
     id: "sandra-brewer-photo-one",
-    title: "Sandra Brewer Campaign Still",
-    context: "State Campaign Photography",
+    title: "Sandra Brewer Still",
+    context: "Photo",
     category: "Sandra Brewer",
     src: "https://1drv.ms/i/c/9d9f7c4362637c48/IQQ-VAgTL9YHSqqyDkQQs0gAAYFOA6kpVPR4laS-tMIADEc?width=5739&height=3826",
   },
   {
     id: "sandra-brewer-photo-two",
     title: "Sandra Brewer Field Coverage",
-    context: "State Campaign Photography",
+    context: "Photo",
     category: "Sandra Brewer",
     src: "https://1drv.ms/i/c/9d9f7c4362637c48/IQQhbFLYPXtETqh0B4QHLiAPAWztncKorXPdt1RPH5Z-0fs?width=5560&height=3707",
   },
   {
     id: "andra-piece-to-camera",
     title: "Andra Biondi Piece-to-Camera",
-    context: "State Campaign Video",
+    context: "Video",
     category: "Victoria Park",
     src: "https://1drv.ms/v/c/9d9f7c4362637c48/IQTyAwxV3vdfQavj_0iiPOCEAbj4Hr6osW09zh73u-rIxKw?width=3840&height=2160",
   },
   {
     id: "andra-racecourse-libby",
     title: "Andra Biondi with Libby Mettam",
-    context: "State Campaign Video",
+    context: "Video",
     category: "Victoria Park",
     src: "https://1drv.ms/v/c/9d9f7c4362637c48/IQSIsVqxoUn9TIu61NCf8ADLAZsf6NLewXar8uKrMNzkPbw?width=3840&height=2160",
   },
   {
     id: "aswath-comms-photo",
-    title: "Aswath Chavittupara Campaign Field",
-    context: "State Campaign Photography",
+    title: "Aswath Chavittupara Field",
+    context: "Photo",
     category: "Morley",
     src: "https://1drv.ms/i/c/9d9f7c4362637c48/IQS_VVLJPd-SSbYAqrbuAlJtAQZFu3Zt63ibqIFWgRkqil0?width=5740&height=3827",
   },
   {
     id: "aswath-comms-field-photo",
     title: "Aswath Chavittupara Community Coverage",
-    context: "State Campaign Photography",
+    context: "Photo",
     category: "Morley",
     src: "https://1drv.ms/i/c/9d9f7c4362637c48/IQQ5qfwpfliESYi4uYXmV1pnAb3TGbBINFg9CpEhMlhfJMY?width=5021&height=3347",
   },
   {
     id: "lisa-olsson-video",
-    title: "Lisa Olsson Campaign Piece",
-    context: "State Campaign Video",
+    title: "Lisa Olsson Piece",
+    context: "Video",
     category: "Hillarys",
     src: "https://1drv.ms/v/c/9d9f7c4362637c48/IQRuhxv_SpLITI1MGN4AP95LAb1o47S89cS2C9VjObocmb8?width=3840&height=2160",
   },
   {
     id: "lisa-olsson-photo",
-    title: "Lisa Olsson Campaign Portrait",
-    context: "State Campaign Photography",
+    title: "Lisa Olsson Portrait",
+    context: "Photo",
     category: "Hillarys",
     src: "https://1drv.ms/i/c/9d9f7c4362637c48/IQQdxNVXMH96T7dIdgd5tSaQAZlJfpfz7LyjwORS79omJxw?width=4000&height=6000",
     orientation: "portrait",
@@ -329,7 +341,7 @@ const stateCampaignEmbeds: ExternalCampaignEmbed[] = [
   {
     id: "scott-edwardes-road",
     title: "Scott Edwardes Road Clip",
-    context: "State Campaign Short Video",
+    context: "Short video",
     category: "Kingsley",
     src: "https://1drv.ms/v/c/9d9f7c4362637c48/IQQQOl8eZMllSpgtqkvg44ssAQenMtPGHH9lvAGsmRO3ceQ?width=1920&height=1920",
     orientation: "square",
@@ -337,7 +349,7 @@ const stateCampaignEmbeds: ExternalCampaignEmbed[] = [
   {
     id: "scott-edwardes-student",
     title: "Scott Edwardes Student Clip",
-    context: "State Campaign Short Video",
+    context: "Short video",
     category: "Kingsley",
     src: "https://1drv.ms/v/c/9d9f7c4362637c48/IQQ6xx6SG4LWTbC4Fy6ghcazAVqFxoNt8cQ1vOkclH7FJiE?width=1920&height=1920",
     orientation: "square",
@@ -345,7 +357,7 @@ const stateCampaignEmbeds: ExternalCampaignEmbed[] = [
   {
     id: "scott-edwardes-police",
     title: "Scott Edwardes Police Reel",
-    context: "State Campaign Reel",
+    context: "Reel",
     category: "Kingsley",
     src: "https://1drv.ms/v/c/9d9f7c4362637c48/IQQKudQ1w23NQKxaUkfakpuvAdFNO-3t_20i_PS0FpYmV7M?width=1080&height=1920",
     orientation: "portrait",
@@ -353,7 +365,7 @@ const stateCampaignEmbeds: ExternalCampaignEmbed[] = [
   {
     id: "scott-edwardes-health",
     title: "Scott Edwardes Health Reel",
-    context: "State Campaign Reel",
+    context: "Reel",
     category: "Kingsley",
     src: "https://1drv.ms/v/c/9d9f7c4362637c48/IQQFRNcufpm5QqcE9jwv32FgAf_3LBmzaqvp_maHhvxPCKk?width=1080&height=1920",
     orientation: "portrait",
@@ -364,42 +376,42 @@ const federalCampaignEmbeds: ExternalCampaignEmbed[] = [
   {
     id: "liam-trish-vince-broll",
     title: "Liam, Trish & Vince B-roll",
-    context: "Cross-Campaign B-roll",
+    context: "B-roll",
     category: "Candidate Travel",
     src: "https://1drv.ms/v/c/9d9f7c4362637c48/IQRUul58E3usQLbSR6B8gEy1AZm8L9BobVHzsEMbX4Gcjms?width=1920&height=1080",
   },
   {
     id: "liam-trish-vince-vince-broll",
     title: "Vince Connelly B-roll",
-    context: "Cross-Campaign B-roll",
+    context: "B-roll",
     category: "Candidate Travel",
     src: "https://1drv.ms/v/c/9d9f7c4362637c48/IQS2jIJcHfhBSZZIN6cpeIGRAci2LfMqut3b8C4qdSP-UxY?width=3840&height=2160",
   },
   {
     id: "sean-ayres-field-work",
-    title: "Sean Ayres Campaign Field Work",
-    context: "Federal Campaign Photography",
+    title: "Sean Ayres Field Work",
+    context: "Photo",
     category: "Burt",
     src: "https://1drv.ms/i/c/9d9f7c4362637c48/IQTRlGg3NdGxRZGbuZp7qciNAdlEKJgJy0DCtO2I9GVzq6w?width=5933&height=3955",
   },
   {
     id: "sean-ayres-photo-one",
-    title: "Sean Ayres Campaign Still",
-    context: "Federal Campaign Photography",
+    title: "Sean Ayres Still",
+    context: "Photo",
     category: "Burt",
     src: "https://1drv.ms/i/c/9d9f7c4362637c48/IQSmGapYlrfrQYny4O1QQb9rATPRAsinXvH7nI2DMyEVbXU?width=5755&height=3837",
   },
   {
     id: "sean-ayres-photo-two",
     title: "Sean Ayres Field Coverage",
-    context: "Federal Campaign Photography",
+    context: "Photo",
     category: "Burt",
     src: "https://1drv.ms/i/c/9d9f7c4362637c48/IQSzDeSIUv77Rp0P0JrgtndaARF3YPN_TBYoCyxGdGY283Q?width=6000&height=4000",
   },
   {
     id: "tom-white-ptc-5",
     title: "Tom White Piece-to-Camera",
-    context: "Federal Campaign Video",
+    context: "Video",
     category: "Curtin",
     src: "https://1drv.ms/v/c/9d9f7c4362637c48/IQQdpjVisYVESINfod6QVQZ_AdZHqhN5rbtQiI2W8LAUhCU?width=1920&height=1920",
     orientation: "square",
@@ -407,7 +419,7 @@ const federalCampaignEmbeds: ExternalCampaignEmbed[] = [
   {
     id: "tom-white-ptc-2",
     title: "Tom White Social Cut",
-    context: "Federal Campaign Video",
+    context: "Video",
     category: "Curtin",
     src: "https://1drv.ms/v/c/9d9f7c4362637c48/IQQKS1UCY2ntTLZahyzOG8ttAQJXXxKmiKUYGDaQvuTheqo?width=1920&height=1920",
     orientation: "square",
@@ -415,7 +427,7 @@ const federalCampaignEmbeds: ExternalCampaignEmbed[] = [
   {
     id: "vince-connelly-surfing",
     title: "Vince Connelly Surfing Piece",
-    context: "Federal Campaign Video",
+    context: "Video",
     category: "Moore",
     src: "https://1drv.ms/v/c/9d9f7c4362637c48/IQSkD2kkoP8zRrqSdCZcK_3PAXiS-xuzdc6dniesKzY8ynU?width=2160&height=3840",
     orientation: "portrait",
@@ -423,35 +435,35 @@ const federalCampaignEmbeds: ExternalCampaignEmbed[] = [
   {
     id: "vince-connelly-drone",
     title: "Vince Connelly Drone Coverage",
-    context: "Federal Campaign B-roll",
+    context: "B-roll",
     category: "Moore",
     src: "https://1drv.ms/v/c/9d9f7c4362637c48/IQRsbUI7bCesRoRnNzZApzSLARE4ZZZtb6tuz0ikubuIUOM?width=5472&height=3078",
   },
   {
     id: "vince-connelly-photo",
-    title: "Vince Connelly Campaign Still",
-    context: "Federal Campaign Photography",
+    title: "Vince Connelly Still",
+    context: "Photo",
     category: "Moore",
     src: "https://1drv.ms/i/c/9d9f7c4362637c48/IQSkCZVfisfoS51qJIp5qnHCAe1fattGkOzig4xXZq3eluQ?width=6000&height=4000",
   },
   {
     id: "mic-fels-dutton-photo",
     title: "Mic Fels with Peter Dutton",
-    context: "Federal Campaign Photography",
+    context: "Photo",
     category: "Swan",
     src: "https://1drv.ms/i/c/9d9f7c4362637c48/IQQpYibKcYRtS4Gn9JLM__FAAUDNl5lOR2B0moiqRPFC2a0?width=5657&height=3771",
   },
   {
     id: "mic-fels-playground-upgrades",
     title: "Mic Fels Playground Upgrades",
-    context: "Federal Campaign Video",
+    context: "Video",
     category: "Swan",
     src: "https://1drv.ms/v/c/9d9f7c4362637c48/IQRzZQ-zLR-gQq9bMvmQF6PQAWpc2r2gjqiH31uRyIsMNDs",
   },
   {
     id: "mic-fels-foreshore-lighting",
     title: "Mic Fels Foreshore Lighting Reel",
-    context: "Federal Campaign Reel",
+    context: "Reel",
     category: "Swan",
     src: "https://1drv.ms/v/c/9d9f7c4362637c48/IQRLb2mZ6ySnT7vz31-Ieq_tAYMbmLvQquKqWzjzR109_jk?width=1296&height=2304",
     orientation: "portrait",
@@ -459,7 +471,7 @@ const federalCampaignEmbeds: ExternalCampaignEmbed[] = [
   {
     id: "matt-moran-dutton-photo",
     title: "Matt Moran Dutton Event",
-    context: "Federal Campaign Photography",
+    context: "Photo",
     category: "Bullwinkel",
     src: "https://1drv.ms/i/c/9d9f7c4362637c48/IQRT_F3t7LglQKXuWSsXNbTkAe8-krqh372A6dRDo5HwRQQ?width=5760&height=3840",
   },
@@ -491,9 +503,8 @@ const stateCandidateArchives: ArchiveCandidate[] = [
     section: "state",
     name: "Jonathan Huston",
     seat: "Nedlands",
-    eyebrow: "2025 WA State Election / Electorate Office",
-    summary:
-      "Local issue videos, reels, field coverage, community explainers, and continuing electorate media for one of the strongest WA Liberal social audiences.",
+    eyebrow: "2025 / Electorate office",
+    summary: "Local issue videos, reels, photos, and ongoing office media.",
     media: [
       ...getLocalCampaignVideos(),
       ...getCampaignEmbeds(stateCampaignEmbeds, [
@@ -505,10 +516,9 @@ const stateCandidateArchives: ArchiveCandidate[] = [
     id: "hayley-edwards",
     section: "state",
     name: "Hayley Edwards",
-    seat: "State campaign coverage",
-    eyebrow: "2025 WA State Election",
-    summary:
-      "Press conference and campaign coverage produced around leader-level field activity and local campaign moments.",
+    seat: "Field coverage",
+    eyebrow: "2025",
+    summary: "Press conference clips, field photos, and local coverage.",
     media: getCampaignEmbeds(stateCampaignEmbeds, [
       "hayley-edwards-presser",
       "hayley-edwards-photo-one",
@@ -520,9 +530,8 @@ const stateCandidateArchives: ArchiveCandidate[] = [
     section: "state",
     name: "Nitin Vashisht",
     seat: "Riverton",
-    eyebrow: "2025 WA State Election",
-    summary:
-      "Community sport and local club campaign coverage packaged for social distribution and candidate storytelling.",
+    eyebrow: "2025",
+    summary: "Community sport, local clubs, traffic, and school pieces.",
     media: getCampaignEmbeds(stateCampaignEmbeds, [
       "nitin-vashisht-local-club",
       "nitin-vashisht-school",
@@ -534,9 +543,8 @@ const stateCandidateArchives: ArchiveCandidate[] = [
     section: "state",
     name: "Sandra Brewer",
     seat: "Cottesloe",
-    eyebrow: "2025 WA State Election",
-    summary:
-      "Candidate photography and event coverage from the campaign archive, built for fast social and campaign collateral use.",
+    eyebrow: "2025",
+    summary: "Photos and event coverage from the archive.",
     media: getCampaignEmbeds(stateCampaignEmbeds, [
       "sandra-brewer-coverage",
       "sandra-brewer-photo-one",
@@ -548,9 +556,8 @@ const stateCandidateArchives: ArchiveCandidate[] = [
     section: "state",
     name: "Andra Biondi",
     seat: "Victoria Park",
-    eyebrow: "2025 WA State Election",
-    summary:
-      "Candidate pieces, local issue filming, and leader-adjacent field coverage from the Victoria Park campaign archive.",
+    eyebrow: "2025",
+    summary: "Videos and local issue coverage.",
     media: getCampaignEmbeds(stateCampaignEmbeds, [
       "andra-piece-to-camera",
       "andra-racecourse-libby",
@@ -561,9 +568,8 @@ const stateCandidateArchives: ArchiveCandidate[] = [
     section: "state",
     name: "Aswath Chavittupara",
     seat: "Morley",
-    eyebrow: "2025 WA State Election",
-    summary:
-      "Campaign stills and communications plan photography for social, local campaign material, and candidate-facing assets.",
+    eyebrow: "2025",
+    summary: "Stills and local field photography.",
     media: getCampaignEmbeds(stateCampaignEmbeds, [
       "aswath-comms-photo",
       "aswath-comms-field-photo",
@@ -574,9 +580,8 @@ const stateCandidateArchives: ArchiveCandidate[] = [
     section: "state",
     name: "Lisa Olsson",
     seat: "Hillarys",
-    eyebrow: "2025 WA State Election",
-    summary:
-      "A mixed candidate archive of video, portraiture, and campaign field material for a targeted local race.",
+    eyebrow: "2025",
+    summary: "Video, portraits, and field work.",
     media: getCampaignEmbeds(stateCampaignEmbeds, [
       "lisa-olsson-video",
       "lisa-olsson-photo",
@@ -587,9 +592,8 @@ const stateCandidateArchives: ArchiveCandidate[] = [
     section: "state",
     name: "Scott Edwardes",
     seat: "Kingsley",
-    eyebrow: "2025 WA State Election",
-    summary:
-      "A deeper set of short campaign clips across roads, students, police, and health, built for fast local issue messaging.",
+    eyebrow: "2025",
+    summary: "Short clips across roads, students, police, and health.",
     media: getCampaignEmbeds(stateCampaignEmbeds, [
       "scott-edwardes-road",
       "scott-edwardes-student",
@@ -605,9 +609,8 @@ const federalCandidateArchives: ArchiveCandidate[] = [
     section: "federal",
     name: "Tom White",
     seat: "Curtin",
-    eyebrow: "2025 Federal Election",
-    summary:
-      "Piece-to-camera and square social cuts for a high-attention metropolitan federal campaign.",
+    eyebrow: "2025",
+    summary: "Piece-to-camera videos and square social cuts.",
     media: getCampaignEmbeds(federalCampaignEmbeds, [
       "tom-white-ptc-5",
       "tom-white-ptc-2",
@@ -618,9 +621,8 @@ const federalCandidateArchives: ArchiveCandidate[] = [
     section: "federal",
     name: "Vince Connelly",
     seat: "Moore",
-    eyebrow: "2025 Federal Election",
-    summary:
-      "Candidate video, drone coverage, and campaign stills spanning local lifestyle, field footage, and electorate-facing campaign visuals.",
+    eyebrow: "2025",
+    summary: "Video, drone coverage, and stills.",
     media: getCampaignEmbeds(federalCampaignEmbeds, [
       "vince-connelly-surfing",
       "vince-connelly-drone",
@@ -632,9 +634,8 @@ const federalCandidateArchives: ArchiveCandidate[] = [
     section: "federal",
     name: "Matt Moran",
     seat: "Bullwinkel",
-    eyebrow: "2025 Federal Election",
-    summary:
-      "Federal campaign stills from leader-visit activity and field coverage in Bullwinkel.",
+    eyebrow: "2025",
+    summary: "Leader-visit stills and field coverage.",
     media: getCampaignEmbeds(federalCampaignEmbeds, [
       "matt-moran-dutton-photo",
     ]),
@@ -644,9 +645,8 @@ const federalCandidateArchives: ArchiveCandidate[] = [
     section: "federal",
     name: "Mic Fels",
     seat: "Swan",
-    eyebrow: "2025 Federal Election",
-    summary:
-      "Federal campaign photography and local commitment videos covering candidate activity, Dutton campaign events, and social-first local issues.",
+    eyebrow: "2025",
+    summary: "Photos, local commitment videos, and event work.",
     media: getCampaignEmbeds(federalCampaignEmbeds, [
       "mic-fels-dutton-photo",
       "mic-fels-playground-upgrades",
@@ -658,9 +658,8 @@ const federalCandidateArchives: ArchiveCandidate[] = [
     section: "federal",
     name: "Sean Ayres",
     seat: "Burt",
-    eyebrow: "2025 Federal Election",
-    summary:
-      "Federal campaign field photography from Burt, focused on showing candidate presence, ground activity, and campaign atmosphere.",
+    eyebrow: "2025",
+    summary: "Field photography from Burt.",
     media: getCampaignEmbeds(federalCampaignEmbeds, [
       "sean-ayres-field-work",
       "sean-ayres-photo-one",
@@ -671,10 +670,9 @@ const federalCandidateArchives: ArchiveCandidate[] = [
     id: "liam-trish-vince",
     section: "federal",
     name: "Liam, Trish & Vince",
-    seat: "Cross-candidate campaign b-roll",
-    eyebrow: "2025 Federal Campaign",
-    summary:
-      "Multi-candidate b-roll and field material built to give the federal campaign archive more motion, texture, and reusable visual coverage.",
+    seat: "B-roll",
+    eyebrow: "2025",
+    summary: "B-roll and field material across candidates.",
     media: getCampaignEmbeds(federalCampaignEmbeds, [
       "liam-trish-vince-broll",
       "liam-trish-vince-vince-broll",
@@ -683,11 +681,10 @@ const federalCandidateArchives: ArchiveCandidate[] = [
   {
     id: "leader-visits",
     section: "federal",
-    name: "Peter Dutton campaign events",
-    seat: "Federal campaign events",
-    eyebrow: "2025 Federal Campaign",
-    summary:
-      "Leader-visit material across multiple candidates, showing event coverage, candidate positioning, and national campaign moments in WA.",
+    name: "Peter Dutton events",
+    seat: "Leader visits",
+    eyebrow: "2025",
+    summary: "Event coverage across Perth stops.",
     media: getCampaignEmbeds(federalCampaignEmbeds, [
       "mic-fels-dutton-photo",
       "matt-moran-dutton-photo",
@@ -754,7 +751,7 @@ const portfolioMediaItems: MediaItem[] = [
     type: "video",
     src: "/media/amalfi-media-strategy.mp4",
     poster: "/media/amalfi-media-strategy-poster.jpg",
-    title: "Media Strategy Reel",
+    title: "Media Reel",
     category: "Video",
     year: "2025",
     featured: true,
@@ -764,15 +761,15 @@ const portfolioMediaItems: MediaItem[] = [
     id: "interview",
     type: "image",
     src: "/media/amalfi-interview.jpg",
-    title: "Interview-Led Storytelling",
-    category: "Campaign",
+    title: "Interview work",
+    category: "Photo",
     year: "2025",
   },
   {
     id: "community",
     type: "image",
     src: "/media/amalfi-community.jpg",
-    title: "Community Initiative",
+    title: "Community photos",
     category: "Photography",
     year: "2025",
   },
@@ -780,13 +777,36 @@ const portfolioMediaItems: MediaItem[] = [
     id: "portrait",
     type: "image",
     src: "/media/amalfi-portrait.jpg",
-    title: "Portrait Session",
+    title: "Portraits",
     category: "Portrait",
     year: "2025",
   },
 ];
 
 const mediaItems = [...campaignVideoItems, ...portfolioMediaItems];
+
+const contactPhotos = [
+  {
+    src: "/media/rohan-contact/rohan-headshot-01.jpg",
+    alt: "Rohan Hammond portrait",
+    label: "Rohan",
+  },
+  {
+    src: "/media/rohan-contact/rohan-on-shoot-01.jpg",
+    alt: "Rohan filming an interview",
+    label: "On a shoot",
+  },
+  {
+    src: "/media/rohan-contact/rohan-on-shoot-02.jpg",
+    alt: "Rohan filming in a public building",
+    label: "Field work",
+  },
+  {
+    src: "/media/rohan-contact/rohan-speaking-01.jpg",
+    alt: "Rohan speaking at an event",
+    label: "Speaking",
+  },
+];
 
 function getArchiveRoute(): ArchiveRoute {
   if (typeof window === "undefined") return null;
@@ -867,7 +887,10 @@ function App() {
     [],
   );
   const archiveItems = useMemo(
-    () => portfolioMediaItems.filter((item) => !item.featured),
+    () =>
+      portfolioMediaItems.filter(
+        (item) => !item.featured && item.id !== "portrait",
+      ),
     [],
   );
   const activeArchive = useMemo(
@@ -974,23 +997,18 @@ function App() {
             Work
           </a>
           <a href="#campaigns" onClick={() => setMenuOpen(false)}>
-            Campaigns
+            Experience
           </a>
           <a href="#campaign-media" onClick={() => setMenuOpen(false)}>
             Media
           </a>
           <a href="#services" onClick={() => setMenuOpen(false)}>
-            Capabilities
+            What I do
           </a>
           <a href="#about" onClick={() => setMenuOpen(false)}>
             About
           </a>
-          <a
-            href={profile.contactHref}
-            rel="noreferrer"
-            target="_blank"
-            onClick={() => setMenuOpen(false)}
-          >
+          <a href="#contact" onClick={() => setMenuOpen(false)}>
             Contact
           </a>
         </nav>
@@ -1009,11 +1027,11 @@ function App() {
 
             <div className="hero-actions">
               <a className="hero-link" href="#campaigns">
-                View campaign experience
+                Experience
                 <ArrowUpRight size={18} aria-hidden="true" />
               </a>
               <a className="text-link" href="#work">
-                See the media
+                Work
                 <ArrowUpRight size={16} aria-hidden="true" />
               </a>
             </div>
@@ -1022,15 +1040,15 @@ function App() {
           <aside className="hero-visual" aria-label="About image">
             <img src="/media/amalfi-founder.jpg" alt="" />
             <div className="hero-note">
-              <span>Founder / Political Media Producer</span>
-              <strong>Campaign judgement behind the camera, not just the shot.</strong>
+              <span>Amalfi Media / Perth</span>
+              <strong>Political work, brand work, people work.</strong>
             </div>
           </aside>
         </section>
 
         <section className="proof-strip" aria-labelledby="proof-title">
           <p className="eyebrow" id="proof-title">
-            Political Proof
+            Work so far
           </p>
           <div className="proof-grid">
             {campaignStats.map((stat) => (
@@ -1049,26 +1067,19 @@ function App() {
           aria-labelledby="campaigns-title"
         >
           <div className="section-heading">
-            <p className="eyebrow">Liberal Campaign Experience</p>
-            <h2 id="campaigns-title">
-              Built for leader-level pressure, electorate work, and campaign field days.
-            </h2>
+            <p className="eyebrow">Experience</p>
+            <h2 id="campaigns-title">Video, photos, and media work.</h2>
           </div>
 
           <div className="campaign-layout">
             <div className="campaign-summary">
               <p>
-                Rohan has worked inside the tempo of Liberal campaigns and
-                parliamentary offices: fast news cycles, candidate travel, local
-                issues, press conferences, paid placements, volunteer energy,
-                and the practical need to turn content around while the moment
-                is still useful.
+                Most of the work sits around people: candidates, founders,
+                events, community groups, and local issues.
               </p>
               <p>
-                The value is not just that he can film and edit. It is that he
-                can identify the story, understand the political risk, draft the
-                surrounding comms, and package the content for the platform,
-                audience, and campaign objective.
+                I film, photograph, edit, write when needed, and help get the
+                piece out.
               </p>
             </div>
 
@@ -1091,103 +1102,139 @@ function App() {
 
         <CampaignMediaSection
           id="campaign-media"
-          eyebrow="Federal Campaign Media"
-          title="Federal videos, reels, and photos."
-          summary="Selected work from metropolitan federal campaigns and leader-visit activity, ordered to foreground Tom White, Vince Connelly, and Matt Moran."
-          clientHeading="Some federal clients we've worked with"
+          eyebrow="Federal work"
+          title="Videos, reels, and photos."
+          summary="Selected federal videos, events, and field work."
           clients={federalCandidateArchives}
           items={federalCampaignMedia}
         />
 
         <CampaignMediaSection
           id="state-media"
-          eyebrow="State Campaign Media"
-          title="State videos, reels, and photos."
-          summary="Selected state campaign work across candidates, local issues, leader events, field coverage, and social-first campaign content."
-          clientHeading="Some state clients we've worked with"
+          eyebrow="State work"
+          title="Videos, reels, and photos."
+          summary="A mix of candidate videos, local issues, field days, and stills."
           clients={stateCandidateArchives}
           items={stateCampaignMedia}
         />
 
-        <section className="featured-band" id="work" aria-labelledby="work-title">
+        <section className="studio-section" id="work" aria-labelledby="work-title">
           <div className="section-heading">
-            <p className="eyebrow">Visual Proof</p>
-            <h2 id="work-title">Campaign, event, and community visuals.</h2>
+            <p className="eyebrow">Selected work</p>
+            <div>
+              <h2 id="work-title">Photos, video, and what I do.</h2>
+              <p className="section-summary">
+                A shorter snapshot of the work, the services, and the person
+                behind the camera.
+              </p>
+            </div>
           </div>
 
-          <div className="featured-grid">
-            {featuredItems.map((item) => (
-              <MediaCard key={item.id} item={item} onOpen={openItem} />
-            ))}
-          </div>
-        </section>
-
-        <section
-          className="services-section"
-          id="services"
-          aria-labelledby="services-title"
-        >
-          <div className="section-heading compact">
-            <p className="eyebrow">Capabilities</p>
-            <h2 id="services-title">Media that can brief, shoot, edit, write, and land.</h2>
-          </div>
-
-          <div className="service-grid">
-            {services.map((service) => (
-              <div className="service-item" key={service}>
-                {service}
+          <div className="studio-layout">
+            <div className="studio-aside">
+              <div className="studio-panel" id="about">
+                <p className="eyebrow">About</p>
+                <h2 id="about-title">About Rohan.</h2>
+                <div className="about-copy">
+                  <p>
+                    I am a Perth videographer and photographer. Most of my
+                    recent work has been around politics, campaigns, local
+                    issues, and small brands.
+                  </p>
+                  <p>
+                    I like work that is clear, useful, and human. I can shoot
+                    it, edit it, write around it, and help get it out.
+                  </p>
+                  <a
+                    className="contact-link"
+                    href={profile.contactHref}
+                    rel="noreferrer"
+                    target="_blank"
+                  >
+                    {profile.contactLabel}
+                    <ExternalLink size={18} aria-hidden="true" />
+                  </a>
+                </div>
               </div>
-            ))}
+
+              <div className="studio-panel" id="services">
+                <p className="eyebrow">What I do</p>
+                <div className="studio-capabilities">
+                  {services.map((service) => (
+                    <div className="studio-capability" key={service}>
+                      {service}
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            <div className="studio-media" aria-label="Selected portfolio work">
+              <div className="studio-media-grid">
+                {[...featuredItems, ...archiveItems].map((item) => (
+                  <MediaCard
+                    key={item.id}
+                    item={item}
+                    onOpen={openItem}
+                    compact={!item.featured}
+                  />
+                ))}
+              </div>
+            </div>
           </div>
         </section>
 
-        <section className="archive-section" aria-labelledby="archive-title">
-          <div className="section-heading compact">
-            <p className="eyebrow">More Work</p>
-            <h2 id="archive-title">Field days, community rooms, and campaign detail.</h2>
+        <section className="contact-section" id="contact" aria-labelledby="contact-title">
+          <div className="section-heading">
+            <p className="eyebrow">Contact</p>
+            <div>
+              <h2 id="contact-title">Get in contact.</h2>
+              <p className="section-summary">
+                For shoots, campaign work, brand work, or anything that needs a
+                camera and a bit of common sense.
+              </p>
+            </div>
           </div>
 
-          <div className="archive-grid">
-            {archiveItems.map((item) => (
-              <MediaCard key={item.id} item={item} onOpen={openItem} compact />
-            ))}
-          </div>
-        </section>
+          <div className="contact-layout">
+            <div className="contact-photo-grid" aria-label="Rohan at work">
+              {contactPhotos.map((photo) => (
+                <figure className="contact-photo" key={photo.src}>
+                  <img src={photo.src} alt={photo.alt} loading="lazy" />
+                  <figcaption>{photo.label}</figcaption>
+                </figure>
+              ))}
+            </div>
 
-        <section className="about-section" id="about" aria-labelledby="about-title">
-          <figure className="about-portrait">
-            <img src="/media/amalfi-founder.jpg" alt="" />
-            <figcaption>Perth-based political media, content creation, and strategy.</figcaption>
-          </figure>
-
-          <div>
-            <p className="eyebrow">About</p>
-            <h2 id="about-title">A compact creative studio with real campaign instincts.</h2>
-            <div className="about-copy">
-              <p>
-                Amalfi Media exists because campaign teams need someone who
-                understands both the political stakes and the production
-                pipeline. Rohan can read the news cycle, find the usable story,
-                film it, edit it, write around it, and ship it while the moment
-                still matters.
-              </p>
-              <p>
-                His work has covered leader's office campaigning, electorate
-                office media, paid advertising, community events, press
-                conferences, parliamentary statements, and high-volume social
-                content for Liberal candidates and MPs across state and federal
-                contests.
-              </p>
+            <div className="contact-details">
+              <div className="contact-detail">
+                <span>Email</span>
+                <a href={profile.contactHref}>{contactDetails.email}</a>
+              </div>
+              <div className="contact-detail">
+                <span>Location</span>
+                <p>{contactDetails.address}</p>
+              </div>
               <a
                 className="contact-link"
-                href={profile.contactHref}
-                rel="noreferrer"
+                href={contactDetails.mapsUrl}
                 target="_blank"
+                rel="noreferrer"
               >
-                {profile.contactLabel}
+                Open in Google Maps
                 <ExternalLink size={18} aria-hidden="true" />
               </a>
             </div>
+          </div>
+
+          <div className="contact-map">
+            <iframe
+              title="Map to 2 Park Road, Crawley"
+              src={contactDetails.mapsEmbedUrl}
+              loading="lazy"
+              referrerPolicy="no-referrer-when-downgrade"
+              allowFullScreen
+            />
           </div>
         </section>
           </>
@@ -1225,12 +1272,36 @@ function getCampaignMediaTab(item: ArchiveMediaItem): CampaignMediaTab {
 }
 
 function getCampaignMediaCountLabel(tab: CampaignMediaTab, count: number) {
-  if (tab === "photos") return `${count} ${count === 1 ? "still" : "stills"}`;
-  if (tab === "reels") {
-    return `${count} ${count === 1 ? "vertical cut" : "vertical cuts"}`;
-  }
+  if (tab === "photos") return `${count} ${count === 1 ? "photo" : "photos"}`;
+  if (tab === "reels") return `${count} ${count === 1 ? "reel" : "reels"}`;
 
-  return `${count} ${count === 1 ? "edit" : "edits"}`;
+  return `${count} ${count === 1 ? "video" : "videos"}`;
+}
+
+function getCampaignMediaPreviewItem(items: ArchiveMediaItem[]) {
+  return items.find((item) => Boolean(item.poster)) ?? items[0];
+}
+
+function getCampaignMediaCollections(
+  clients: ArchiveCandidate[],
+  tab: CampaignMediaTab,
+): CampaignMediaCollection[] {
+  return clients
+    .map((candidate) => {
+      const mediaItems = candidate.media.filter(
+        (item) => getCampaignMediaTab(item) === tab,
+      );
+      const preview = getCampaignMediaPreviewItem(mediaItems);
+
+      if (!preview) return undefined;
+
+      return {
+        candidate,
+        items: mediaItems,
+        preview,
+      };
+    })
+    .filter(isDefined);
 }
 
 type CampaignMediaSectionProps = {
@@ -1238,7 +1309,6 @@ type CampaignMediaSectionProps = {
   eyebrow: string;
   title: string;
   summary: string;
-  clientHeading: string;
   clients: ArchiveCandidate[];
   items: ArchiveMediaItem[];
 };
@@ -1248,11 +1318,13 @@ function CampaignMediaSection({
   eyebrow,
   title,
   summary,
-  clientHeading,
   clients,
   items,
 }: CampaignMediaSectionProps) {
   const [activeTab, setActiveTab] = useState<CampaignMediaTab>("videos");
+  const [expandedCollectionId, setExpandedCollectionId] = useState<
+    string | null
+  >(null);
   const itemsByTab = useMemo(
     () => ({
       videos: items.filter((item) => getCampaignMediaTab(item) === "videos"),
@@ -1261,9 +1333,25 @@ function CampaignMediaSection({
     }),
     [items],
   );
-  const activeItems = itemsByTab[activeTab];
+  const collectionsByTab = useMemo(
+    () => ({
+      videos: getCampaignMediaCollections(clients, "videos"),
+      reels: getCampaignMediaCollections(clients, "reels"),
+      photos: getCampaignMediaCollections(clients, "photos"),
+    }),
+    [clients],
+  );
+  const activeCollections = collectionsByTab[activeTab];
+  const expandedCollection =
+    activeCollections.find(
+      (collection) => collection.candidate.id === expandedCollectionId,
+    ) ?? null;
   const headingId = `${id}-title`;
   const panelId = `${id}-panel`;
+
+  useEffect(() => {
+    setExpandedCollectionId(null);
+  }, [activeTab]);
 
   return (
     <section
@@ -1276,22 +1364,6 @@ function CampaignMediaSection({
         <div>
           <h2 id={headingId}>{title}</h2>
           <p className="section-summary">{summary}</p>
-        </div>
-      </div>
-
-      <div className="campaign-clients" aria-label={clientHeading}>
-        <div className="client-column">
-          <h4>{clientHeading}</h4>
-          <div className="client-list">
-            {clients.map((candidate) => (
-              <a
-                href={`#archive/${candidate.section}/${candidate.id}`}
-                key={candidate.id}
-              >
-                {candidate.name}
-              </a>
-            ))}
-          </div>
         </div>
       </div>
 
@@ -1315,15 +1387,178 @@ function CampaignMediaSection({
       </div>
 
       <div
-        className={`campaign-video-grid is-${activeTab}`}
+        className={`campaign-collection-grid is-${activeTab}`}
         id={panelId}
         role="tabpanel"
       >
-        {activeItems.map((item) => (
-          <ArchiveMediaCard item={item} key={item.id} />
-        ))}
+        {activeCollections.map((collection) => {
+          const collectionPanelId = `${panelId}-${collection.candidate.id}`;
+
+          return (
+            <CampaignCollectionCard
+              collection={collection}
+              controlsId={collectionPanelId}
+              isExpanded={
+                expandedCollection?.candidate.id === collection.candidate.id
+              }
+              key={collection.candidate.id}
+              tab={activeTab}
+              onToggle={() =>
+                setExpandedCollectionId((current) =>
+                  current === collection.candidate.id
+                    ? null
+                    : collection.candidate.id,
+                )
+              }
+            />
+          );
+        })}
       </div>
+
+      {expandedCollection && (
+        <div
+          className="campaign-expanded-gallery"
+          id={`${panelId}-${expandedCollection.candidate.id}`}
+        >
+          <div className="campaign-expanded-header">
+            <div>
+              <p className="eyebrow">{expandedCollection.candidate.seat}</p>
+              <h3>{expandedCollection.candidate.name}</h3>
+              <p>
+                {getCampaignMediaCountLabel(
+                  activeTab,
+                  expandedCollection.items.length,
+                )}
+              </p>
+            </div>
+
+            <div className="campaign-expanded-actions">
+              <a
+                className="collection-archive-link"
+                href={`#archive/${expandedCollection.candidate.section}/${expandedCollection.candidate.id}`}
+              >
+                Archive
+                <ArrowUpRight size={16} aria-hidden="true" />
+              </a>
+              <button
+                className="icon-button"
+                type="button"
+                aria-label={`Close ${expandedCollection.candidate.name} gallery`}
+                onClick={() => setExpandedCollectionId(null)}
+              >
+                <X size={18} />
+              </button>
+            </div>
+          </div>
+
+          <div className={`campaign-video-grid is-${activeTab}`}>
+            {expandedCollection.items.map((item) => (
+              <ArchiveMediaCard
+                item={item}
+                key={item.id}
+                ownerName={expandedCollection.candidate.name}
+              />
+            ))}
+          </div>
+        </div>
+      )}
     </section>
+  );
+}
+
+type CampaignCollectionCardProps = {
+  collection: CampaignMediaCollection;
+  controlsId: string;
+  isExpanded: boolean;
+  tab: CampaignMediaTab;
+  onToggle: () => void;
+};
+
+function CampaignCollectionCard({
+  collection,
+  controlsId,
+  isExpanded,
+  tab,
+  onToggle,
+}: CampaignCollectionCardProps) {
+  const { candidate, items, preview } = collection;
+  const isPhoto = getCampaignMediaTab(preview) === "photos";
+  const buttonClassName = [
+    "collection-preview-button",
+    isPhoto ? "is-photo" : "is-video",
+    tab === "reels" ? "is-portrait" : "",
+    isExpanded ? "is-expanded" : "",
+  ]
+    .filter(Boolean)
+    .join(" ");
+
+  return (
+    <article
+      className={isExpanded ? "collection-card is-expanded" : "collection-card"}
+    >
+      <button
+        className={buttonClassName}
+        type="button"
+        aria-controls={controlsId}
+        aria-expanded={isExpanded}
+        aria-label={`Open ${candidate.name} ${tab}`}
+        onClick={onToggle}
+      >
+        <CampaignCollectionPreviewVisual
+          collectionName={candidate.name}
+          item={preview}
+          tab={tab}
+        />
+        <span className="media-hover-name" aria-hidden="true">
+          {candidate.name}
+        </span>
+        <span className="collection-media-icon" aria-hidden="true">
+          {isPhoto ? (
+            <Images size={18} />
+          ) : (
+            <Play size={18} fill="currentColor" />
+          )}
+        </span>
+      </button>
+
+      <div className="collection-meta">
+        <div>
+          <h3>{candidate.name}</h3>
+          <p>{candidate.seat}</p>
+        </div>
+        <span>{getCampaignMediaCountLabel(tab, items.length)}</span>
+      </div>
+    </article>
+  );
+}
+
+type CampaignCollectionPreviewVisualProps = {
+  collectionName: string;
+  item: ArchiveMediaItem;
+  tab: CampaignMediaTab;
+};
+
+function CampaignCollectionPreviewVisual({
+  collectionName,
+  item,
+  tab,
+}: CampaignCollectionPreviewVisualProps) {
+  const label =
+    tab === "photos"
+      ? "Photo set"
+      : tab === "reels"
+        ? "Reel set"
+        : "Video set";
+
+  if (item.poster) {
+    return <img src={item.poster} alt="" loading="lazy" />;
+  }
+
+  return (
+    <span className="collection-preview-placeholder">
+      <span>{label}</span>
+      <strong>{collectionName}</strong>
+    </span>
   );
 }
 
@@ -1421,16 +1656,18 @@ function AutoPlayVideo({ item }: { item: MediaItem }) {
 
 function CandidateArchivePage({ candidate }: { candidate: ArchiveCandidate }) {
   const sectionLabel =
-    candidate.section === "state" ? "State archive" : "Federal archive";
+    candidate.section === "state" ? "State work" : "Federal work";
+  const backHref =
+    candidate.section === "state" ? "#state-media" : "#campaign-media";
 
   return (
     <section
       className="candidate-archive-page"
       aria-labelledby="candidate-archive-title"
     >
-      <a className="archive-back-link" href="#campaign-media">
+      <a className="archive-back-link" href={backHref}>
         <ChevronLeft size={18} aria-hidden="true" />
-        Campaign media
+        Back to media
       </a>
 
       <div className="candidate-archive-hero">
@@ -1443,20 +1680,30 @@ function CandidateArchivePage({ candidate }: { candidate: ArchiveCandidate }) {
         <aside className="candidate-archive-stats">
           <span>{sectionLabel}</span>
           <strong>{candidate.seat}</strong>
-          <span>{candidate.media.length} selected samples</span>
+          <span>{candidate.media.length} pieces</span>
         </aside>
       </div>
 
       <div className="candidate-archive-grid">
         {candidate.media.map((item) => (
-          <ArchiveMediaCard item={item} key={item.id} />
+          <ArchiveMediaCard
+            item={item}
+            key={item.id}
+            ownerName={candidate.name}
+          />
         ))}
       </div>
     </section>
   );
 }
 
-function ArchiveMediaCard({ item }: { item: ArchiveMediaItem }) {
+function ArchiveMediaCard({
+  item,
+  ownerName,
+}: {
+  item: ArchiveMediaItem;
+  ownerName?: string;
+}) {
   const isPhoto = isOneDrivePhoto(item.src);
   const isExternal = item.src.startsWith("http");
   const isEmbeddedVideo = isExternal && !isPhoto && item.kind !== "video";
@@ -1464,12 +1711,13 @@ function ArchiveMediaCard({ item }: { item: ArchiveMediaItem }) {
   const openLabel = isExternal
     ? `Open ${item.title} in OneDrive`
     : `Open ${item.title} video`;
+  const hoverName = ownerName ?? item.category;
   const frameStyle = getExternalMediaFrameStyle(item.src);
   const frameClassName = [
     "external-campaign-frame",
     item.kind === "video" ? "is-video" : isPhoto ? "is-photo" : "is-video",
-    isEmbeddedVideo ? "is-embed-video" : "",
     item.kind === "video" ? "is-local-video" : "",
+    isEmbeddedVideo ? "is-embed-video" : "",
     item.orientation ? `is-${item.orientation}` : "",
   ]
     .filter(Boolean)
@@ -1489,11 +1737,9 @@ function ArchiveMediaCard({ item }: { item: ArchiveMediaItem }) {
           <video
             src={item.src}
             poster={item.poster}
-            muted
-            loop
-            autoPlay
+            controls
             playsInline
-            preload="metadata"
+            preload="none"
           />
         ) : (
           <iframe
@@ -1504,6 +1750,9 @@ function ArchiveMediaCard({ item }: { item: ArchiveMediaItem }) {
             allowFullScreen
           />
         )}
+        <span className="media-hover-name" aria-hidden="true">
+          {hoverName}
+        </span>
       </div>
 
       <div className="external-campaign-meta">
