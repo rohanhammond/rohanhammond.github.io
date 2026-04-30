@@ -43,7 +43,15 @@ type ExternalCampaignEmbed = {
   context: string;
   category: string;
   src: string;
-  orientation?: "landscape" | "portrait";
+  orientation?: "landscape" | "portrait" | "square";
+};
+
+type CampaignArchiveSection = {
+  id: "state" | "federal";
+  eyebrow: string;
+  title: string;
+  summary: string;
+  items: ExternalCampaignEmbed[];
 };
 
 const profile = {
@@ -184,14 +192,29 @@ const campaignVideoItems: MediaItem[] = [
   },
 ];
 
-const externalCampaignEmbeds: ExternalCampaignEmbed[] = [
-  {
-    id: "liam-trish-vince-broll",
-    title: "Liam, Trish & Vince B-roll",
-    context: "Federal / Candidate Video",
-    category: "Liam, Trish & Vince",
-    src: "https://1drv.ms/v/c/9d9f7c4362637c48/IQRUul58E3usQLbSR6B8gEy1AZm8L9BobVHzsEMbX4Gcjms?width=1920&height=1080",
-  },
+const stateCampaignRoster = [
+  "Andra Biondi",
+  "Aswath Chavittupara",
+  "Hayley Edwards",
+  "Jonathan Huston",
+  "Liam Staltari",
+  "Lisa Olsson",
+  "Nitin Vashisht",
+  "Paula Tan",
+  "Sandra Brewer",
+  "Scott Edwardes",
+];
+
+const federalCampaignRoster = [
+  "Matt Moran",
+  "Mic Fels",
+  "Sean Ayres",
+  "Tom White",
+  "Vince Connelly",
+  "Peter Dutton campaign events",
+];
+
+const stateCampaignEmbeds: ExternalCampaignEmbed[] = [
   {
     id: "jonathan-huston-door-knocking",
     title: "Jonathan Huston Door Knocking",
@@ -207,13 +230,6 @@ const externalCampaignEmbeds: ExternalCampaignEmbed[] = [
     src: "https://1drv.ms/v/c/9d9f7c4362637c48/IQQQ926QY6NjQYdaPgW-YG5jAT4wxJVaIwO3xIZQTXhEJYQ?width=1920&height=1080",
   },
   {
-    id: "sean-ayres-field-work",
-    title: "Sean Ayres Campaign Field Work",
-    context: "Federal Campaign Photography",
-    category: "Sean Ayres for Burt",
-    src: "https://1drv.ms/i/c/9d9f7c4362637c48/IQTRlGg3NdGxRZGbuZp7qciNAdlEKJgJy0DCtO2I9GVzq6w?width=5933&height=3955",
-  },
-  {
     id: "nitin-vashisht-local-club",
     title: "Nitin Vashisht Local Club Piece",
     context: "Candidate Campaign Video",
@@ -227,6 +243,219 @@ const externalCampaignEmbeds: ExternalCampaignEmbed[] = [
     category: "Sandra Brewer",
     src: "https://1drv.ms/i/c/9d9f7c4362637c48/IQTlRO_MKOFtSbLqUpcXPTBZAe7KmqVql53oCXWknrVIh6Q?width=2773&height=4160",
     orientation: "portrait",
+  },
+  {
+    id: "andra-piece-to-camera",
+    title: "Andra Biondi Piece-to-Camera",
+    context: "State Campaign Video",
+    category: "Victoria Park",
+    src: "https://1drv.ms/v/c/9d9f7c4362637c48/IQTyAwxV3vdfQavj_0iiPOCEAbj4Hr6osW09zh73u-rIxKw?width=3840&height=2160",
+  },
+  {
+    id: "andra-racecourse-libby",
+    title: "Andra Biondi with Libby Mettam",
+    context: "State Campaign Video",
+    category: "Victoria Park",
+    src: "https://1drv.ms/v/c/9d9f7c4362637c48/IQSIsVqxoUn9TIu61NCf8ADLAZsf6NLewXar8uKrMNzkPbw?width=3840&height=2160",
+  },
+  {
+    id: "aswath-comms-photo",
+    title: "Aswath Chavittupara Campaign Field",
+    context: "State Campaign Photography",
+    category: "Morley",
+    src: "https://1drv.ms/i/c/9d9f7c4362637c48/IQS_VVLJPd-SSbYAqrbuAlJtAQZFu3Zt63ibqIFWgRkqil0?width=5740&height=3827",
+  },
+  {
+    id: "aswath-comms-field-photo",
+    title: "Aswath Chavittupara Community Coverage",
+    context: "State Campaign Photography",
+    category: "Morley",
+    src: "https://1drv.ms/i/c/9d9f7c4362637c48/IQQ5qfwpfliESYi4uYXmV1pnAb3TGbBINFg9CpEhMlhfJMY?width=5021&height=3347",
+  },
+  {
+    id: "lisa-olsson-video",
+    title: "Lisa Olsson Campaign Piece",
+    context: "State Campaign Video",
+    category: "Hillarys",
+    src: "https://1drv.ms/v/c/9d9f7c4362637c48/IQRuhxv_SpLITI1MGN4AP95LAb1o47S89cS2C9VjObocmb8?width=3840&height=2160",
+  },
+  {
+    id: "lisa-olsson-photo",
+    title: "Lisa Olsson Campaign Portrait",
+    context: "State Campaign Photography",
+    category: "Hillarys",
+    src: "https://1drv.ms/i/c/9d9f7c4362637c48/IQQdxNVXMH96T7dIdgd5tSaQAZlJfpfz7LyjwORS79omJxw?width=4000&height=6000",
+    orientation: "portrait",
+  },
+  {
+    id: "paula-tan-preselection",
+    title: "Paula Tan Preselection Film",
+    context: "State Campaign Video",
+    category: "Maylands",
+    src: "https://1drv.ms/v/c/9d9f7c4362637c48/IQSH4qysIzk3SojG0CJwlYXiAXwZuVWYSR_0ZtWWYfwqigU?width=3840&height=2160",
+  },
+  {
+    id: "paula-tan-aus-day",
+    title: "Paula Tan Australia Day Piece",
+    context: "State Campaign Video",
+    category: "Maylands",
+    src: "https://1drv.ms/v/c/9d9f7c4362637c48/IQQlWUPzVoi4RJ96eBKEo0_3AYIQCz0GYqxCWInKjFPp-h4?width=3840&height=2160",
+  },
+  {
+    id: "scott-edwardes-road",
+    title: "Scott Edwardes Road Clip",
+    context: "State Campaign Short Video",
+    category: "Kingsley",
+    src: "https://1drv.ms/v/c/9d9f7c4362637c48/IQQQOl8eZMllSpgtqkvg44ssAQenMtPGHH9lvAGsmRO3ceQ?width=1920&height=1920",
+    orientation: "square",
+  },
+  {
+    id: "scott-edwardes-student",
+    title: "Scott Edwardes Student Clip",
+    context: "State Campaign Short Video",
+    category: "Kingsley",
+    src: "https://1drv.ms/v/c/9d9f7c4362637c48/IQQ6xx6SG4LWTbC4Fy6ghcazAVqFxoNt8cQ1vOkclH7FJiE?width=1920&height=1920",
+    orientation: "square",
+  },
+  {
+    id: "scott-edwardes-police",
+    title: "Scott Edwardes Police Reel",
+    context: "State Campaign Reel",
+    category: "Kingsley",
+    src: "https://1drv.ms/v/c/9d9f7c4362637c48/IQQKudQ1w23NQKxaUkfakpuvAdFNO-3t_20i_PS0FpYmV7M?width=1080&height=1920",
+    orientation: "portrait",
+  },
+  {
+    id: "scott-edwardes-health",
+    title: "Scott Edwardes Health Reel",
+    context: "State Campaign Reel",
+    category: "Kingsley",
+    src: "https://1drv.ms/v/c/9d9f7c4362637c48/IQQFRNcufpm5QqcE9jwv32FgAf_3LBmzaqvp_maHhvxPCKk?width=1080&height=1920",
+    orientation: "portrait",
+  },
+];
+
+const federalCampaignEmbeds: ExternalCampaignEmbed[] = [
+  {
+    id: "liam-trish-vince-broll",
+    title: "Liam, Trish & Vince B-roll",
+    context: "Cross-Campaign B-roll",
+    category: "Candidate Travel",
+    src: "https://1drv.ms/v/c/9d9f7c4362637c48/IQRUul58E3usQLbSR6B8gEy1AZm8L9BobVHzsEMbX4Gcjms?width=1920&height=1080",
+  },
+  {
+    id: "sean-ayres-field-work",
+    title: "Sean Ayres Campaign Field Work",
+    context: "Federal Campaign Photography",
+    category: "Burt",
+    src: "https://1drv.ms/i/c/9d9f7c4362637c48/IQTRlGg3NdGxRZGbuZp7qciNAdlEKJgJy0DCtO2I9GVzq6w?width=5933&height=3955",
+  },
+  {
+    id: "tom-white-ptc-5",
+    title: "Tom White Piece-to-Camera",
+    context: "Federal Campaign Video",
+    category: "Curtin",
+    src: "https://1drv.ms/v/c/9d9f7c4362637c48/IQQdpjVisYVESINfod6QVQZ_AdZHqhN5rbtQiI2W8LAUhCU?width=1920&height=1920",
+    orientation: "square",
+  },
+  {
+    id: "tom-white-ptc-2",
+    title: "Tom White Social Cut",
+    context: "Federal Campaign Video",
+    category: "Curtin",
+    src: "https://1drv.ms/v/c/9d9f7c4362637c48/IQQKS1UCY2ntTLZahyzOG8ttAQJXXxKmiKUYGDaQvuTheqo?width=1920&height=1920",
+    orientation: "square",
+  },
+  {
+    id: "vince-connelly-surfing",
+    title: "Vince Connelly Surfing Piece",
+    context: "Federal Campaign Video",
+    category: "Moore",
+    src: "https://1drv.ms/v/c/9d9f7c4362637c48/IQSkD2kkoP8zRrqSdCZcK_3PAXiS-xuzdc6dniesKzY8ynU?width=2160&height=3840",
+    orientation: "portrait",
+  },
+  {
+    id: "vince-connelly-drone",
+    title: "Vince Connelly Drone Coverage",
+    context: "Federal Campaign B-roll",
+    category: "Moore",
+    src: "https://1drv.ms/v/c/9d9f7c4362637c48/IQRsbUI7bCesRoRnNzZApzSLARE4ZZZtb6tuz0ikubuIUOM?width=5472&height=3078",
+  },
+  {
+    id: "vince-connelly-photo",
+    title: "Vince Connelly Campaign Still",
+    context: "Federal Campaign Photography",
+    category: "Moore",
+    src: "https://1drv.ms/i/c/9d9f7c4362637c48/IQSkCZVfisfoS51qJIp5qnHCAe1fattGkOzig4xXZq3eluQ?width=6000&height=4000",
+  },
+  {
+    id: "mic-fels-dutton-photo",
+    title: "Mic Fels with Peter Dutton",
+    context: "Federal Campaign Photography",
+    category: "Swan",
+    src: "https://1drv.ms/i/c/9d9f7c4362637c48/IQQpYibKcYRtS4Gn9JLM__FAAUDNl5lOR2B0moiqRPFC2a0?width=5657&height=3771",
+  },
+  {
+    id: "mic-fels-playground-upgrades",
+    title: "Mic Fels Playground Upgrades",
+    context: "Federal Campaign Video",
+    category: "Swan",
+    src: "https://1drv.ms/v/c/9d9f7c4362637c48/IQRzZQ-zLR-gQq9bMvmQF6PQAWpc2r2gjqiH31uRyIsMNDs",
+  },
+  {
+    id: "mic-fels-foreshore-lighting",
+    title: "Mic Fels Foreshore Lighting Reel",
+    context: "Federal Campaign Reel",
+    category: "Swan",
+    src: "https://1drv.ms/v/c/9d9f7c4362637c48/IQRLb2mZ6ySnT7vz31-Ieq_tAYMbmLvQquKqWzjzR109_jk?width=1296&height=2304",
+    orientation: "portrait",
+  },
+  {
+    id: "matt-moran-dutton-photo",
+    title: "Matt Moran Dutton Event",
+    context: "Federal Campaign Photography",
+    category: "Bullwinkel",
+    src: "https://1drv.ms/i/c/9d9f7c4362637c48/IQRT_F3t7LglQKXuWSsXNbTkAe8-krqh372A6dRDo5HwRQQ?width=5760&height=3840",
+  },
+  {
+    id: "matt-moran-sussan-photo",
+    title: "Matt Moran with Sussan Ley",
+    context: "Federal Campaign Photography",
+    category: "Bullwinkel",
+    src: "https://1drv.ms/i/c/9d9f7c4362637c48/IQQqwogbO36TSIgBrZJg6bSGAbuSwqysGxaoeBh-swxZoCE?width=5120&height=3414",
+  },
+  {
+    id: "matt-moran-brown-park-video",
+    title: "Matt Moran Brown Park Video",
+    context: "Federal Campaign Video",
+    category: "Bullwinkel",
+    src: "https://1drv.ms/v/c/9d9f7c4362637c48/IQQhFn_qrYnfR6xbVdj0_j7wAea0kav41OEVO2QZjMU6enc?width=1920&height=1080",
+  },
+  {
+    id: "matt-moran-brown-park-photo",
+    title: "Matt Moran Brown Park Still",
+    context: "Federal Campaign Photography",
+    category: "Bullwinkel",
+    src: "https://1drv.ms/i/c/9d9f7c4362637c48/IQQRYh31Pt34TqlPWs68kumYAcpcjs-dS_YL_KY4pQMzUzc?width=6240&height=4160",
+  },
+];
+
+const campaignArchiveSections: CampaignArchiveSection[] = [
+  {
+    id: "state",
+    eyebrow: "2025 WA State Election",
+    title: "State campaign contracts across candidates, leaders, and local issues.",
+    summary:
+      "A wider proof wall from the state campaign archive: candidate pieces, leader events, reels, press coverage, community stills, and local issue clips.",
+    items: stateCampaignEmbeds,
+  },
+  {
+    id: "federal",
+    eyebrow: "2025 Federal Election",
+    title: "Federal campaign coverage across Perth seats and national campaign events.",
+    summary:
+      "Federal campaign work spanning electorate field days, leader visits, social video, event photography, local commitments, and candidate b-roll.",
+    items: federalCampaignEmbeds,
   },
 ];
 
@@ -557,17 +786,55 @@ function App() {
             aria-labelledby="external-campaign-title"
           >
             <div className="subsection-heading">
-              <p className="eyebrow">Archive Samples</p>
+              <p className="eyebrow">Contract Proof Wall</p>
               <h3 id="external-campaign-title">
-                Selected state and federal pieces from the wider campaign archive.
+                A larger campaign archive showing the spread of candidates, seats, and formats.
               </h3>
             </div>
 
-            <div className="external-campaign-grid">
-              {externalCampaignEmbeds.map((item) => (
-                <ExternalCampaignCard key={item.id} item={item} />
-              ))}
+            <div className="campaign-roster" aria-label="Campaign roster">
+              <div className="roster-column">
+                <h4>State campaign roster</h4>
+                <div className="roster-list">
+                  {stateCampaignRoster.map((candidate) => (
+                    <span key={candidate}>{candidate}</span>
+                  ))}
+                </div>
+              </div>
+              <div className="roster-column">
+                <h4>Federal campaign roster</h4>
+                <div className="roster-list">
+                  {federalCampaignRoster.map((candidate) => (
+                    <span key={candidate}>{candidate}</span>
+                  ))}
+                </div>
+              </div>
             </div>
+
+            {campaignArchiveSections.map((section) => (
+              <div
+                className={`archive-proof-section is-${section.id}`}
+                key={section.id}
+                aria-labelledby={`${section.id}-archive-title`}
+              >
+                <div className="archive-proof-header">
+                  <div className="archive-proof-kicker">
+                    <span>{section.eyebrow}</span>
+                    <strong>{section.items.length} samples</strong>
+                  </div>
+                  <div>
+                    <h4 id={`${section.id}-archive-title`}>{section.title}</h4>
+                    <p>{section.summary}</p>
+                  </div>
+                </div>
+
+                <div className="external-campaign-grid">
+                  {section.items.map((item) => (
+                    <ExternalCampaignCard key={item.id} item={item} />
+                  ))}
+                </div>
+              </div>
+            ))}
           </div>
         </section>
 
@@ -766,7 +1033,7 @@ function AutoPlayVideo({ item }: { item: MediaItem }) {
 function ExternalCampaignCard({ item }: { item: ExternalCampaignEmbed }) {
   const frameClassName = [
     "external-campaign-frame",
-    item.orientation === "portrait" ? "is-portrait" : "",
+    item.orientation ? `is-${item.orientation}` : "",
   ]
     .filter(Boolean)
     .join(" ");

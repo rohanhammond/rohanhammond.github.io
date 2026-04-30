@@ -583,6 +583,106 @@ h1 {
   line-height: 1;
 }
 
+.campaign-roster {
+  display: grid;
+  grid-template-columns: minmax(0, 1.3fr) minmax(0, 0.9fr);
+  gap: clamp(0.85rem, 1.7vw, 1.35rem);
+  margin-bottom: clamp(2.5rem, 5vw, 4.5rem);
+}
+
+.roster-column {
+  min-width: 0;
+  border: 1px solid rgba(42, 37, 31, 0.14);
+  border-radius: 6px;
+  background: rgba(255, 253, 248, 0.58);
+  padding: clamp(1rem, 2vw, 1.35rem);
+}
+
+.roster-column h4,
+.archive-proof-header h4 {
+  margin: 0;
+  font-family: Georgia, "Times New Roman", serif;
+  font-weight: 400;
+  letter-spacing: 0;
+}
+
+.roster-column h4 {
+  margin-bottom: 0.85rem;
+  font-size: clamp(1.15rem, 1.8vw, 1.55rem);
+  line-height: 1.1;
+}
+
+.roster-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+}
+
+.roster-list span {
+  display: inline-flex;
+  align-items: center;
+  min-height: 34px;
+  border: 1px solid rgba(42, 37, 31, 0.14);
+  border-radius: 999px;
+  background: #fffdf8;
+  padding: 0.35rem 0.7rem;
+  color: #51483c;
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 0.07em;
+  line-height: 1.25;
+  text-transform: uppercase;
+}
+
+.archive-proof-section {
+  border-top: 1px solid rgba(42, 37, 31, 0.14);
+  padding-top: clamp(1.8rem, 3.5vw, 2.8rem);
+}
+
+.archive-proof-section + .archive-proof-section {
+  margin-top: clamp(3rem, 6vw, 5rem);
+}
+
+.archive-proof-header {
+  display: grid;
+  grid-template-columns: minmax(9rem, 0.26fr) minmax(0, 0.74fr);
+  gap: clamp(1.5rem, 5vw, 4rem);
+  align-items: start;
+  margin-bottom: clamp(1.35rem, 3vw, 2.2rem);
+}
+
+.archive-proof-kicker {
+  display: grid;
+  gap: 0.45rem;
+  color: #746957;
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  line-height: 1.35;
+  text-transform: uppercase;
+}
+
+.archive-proof-kicker strong {
+  color: #241f1a;
+  font-size: 1rem;
+  letter-spacing: 0.06em;
+}
+
+.archive-proof-header h4 {
+  max-width: 820px;
+  margin-bottom: 0.75rem;
+  font-size: clamp(1.55rem, 3vw, 3rem);
+  line-height: 1.03;
+}
+
+.archive-proof-header p {
+  max-width: 760px;
+  margin: 0;
+  color: #51483c;
+  font-size: clamp(0.98rem, 1.35vw, 1.12rem);
+  line-height: 1.65;
+}
+
 .external-campaign-grid {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -604,6 +704,10 @@ h1 {
 
 .external-campaign-frame.is-portrait {
   aspect-ratio: 4 / 5;
+}
+
+.external-campaign-frame.is-square {
+  aspect-ratio: 1;
 }
 
 .external-campaign-frame iframe {
@@ -920,6 +1024,8 @@ h1 {
   .proof-strip,
   .section-heading,
   .subsection-heading,
+  .campaign-roster,
+  .archive-proof-header,
   .campaign-layout,
   .about-section {
     grid-template-columns: 1fr;
@@ -1061,6 +1167,16 @@ h1 {
 
   .media-meta {
     padding-top: 0.75rem;
+  }
+
+  .roster-list span {
+    min-height: 32px;
+    padding-inline: 0.62rem;
+    font-size: 0.72rem;
+  }
+
+  .archive-proof-section + .archive-proof-section {
+    margin-top: 3rem;
   }
 
   .site-footer {
