@@ -18,6 +18,7 @@ type MediaItem = {
   category: string;
   year?: string;
   featured?: boolean;
+  orientation?: "landscape" | "portrait";
 };
 
 type CampaignStat = {
@@ -32,6 +33,8 @@ type CampaignRole = {
   period: string;
   points: string[];
 };
+
+type CampaignMediaTab = "videos" | "reels";
 
 const profile = {
   name: "Rohan Hammond",
@@ -74,14 +77,14 @@ const campaignStats: CampaignStat[] = [
     value: "7,000+",
     label: "Facebook following grown from zero",
     detail:
-      "Built the Jonathan Huston MLA Facebook audience into one of the strongest followings in the WA Liberal parliamentary team.",
+      "Built the Jonathan Huston Facebook audience into one of the strongest followings in the WA Liberal parliamentary team.",
   },
 ];
 
 const campaignRoles: CampaignRole[] = [
   {
     role: "Electorate Officer & Media Producer",
-    context: "Office of Jonathan Huston MLA",
+    context: "Jonathan Huston",
     period: "Sep 2025 - Present",
     points: [
       "Leads full-stack media operations: filming, photography, editing, creative direction, and social-first content strategy.",
@@ -108,7 +111,70 @@ const campaignRoles: CampaignRole[] = [
   },
 ];
 
-const mediaItems: MediaItem[] = [
+const campaignVideoItems: MediaItem[] = [
+  {
+    id: "jono-door-knocking-recap",
+    type: "video",
+    src: "/media/campaign-videos/jono-door-knocking-recap.mp4",
+    poster: "/media/campaign-videos/jono-door-knocking-recap-poster.jpg",
+    title: "Door Knocking Recap",
+    category: "Jonathan Huston",
+    year: "2025",
+    orientation: "landscape",
+  },
+  {
+    id: "jono-bowling-club",
+    type: "video",
+    src: "/media/campaign-videos/jono-bowling-club.mp4",
+    poster: "/media/campaign-videos/jono-bowling-club-poster.jpg",
+    title: "Dalkeith Nedlands Bowling Club",
+    category: "Community Issue",
+    year: "2025",
+    orientation: "landscape",
+  },
+  {
+    id: "jono-traffic",
+    type: "video",
+    src: "/media/campaign-videos/jono-traffic.mp4",
+    poster: "/media/campaign-videos/jono-traffic-poster.jpg",
+    title: "Thomas Street Traffic",
+    category: "Local Issue",
+    year: "2025",
+    orientation: "landscape",
+  },
+  {
+    id: "jono-high-rise",
+    type: "video",
+    src: "/media/campaign-videos/jono-high-rise.mp4",
+    poster: "/media/campaign-videos/jono-high-rise-poster.jpg",
+    title: "High-Rise Planning",
+    category: "Planning Issue",
+    year: "2025",
+    orientation: "portrait",
+  },
+  {
+    id: "jono-iga-door-knocking",
+    type: "video",
+    src: "/media/campaign-videos/jono-iga-door-knocking.mp4",
+    poster: "/media/campaign-videos/jono-iga-door-knocking-poster.jpg",
+    title: "IGA Door Knocking Ad",
+    category: "Field Campaign",
+    year: "2024",
+    orientation: "landscape",
+  },
+  {
+    id: "jono-hospital-services",
+    type: "video",
+    src: "/media/campaign-videos/jono-hospital-services.mp4",
+    poster: "/media/campaign-videos/jono-hospital-services-poster.jpg",
+    title: "Hospital Services",
+    category: "Health Services",
+    year: "2024",
+    orientation: "portrait",
+  },
+];
+
+const portfolioMediaItems: MediaItem[] = [
   {
     id: "campaign-video",
     type: "video",
@@ -181,17 +247,34 @@ const mediaItems: MediaItem[] = [
   },
 ];
 
+const mediaItems = [...campaignVideoItems, ...portfolioMediaItems];
+
 function App() {
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
   const [menuOpen, setMenuOpen] = useState(false);
+  const [campaignMediaTab, setCampaignMediaTab] =
+    useState<CampaignMediaTab>("videos");
 
   const featuredItems = useMemo(
-    () => mediaItems.filter((item) => item.featured),
+    () => portfolioMediaItems.filter((item) => item.featured),
     [],
   );
   const archiveItems = useMemo(
-    () => mediaItems.filter((item) => !item.featured),
+    () => portfolioMediaItems.filter((item) => !item.featured),
     [],
+  );
+  const campaignVideos = useMemo(
+    () =>
+      campaignVideoItems.filter((item) => item.orientation !== "portrait"),
+    [],
+  );
+  const campaignReels = useMemo(
+    () => campaignVideoItems.filter((item) => item.orientation === "portrait"),
+    [],
+  );
+  const activeCampaignMedia = useMemo(
+    () => (campaignMediaTab === "videos" ? campaignVideos : campaignReels),
+    [campaignMediaTab, campaignReels, campaignVideos],
   );
 
   const activeItem = activeIndex === null ? null : mediaItems[activeIndex];
@@ -270,6 +353,9 @@ function App() {
           </a>
           <a href="#campaigns" onClick={() => setMenuOpen(false)}>
             Campaigns
+          </a>
+          <a href="#campaign-media" onClick={() => setMenuOpen(false)}>
+            Videos
           </a>
           <a href="#services" onClick={() => setMenuOpen(false)}>
             Capabilities
@@ -374,6 +460,66 @@ function App() {
                 </article>
               ))}
             </div>
+          </div>
+        </section>
+
+        <section
+          className="campaign-video-section"
+          id="campaign-media"
+          aria-labelledby="campaign-media-title"
+        >
+          <div className="section-heading">
+            <p className="eyebrow">Jonathan Huston</p>
+            <h2 id="campaign-media-title">
+              Local issue videos and reels built for voters' feeds.
+            </h2>
+          </div>
+
+          <div className="media-tabs" role="tablist" aria-label="Campaign media">
+            <button
+              className={
+                campaignMediaTab === "videos"
+                  ? "media-tab is-active"
+                  : "media-tab"
+              }
+              type="button"
+              role="tab"
+              aria-selected={campaignMediaTab === "videos"}
+              aria-controls="campaign-media-panel"
+              onClick={() => setCampaignMediaTab("videos")}
+            >
+              <span>Videos</span>
+              <small>{campaignVideos.length} widescreen edits</small>
+            </button>
+            <button
+              className={
+                campaignMediaTab === "reels"
+                  ? "media-tab is-active"
+                  : "media-tab"
+              }
+              type="button"
+              role="tab"
+              aria-selected={campaignMediaTab === "reels"}
+              aria-controls="campaign-media-panel"
+              onClick={() => setCampaignMediaTab("reels")}
+            >
+              <span>Reels</span>
+              <small>{campaignReels.length} vertical cuts</small>
+            </button>
+          </div>
+
+          <div
+            className={
+              campaignMediaTab === "reels"
+                ? "campaign-video-grid is-reels"
+                : "campaign-video-grid is-videos"
+            }
+            id="campaign-media-panel"
+            role="tabpanel"
+          >
+            {activeCampaignMedia.map((item) => (
+              <MediaCard key={item.id} item={item} onOpen={openItem} />
+            ))}
           </div>
         </section>
 
@@ -484,10 +630,24 @@ type MediaCardProps = {
 };
 
 function MediaCard({ item, compact = false, onOpen }: MediaCardProps) {
+  const cardClassName = [
+    "media-card",
+    compact ? "compact" : "",
+    item.orientation ? `is-${item.orientation}` : "",
+  ]
+    .filter(Boolean)
+    .join(" ");
+  const buttonClassName = [
+    "media-button",
+    item.orientation ? item.orientation : "",
+  ]
+    .filter(Boolean)
+    .join(" ");
+
   return (
-    <article className={compact ? "media-card compact" : "media-card"}>
+    <article className={cardClassName}>
       <button
-        className="media-button"
+        className={buttonClassName}
         type="button"
         aria-label={`Open ${item.title}`}
         onClick={() => onOpen(item)}
