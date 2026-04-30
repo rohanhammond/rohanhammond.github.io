@@ -79,8 +79,6 @@ type ExternalMediaFrameStyle = CSSProperties & {
   "--media-aspect"?: string;
 };
 
-const PHOTO_PREVIEW_MAX_SIZE = 1800;
-
 const profile = {
   name: "Rohan Hammond",
   brand: "Amalfi Media",
@@ -874,27 +872,6 @@ function getExternalMediaFrameStyle(
   };
 }
 
-function getPhotoPreviewSrc(src: string) {
-  const dimensions = getExternalMediaDimensions(src);
-
-  if (!dimensions) return src;
-
-  try {
-    const url = new URL(src);
-    const longestSide = Math.max(dimensions.width, dimensions.height);
-    const scale = Math.min(PHOTO_PREVIEW_MAX_SIZE / longestSide, 1);
-    const width = Math.round(dimensions.width * scale);
-    const height = Math.round(dimensions.height * scale);
-
-    url.searchParams.set("width", String(width));
-    url.searchParams.set("height", String(height));
-
-    return url.toString();
-  } catch {
-    return src;
-  }
-}
-
 function App() {
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
   const [menuOpen, setMenuOpen] = useState(false);
@@ -1501,36 +1478,6 @@ function CandidateArchivePage({ candidate }: { candidate: ArchiveCandidate }) {
   );
 }
 
-function ExternalPhotoPreview({
-  item,
-}: {
-  item: Pick<ExternalCampaignEmbed, "src" | "title">;
-}) {
-  const [imageFailed, setImageFailed] = useState(false);
-
-  if (imageFailed) {
-    return (
-      <iframe
-        src={item.src}
-        title={item.title}
-        loading="lazy"
-        allow="autoplay; fullscreen; encrypted-media"
-        allowFullScreen
-      />
-    );
-  }
-
-  return (
-    <img
-      src={getPhotoPreviewSrc(item.src)}
-      alt={item.title}
-      loading="lazy"
-      decoding="async"
-      onError={() => setImageFailed(true)}
-    />
-  );
-}
-
 function ArchiveMediaCard({ item }: { item: ArchiveMediaItem }) {
   const isPhoto = isOneDrivePhoto(item.src);
   const isExternal = item.src.startsWith("http");
@@ -1561,8 +1508,6 @@ function ArchiveMediaCard({ item }: { item: ArchiveMediaItem }) {
             playsInline
             preload="metadata"
           />
-        ) : isPhoto ? (
-          <ExternalPhotoPreview item={item} />
         ) : (
           <iframe
             src={item.src}
@@ -1615,17 +1560,13 @@ function ExternalCampaignCard({ item }: { item: ExternalCampaignEmbed }) {
   return (
     <article className={cardClassName}>
       <div className={frameClassName} style={frameStyle}>
-        {isPhoto ? (
-          <ExternalPhotoPreview item={item} />
-        ) : (
-          <iframe
-            src={item.src}
-            title={item.title}
-            loading="lazy"
-            allow="autoplay; fullscreen; encrypted-media"
-            allowFullScreen
-          />
-        )}
+        <iframe
+          src={item.src}
+          title={item.title}
+          loading="lazy"
+          allow="autoplay; fullscreen; encrypted-media"
+          allowFullScreen
+        />
       </div>
 
       <div className="external-campaign-meta">
