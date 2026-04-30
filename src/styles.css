@@ -386,6 +386,14 @@ h1 {
   text-wrap: balance;
 }
 
+.section-summary {
+  max-width: 720px;
+  margin: 1rem 0 0;
+  color: #51483c;
+  font-size: clamp(1rem, 1.35vw, 1.12rem);
+  line-height: 1.65;
+}
+
 .section-heading.compact {
   margin-bottom: clamp(1.5rem, 4vw, 3rem);
 }
@@ -404,7 +412,7 @@ h1 {
 
 .media-tabs {
   display: inline-grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 0.25rem;
   margin: calc(clamp(2rem, 5vw, 4rem) * -0.45) 0 clamp(1.5rem, 3vw, 2.5rem);
   border: 1px solid rgba(42, 37, 31, 0.14);
@@ -416,7 +424,7 @@ h1 {
 .media-tab {
   display: grid;
   gap: 0.18rem;
-  min-width: min(14rem, 42vw);
+  min-width: min(11rem, 28vw);
   border: 0;
   border-radius: 999px;
   background: transparent;
@@ -559,6 +567,10 @@ h1 {
   grid-template-columns: repeat(3, minmax(0, 1fr));
 }
 
+.campaign-video-grid.is-photos {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
 .campaign-video-grid.is-reels {
   grid-template-columns: repeat(auto-fit, minmax(190px, 260px));
 }
@@ -599,6 +611,11 @@ h1 {
   grid-template-columns: minmax(0, 1.3fr) minmax(0, 0.9fr);
   gap: clamp(0.85rem, 1.7vw, 1.35rem);
   margin-bottom: clamp(2.5rem, 5vw, 4.5rem);
+}
+
+.campaign-clients {
+  max-width: 1040px;
+  margin: calc(clamp(2rem, 5vw, 4rem) * -0.25) 0 clamp(1.5rem, 3vw, 2.5rem);
 }
 
 .roster-column {
@@ -932,6 +949,11 @@ h1 {
   width: min(100%, 980px);
 }
 
+.featured-grid .media-card.is-portrait {
+  grid-column: 2;
+  width: min(100%, 430px);
+}
+
 .archive-grid .media-card,
 .media-card.compact {
   grid-column: auto;
@@ -1226,7 +1248,8 @@ h1 {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
-  .campaign-video-grid.is-videos {
+  .campaign-video-grid.is-videos,
+  .campaign-video-grid.is-photos {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
@@ -1256,6 +1279,11 @@ h1 {
   .featured-grid .media-card.is-autoplay {
     grid-column: auto;
     width: 100%;
+  }
+
+  .featured-grid .media-card.is-portrait {
+    grid-column: auto;
+    width: min(100%, 420px);
   }
 }
 
@@ -1359,12 +1387,17 @@ h1 {
   .service-grid,
   .proof-grid,
   .campaign-video-grid.is-videos,
+  .campaign-video-grid.is-photos,
   .external-campaign-grid {
     grid-template-columns: 1fr;
   }
 
   .candidate-archive-grid {
     grid-template-columns: 1fr;
+  }
+
+  .featured-grid .media-card.is-portrait {
+    width: min(100%, 360px);
   }
 
   .campaign-video-grid.is-reels {
