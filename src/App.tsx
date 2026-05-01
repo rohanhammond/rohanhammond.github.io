@@ -63,6 +63,7 @@ type ArchiveCandidate = {
   summary: string;
   media: ArchiveMediaItem[];
   previews?: Partial<Record<CampaignMediaTab, string>>;
+  previewPosition?: Partial<Record<CampaignMediaTab, string>>;
 };
 
 type CampaignMediaCollection = {
@@ -70,6 +71,7 @@ type CampaignMediaCollection = {
   items: ArchiveMediaItem[];
   preview: ArchiveMediaItem;
   previewImageSrc: string | null;
+  previewPosition: string | null;
 };
 
 type ArchiveRoute = {
@@ -87,6 +89,7 @@ const MEDIA_BASE_URL = (import.meta.env.VITE_MEDIA_BASE_URL ?? "").replace(
   /\/$/,
   "",
 );
+const ARCHIVE_PIECE_PREVIEW_VERSION = "20260501";
 
 const mediaUrl = (path: string) =>
   MEDIA_BASE_URL && path.startsWith("/")
@@ -97,7 +100,9 @@ const archivePreviewUrl = (name: string) =>
   mediaUrl(`/media/archive-previews/${name}.jpg`);
 
 const archivePiecePreviewUrl = (id: string) =>
-  mediaUrl(`/media/archive-piece-previews/${id}.jpg`);
+  mediaUrl(
+    `/media/archive-piece-previews/${id}.jpg?v=${ARCHIVE_PIECE_PREVIEW_VERSION}`,
+  );
 
 const archivePiecePreviewIds = new Set([
   "andra-piece-to-camera",
@@ -1510,6 +1515,11 @@ const stateCandidateArchives: ArchiveCandidate[] = [
       reels: mediaUrl("/media/michelle-hoffman/michelle-video-1-poster.jpg"),
       photos: mediaUrl("/media/michelle-hoffman/michelle-photo-1.jpg"),
     },
+    previewPosition: {
+      all: "center 12%",
+      videos: "center 12%",
+      reels: "center 12%",
+    },
     media: getCampaignEmbeds(stateCampaignEmbeds, [
       "michelle-hoffman-video-one",
       "michelle-hoffman-video-two",
@@ -1534,6 +1544,9 @@ const stateCandidateArchives: ArchiveCandidate[] = [
     summary: "Video, portraits, and field coverage.",
     previews: {
       all: archivePreviewUrl("lisa-olsson"),
+    },
+    previewPosition: {
+      all: "center 18%",
     },
     media: getCampaignEmbeds(stateCampaignEmbeds, [
       "lisa-olsson-video",
@@ -2389,6 +2402,17 @@ function getCandidatePreviewImageSrc(
   );
 }
 
+function getCandidatePreviewPosition(
+  candidate: ArchiveCandidate,
+  tab: CampaignMediaTab,
+) {
+  return (
+    candidate.previewPosition?.[tab] ??
+    candidate.previewPosition?.all ??
+    null
+  );
+}
+
 function getCampaignMediaCollections(
   clients: ArchiveCandidate[],
   tab: CampaignMediaTab,
@@ -2408,6 +2432,7 @@ function getCampaignMediaCollections(
         items: mediaItems,
         preview,
         previewImageSrc: getCandidatePreviewImageSrc(candidate, tab, preview),
+        previewPosition: getCandidatePreviewPosition(candidate, tab),
       };
     })
     .filter(isDefined);
@@ -2626,6 +2651,7 @@ function CampaignCollectionCard({
         <CampaignCollectionPreviewVisual
           item={preview}
           imageSrc={collection.previewImageSrc}
+          imagePosition={collection.previewPosition}
         />
         <span className="collection-preview-title" aria-hidden="true">
           <span>{getCampaignMediaSetLabel(tab)}</span>
@@ -2653,11 +2679,13 @@ function CampaignCollectionCard({
 type CampaignCollectionPreviewVisualProps = {
   item: ArchiveMediaItem;
   imageSrc: string | null;
+  imagePosition: string | null;
 };
 
 function CampaignCollectionPreviewVisual({
   item,
   imageSrc,
+  imagePosition,
 }: CampaignCollectionPreviewVisualProps) {
   const previewImageSrc = imageSrc ?? getCollectionPreviewImageSrc(item);
   const [failedImageSrc, setFailedImageSrc] = useState<string | null>(null);
@@ -2668,6 +2696,7 @@ function CampaignCollectionPreviewVisual({
         src={previewImageSrc}
         alt=""
         loading="lazy"
+        style={imagePosition ? { objectPosition: imagePosition } : undefined}
         onError={() => setFailedImageSrc(previewImageSrc)}
       />
     );
