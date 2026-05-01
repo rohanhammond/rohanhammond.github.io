@@ -89,12 +89,11 @@ const MEDIA_BASE_URL = (import.meta.env.VITE_MEDIA_BASE_URL ?? "").replace(
   /\/$/,
   "",
 );
+const RESOLVED_MEDIA_BASE_URL = MEDIA_BASE_URL || PUBLIC_MEDIA_BASE_URL;
 const ARCHIVE_PIECE_PREVIEW_VERSION = "20260501";
 
 const mediaUrl = (path: string) =>
-  MEDIA_BASE_URL && path.startsWith("/")
-    ? `${MEDIA_BASE_URL}${path}`
-    : path;
+  path.startsWith("/") ? `${RESOLVED_MEDIA_BASE_URL}${path}` : path;
 
 const archivePreviewUrl = (name: string) =>
   mediaUrl(`/media/archive-previews/${name}.jpg`);
@@ -149,8 +148,7 @@ const shouldUseArchivePreviewStill = (item: ArchiveMediaItem) =>
   !isHostedMediaSrc(item.src) &&
   Boolean(getArchiveMediaPreviewImageSrc(item));
 
-const cloudMediaUrl = (path: string) =>
-  `${MEDIA_BASE_URL || PUBLIC_MEDIA_BASE_URL}${path}`;
+const cloudMediaUrl = (path: string) => mediaUrl(path);
 
 const profile = {
   name: "Rohan Hammond",
@@ -200,15 +198,21 @@ const createOneDrivePhotoItems = ({
   files,
   orientation,
 }: OneDriveMediaConfig): ArchiveMediaItem[] =>
-  files.map((file, index) => ({
-    id: getGeneratedMediaId(prefix, index),
-    title: `${title} ${index + 1}`,
-    context: "Photo",
-    category,
-    kind: "photo",
-    src: oneDriveClientExportUrl(folder, file),
-    orientation,
-  }));
+  files.flatMap((file, index) =>
+    file.startsWith("/media/")
+      ? [
+          {
+            id: getGeneratedMediaId(prefix, index),
+            title: `${title} ${index + 1}`,
+            context: "Photo",
+            category,
+            kind: "photo" as const,
+            src: mediaUrl(file),
+            orientation,
+          },
+        ]
+      : [],
+  );
 
 const createOneDriveVideoItems = ({
   prefix,
@@ -218,14 +222,11 @@ const createOneDriveVideoItems = ({
   files,
   orientation,
 }: OneDriveMediaConfig): ArchiveMediaItem[] =>
-  files.map((file, index) => ({
-    id: getGeneratedMediaId(prefix, index),
-    title: `${title} ${index + 1}`,
-    context: "Video",
-    category,
-    src: oneDriveClientExportUrl(folder, file),
-    orientation,
-  }));
+  [];
+
+type LocalMediaConfig = Omit<OneDriveMediaConfig, "folder"> & {
+  titleStartIndex?: number;
+};
 
 const createLocalPhotoItems = ({
   prefix,
@@ -233,10 +234,11 @@ const createLocalPhotoItems = ({
   category,
   files,
   orientation,
-}: Omit<OneDriveMediaConfig, "folder">): ArchiveMediaItem[] =>
+  titleStartIndex = 1,
+}: LocalMediaConfig): ArchiveMediaItem[] =>
   files.map((file, index) => ({
     id: getGeneratedMediaId(prefix, index),
-    title: `${title} ${index + 5}`,
+    title: `${title} ${index + titleStartIndex}`,
     context: "Photo",
     category,
     kind: "photo",
@@ -389,6 +391,10 @@ const aswathChavittuparaPhotoFiles = [
   "_DSC3701.jpg",
   "_DSC3712.jpg",
 ];
+
+const aswathChavittuparaPhotoPaths = aswathChavittuparaPhotoFiles.map(
+  (file) => `/media/aswath-chavittupara/${file}`,
+);
 
 const michelleHoffmanPhotoFiles = [
   "/media/michelle-hoffman/album/michelle-photo-05.jpg",
@@ -699,17 +705,19 @@ const stateCampaignEmbeds: ArchiveMediaItem[] = [
   },
   {
     id: "hayley-edwards-photo-one",
+    kind: "photo",
     title: "Hayley Edwards Still",
     context: "Photo",
     category: "Hayley Edwards + Libby Mettam",
-    src: "https://1drv.ms/i/c/9d9f7c4362637c48/IQSo1lJbuFtXQafaDJQrWKo2AS7yA6_uGLWm5uRuMeOfQhY?width=5629&height=3753",
+    src: cloudMediaUrl("/media/archive-originals/hayley-edwards-photo-one.jpg"),
   },
   {
     id: "hayley-edwards-photo-two",
+    kind: "photo",
     title: "Hayley Edwards Field Coverage",
     context: "Photo",
     category: "Hayley Edwards + Libby Mettam",
-    src: "https://1drv.ms/i/c/9d9f7c4362637c48/IQS3RMv7JNr7SZ6TZO8KKF0HAZzNo5ePRe4PSdoZ3x5fumI?width=5673&height=3782",
+    src: cloudMediaUrl("/media/archive-originals/hayley-edwards-photo-two.jpg"),
   },
   ...createOneDrivePhotoItems({
     prefix: "hayley-edwards-photo-extra",
@@ -755,25 +763,28 @@ const stateCampaignEmbeds: ArchiveMediaItem[] = [
   }),
   {
     id: "sandra-brewer-coverage",
+    kind: "photo",
     title: "Sandra Brewer Coverage",
     context: "Photo",
     category: "Sandra Brewer",
-    src: "https://1drv.ms/i/c/9d9f7c4362637c48/IQTlRO_MKOFtSbLqUpcXPTBZAe7KmqVql53oCXWknrVIh6Q?width=2773&height=4160",
+    src: cloudMediaUrl("/media/archive-originals/sandra-brewer-coverage.jpg"),
     orientation: "portrait",
   },
   {
     id: "sandra-brewer-photo-one",
+    kind: "photo",
     title: "Sandra Brewer Still",
     context: "Photo",
     category: "Sandra Brewer",
-    src: "https://1drv.ms/i/c/9d9f7c4362637c48/IQQ-VAgTL9YHSqqyDkQQs0gAAYFOA6kpVPR4laS-tMIADEc?width=5739&height=3826",
+    src: cloudMediaUrl("/media/archive-originals/sandra-brewer-photo-one.jpg"),
   },
   {
     id: "sandra-brewer-photo-two",
+    kind: "photo",
     title: "Sandra Brewer Field Coverage",
     context: "Photo",
     category: "Sandra Brewer",
-    src: "https://1drv.ms/i/c/9d9f7c4362637c48/IQQhbFLYPXtETqh0B4QHLiAPAWztncKorXPdt1RPH5Z-0fs?width=5560&height=3707",
+    src: cloudMediaUrl("/media/archive-originals/sandra-brewer-photo-two.jpg"),
   },
   {
     id: "sandra-brewer-parliament-one",
@@ -781,7 +792,7 @@ const stateCampaignEmbeds: ArchiveMediaItem[] = [
     context: "Photo",
     category: "Sandra Brewer",
     kind: "photo",
-    src: oneDriveClientExportUrl("Sandra Brewer", "_DSC0028-Enhanced-NR.jpg"),
+    src: cloudMediaUrl("/media/sandra-brewer/_DSC0028-Enhanced-NR.jpg"),
   },
   {
     id: "sandra-brewer-parliament-two",
@@ -789,7 +800,7 @@ const stateCampaignEmbeds: ArchiveMediaItem[] = [
     context: "Photo",
     category: "Sandra Brewer",
     kind: "photo",
-    src: oneDriveClientExportUrl("Sandra Brewer", "_DSC0121-Enhanced-NR.jpg"),
+    src: cloudMediaUrl("/media/sandra-brewer/_DSC0298-Enhanced-NR.jpg"),
   },
   {
     id: "sandra-brewer-parliament-three",
@@ -797,7 +808,7 @@ const stateCampaignEmbeds: ArchiveMediaItem[] = [
     context: "Photo",
     category: "Sandra Brewer",
     kind: "photo",
-    src: oneDriveClientExportUrl("Sandra Brewer", "_DSC0168-Enhanced-NR.jpg"),
+    src: cloudMediaUrl("/media/sandra-brewer/_DSC0302-Enhanced-NR.jpg"),
   },
   {
     id: "sandra-brewer-parliament-four",
@@ -805,7 +816,7 @@ const stateCampaignEmbeds: ArchiveMediaItem[] = [
     context: "Photo",
     category: "Sandra Brewer",
     kind: "photo",
-    src: oneDriveClientExportUrl("Sandra Brewer", "_DSC0251-Enhanced-NR.jpg"),
+    src: cloudMediaUrl("/media/sandra-brewer/_DSC0317-Enhanced-NR.jpg"),
   },
   ...createLocalPhotoItems({
     prefix: "sandra-brewer-photo-extra",
@@ -886,14 +897,16 @@ const stateCampaignEmbeds: ArchiveMediaItem[] = [
     title: "Andra Biondi Piece-to-Camera",
     context: "Video",
     category: "Victoria Park",
-    src: "https://1drv.ms/v/c/9d9f7c4362637c48/IQTyAwxV3vdfQavj_0iiPOCEAbj4Hr6osW09zh73u-rIxKw?width=3840&height=2160",
+    kind: "video",
+    src: cloudMediaUrl("/media/andra-biondi/videos/andra-piece-to-camera.mp4"),
   },
   {
     id: "andra-racecourse-libby",
     title: "Andra Biondi with Libby Mettam",
     context: "Video",
     category: "Victoria Park",
-    src: "https://1drv.ms/v/c/9d9f7c4362637c48/IQSIsVqxoUn9TIu61NCf8ADLAZsf6NLewXar8uKrMNzkPbw?width=3840&height=2160",
+    kind: "video",
+    src: cloudMediaUrl("/media/andra-biondi/videos/andra-racecourse-libby.mp4"),
   },
   ...createOneDriveVideoItems({
     prefix: "andra-biondi-video-extra",
@@ -911,24 +924,25 @@ const stateCampaignEmbeds: ArchiveMediaItem[] = [
   }),
   {
     id: "aswath-comms-photo",
+    kind: "photo",
     title: "Aswath Chavittupara Field",
     context: "Photo",
     category: "Morley",
-    src: "https://1drv.ms/i/c/9d9f7c4362637c48/IQS_VVLJPd-SSbYAqrbuAlJtAQZFu3Zt63ibqIFWgRkqil0?width=5740&height=3827",
+    src: mediaUrl("/media/aswath-chavittupara/aswath-comms-photo.jpg"),
   },
   {
     id: "aswath-comms-field-photo",
+    kind: "photo",
     title: "Aswath Chavittupara Community Coverage",
     context: "Photo",
     category: "Morley",
-    src: "https://1drv.ms/i/c/9d9f7c4362637c48/IQQ5qfwpfliESYi4uYXmV1pnAb3TGbBINFg9CpEhMlhfJMY?width=5021&height=3347",
+    src: mediaUrl("/media/aswath-chavittupara/aswath-comms-field-photo.jpg"),
   },
-  ...createOneDrivePhotoItems({
+  ...createLocalPhotoItems({
     prefix: "aswath-chavittupara-photo",
     title: "Aswath Chavittupara Photo",
     category: "Morley",
-    folder: "Aswath COMMS Plan Photos",
-    files: aswathChavittuparaPhotoFiles,
+    files: aswathChavittuparaPhotoPaths,
   }),
   {
     id: "michelle-hoffman-video-one",
@@ -1008,6 +1022,7 @@ const stateCampaignEmbeds: ArchiveMediaItem[] = [
     title: "Michelle Hoffman Photo",
     category: "Michelle Hoffman",
     files: michelleHoffmanPhotoFiles,
+    titleStartIndex: 5,
   }),
   {
     id: "lisa-olsson-video",
@@ -1018,10 +1033,11 @@ const stateCampaignEmbeds: ArchiveMediaItem[] = [
   },
   {
     id: "lisa-olsson-photo",
+    kind: "photo",
     title: "Lisa Olsson Portrait",
     context: "Photo",
     category: "Hillarys",
-    src: "https://1drv.ms/i/c/9d9f7c4362637c48/IQQdxNVXMH96T7dIdgd5tSaQAZlJfpfz7LyjwORS79omJxw?width=4000&height=6000",
+    src: cloudMediaUrl("/media/archive-originals/lisa-olsson-photo.jpg"),
     orientation: "portrait",
   },
   ...createOneDrivePhotoItems({
@@ -1240,7 +1256,8 @@ const federalCampaignEmbeds: ArchiveMediaItem[] = [
     title: "Vince Connelly Surfing Piece",
     context: "Video",
     category: "Moore",
-    src: "https://1drv.ms/v/c/9d9f7c4362637c48/IQSkD2kkoP8zRrqSdCZcK_3PAXiS-xuzdc6dniesKzY8ynU?width=2160&height=3840",
+    kind: "video",
+    src: cloudMediaUrl("/media/vince-connelly/videos/vince-connelly-surfing.mp4"),
     orientation: "portrait",
   },
   {
@@ -1248,14 +1265,16 @@ const federalCampaignEmbeds: ArchiveMediaItem[] = [
     title: "Vince Connelly Drone Coverage",
     context: "B-roll",
     category: "Moore",
-    src: "https://1drv.ms/v/c/9d9f7c4362637c48/IQRsbUI7bCesRoRnNzZApzSLARE4ZZZtb6tuz0ikubuIUOM?width=5472&height=3078",
+    kind: "video",
+    src: cloudMediaUrl("/media/vince-connelly/videos/vince-connelly-drone.mp4"),
   },
   {
     id: "vince-connelly-photo",
     title: "Vince Connelly Still",
     context: "Photo",
     category: "Moore",
-    src: "https://1drv.ms/i/c/9d9f7c4362637c48/IQSkCZVfisfoS51qJIp5qnHCAe1fattGkOzig4xXZq3eluQ?width=6000&height=4000",
+    kind: "photo",
+    src: cloudMediaUrl("/media/vince-connelly/photos/vince-connelly-still.jpg"),
   },
   ...createOneDriveVideoItems({
     prefix: "vince-connelly-video-extra",
