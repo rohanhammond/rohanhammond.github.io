@@ -234,6 +234,16 @@ const hayleyEdwardsPhotoFiles = [
   "_DSC6807.jpg",
 ];
 
+const claireMoodyPhotoFiles = [
+  "/media/claire-moody/_DSC1582.jpg",
+  "/media/claire-moody/_DSC1752.jpg",
+  "/media/claire-moody/_DSC1891.jpg",
+  "/media/claire-moody/_DSC1912.jpg",
+  "/media/claire-moody/_DSC1924.jpg",
+  "/media/claire-moody/_DSC1941.jpg",
+  "/media/claire-moody/_DSC1989.jpg",
+];
+
 const nitinVashishtPhotoFiles = [
   "_DSC1375.jpg",
   "_DSC1443.jpg",
@@ -437,7 +447,7 @@ const campaignStats: CampaignStat[] = [
     detail: "Video and photo support across local campaigns.",
   },
   {
-    value: "7",
+    value: "8",
     label: "federal campaigns",
     detail: "Candidate videos, field days, and leader visits.",
   },
@@ -992,6 +1002,14 @@ const stateCampaignEmbeds: ArchiveMediaItem[] = [
 ];
 
 const federalCampaignEmbeds: ArchiveMediaItem[] = [
+  ...claireMoodyPhotoFiles.map((file, index) => ({
+    id: getGeneratedMediaId("claire-moody-photo", index),
+    title: `Claire Moody Photo ${index + 1}`,
+    context: "Photo",
+    category: "Brand",
+    kind: "photo" as const,
+    src: mediaUrl(file),
+  })),
   {
     id: "liam-trish-vince-broll",
     title: "Trish Botha B-roll",
@@ -1456,6 +1474,20 @@ const stateCandidateArchives: ArchiveCandidate[] = [
 
 const federalCandidateArchives: ArchiveCandidate[] = [
   {
+    id: "claire-moody",
+    section: "federal",
+    name: "Claire Moody",
+    seat: "Brand",
+    eyebrow: "2025",
+    summary: "Field photography and local campaign coverage.",
+    previews: {
+      all: mediaUrl("/media/claire-moody/_DSC1582.jpg"),
+    },
+    media: getCampaignEmbeds(federalCampaignEmbeds, [
+      ...getGeneratedMediaIds("claire-moody-photo", claireMoodyPhotoFiles),
+    ]),
+  },
+  {
     id: "tom-white",
     section: "federal",
     name: "Tom White",
@@ -1625,6 +1657,7 @@ const candidateArchives = [
 const federalCampaignMedia: ArchiveMediaItem[] = getCampaignEmbeds(
   federalCampaignEmbeds,
   [
+    ...getGeneratedMediaIds("claire-moody-photo", claireMoodyPhotoFiles),
     "tom-white-ptc-5",
     "tom-white-ptc-2",
     ...getGeneratedMediaIds("tom-white-video-extra", [
