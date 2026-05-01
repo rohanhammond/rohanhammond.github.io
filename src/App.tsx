@@ -2160,13 +2160,6 @@ function App() {
   );
 }
 
-const campaignMediaTabs: { id: CampaignMediaTab; label: string }[] = [
-  { id: "all", label: "All" },
-  { id: "videos", label: "Videos" },
-  { id: "reels", label: "Reels" },
-  { id: "photos", label: "Photos" },
-];
-
 function isArchivePhoto(item: ArchiveMediaItem) {
   return item.kind === "photo" || isOneDrivePhoto(item.src);
 }
@@ -2267,31 +2260,21 @@ function CampaignMediaSection({
   clients,
   items,
 }: CampaignMediaSectionProps) {
-  const [activeTab, setActiveTab] = useState<CampaignMediaTab>("all");
+  const activeTab: CampaignMediaTab = "all";
   const [expandedCollectionId, setExpandedCollectionId] = useState<
     string | null
   >(null);
   const expandedGalleryRef = useRef<HTMLDivElement | null>(null);
-  const collectionsByTab = useMemo(
-    () => ({
-      all: getCampaignMediaCollections(clients, "all"),
-      videos: getCampaignMediaCollections(clients, "videos"),
-      reels: getCampaignMediaCollections(clients, "reels"),
-      photos: getCampaignMediaCollections(clients, "photos"),
-    }),
+  const activeCollections = useMemo(
+    () => getCampaignMediaCollections(clients, activeTab),
     [clients],
   );
-  const activeCollections = collectionsByTab[activeTab];
   const expandedCollection =
     activeCollections.find(
       (collection) => collection.candidate.id === expandedCollectionId,
     ) ?? null;
   const headingId = `${id}-title`;
   const panelId = `${id}-panel`;
-
-  useEffect(() => {
-    setExpandedCollectionId(null);
-  }, [activeTab]);
 
   useEffect(() => {
     if (!expandedCollectionId) return;
@@ -2308,7 +2291,7 @@ function CampaignMediaSection({
     });
 
     return () => window.cancelAnimationFrame(frame);
-  }, [expandedCollectionId, activeTab]);
+  }, [expandedCollectionId]);
 
   return (
     <section
@@ -2321,29 +2304,12 @@ function CampaignMediaSection({
         <div>
           <h2 id={headingId}>{title}</h2>
           <p className="section-summary">{summary}</p>
-
-          <div className="media-tabs" role="tablist" aria-label={`${eyebrow} filters`}>
-            {campaignMediaTabs.map((tab) => (
-              <button
-                className={activeTab === tab.id ? "media-tab is-active" : "media-tab"}
-                type="button"
-                role="tab"
-                aria-selected={activeTab === tab.id}
-                aria-controls={panelId}
-                key={tab.id}
-                onClick={() => setActiveTab(tab.id)}
-              >
-                <span>{tab.label}</span>
-              </button>
-            ))}
-          </div>
         </div>
       </div>
 
       <div
         className={`campaign-collection-grid is-${activeTab}`}
         id={panelId}
-        role="tabpanel"
       >
         {activeCollections.map((collection) => {
           const collectionPanelId = `${panelId}-${collection.candidate.id}`;

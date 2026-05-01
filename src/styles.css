@@ -460,51 +460,6 @@ h1 {
   background: #fffdf8;
 }
 
-.media-tabs {
-  display: grid;
-  width: min(100%, 680px);
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: clamp(0.75rem, 2.2vw, 2rem);
-  margin-top: clamp(1.4rem, 2.8vw, 2rem);
-  border-bottom: 1px solid rgba(42, 37, 31, 0.16);
-}
-
-.media-tab {
-  display: block;
-  min-width: 0;
-  border: 0;
-  border-bottom: 2px solid transparent;
-  border-radius: 0;
-  background: transparent;
-  color: #746957;
-  cursor: pointer;
-  padding: 0 0 0.75rem;
-  text-align: left;
-  transition:
-    color 180ms ease,
-    border-color 180ms ease,
-    transform 180ms ease;
-}
-
-.media-tab:hover,
-.media-tab:focus-visible {
-  color: #241f1a;
-  transform: translateY(-1px);
-}
-
-.media-tab.is-active {
-  border-bottom-color: #123f73;
-  color: #123f73;
-}
-
-.media-tab span {
-  font-size: 0.78rem;
-  font-weight: 900;
-  letter-spacing: 0.08em;
-  line-height: 1.1;
-  text-transform: uppercase;
-}
-
 .campaign-collection-grid {
   display: grid;
   gap: clamp(0.85rem, 1.7vw, 1.35rem);
@@ -1840,25 +1795,6 @@ h1 {
 
   .hero-visual {
     min-height: 460px;
-  }
-
-  .media-tabs {
-    width: 100%;
-    gap: 0.65rem;
-    border-radius: 0;
-  }
-
-  .media-tab {
-    border-radius: 0;
-    padding: 0 0 0.65rem;
-  }
-
-  .media-tab span {
-    font-size: 0.68rem;
-  }
-
-  .media-tab small {
-    font-size: 0.62rem;
   }
 
   .featured-grid,
