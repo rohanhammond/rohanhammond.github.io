@@ -316,22 +316,26 @@ const nitinVashishtPhotoFiles = [
 ];
 
 const sandraBrewerPhotoFiles = [
-  "_DSC0268-Enhanced-NR.jpg",
-  "_DSC0298-Enhanced-NR.jpg",
-  "_DSC0302-Enhanced-NR.jpg",
-  "_DSC0317-Enhanced-NR.jpg",
-  "_DSC0322-Enhanced-NR.jpg",
-  "_DSC0330-Enhanced-NR.jpg",
-  "_DSC0404-Enhanced-NR.jpg",
-  "_DSC0416-Enhanced-NR.jpg",
-  "_DSC0426-Enhanced-NR.jpg",
-  "_DSC0431-Enhanced-NR.jpg",
-  "_DSC0434-Enhanced-NR.jpg",
-  "_DSC0438-Enhanced-NR.jpg",
-  "_DSC0439-Enhanced-NR.jpg",
-  "_DSC0440-Enhanced-NR.jpg",
-  "_DSC0442-Enhanced-NR.jpg",
-  "_DSC0446-Enhanced-NR.jpg",
+  "/media/sandra-brewer/_DSC0028-Enhanced-NR.jpg",
+  "/media/sandra-brewer/_DSC0298-Enhanced-NR.jpg",
+  "/media/sandra-brewer/_DSC0302-Enhanced-NR.jpg",
+  "/media/sandra-brewer/_DSC0317-Enhanced-NR.jpg",
+  "/media/sandra-brewer/_DSC0322-Enhanced-NR.jpg",
+  "/media/sandra-brewer/_DSC0330-Enhanced-NR.jpg",
+  "/media/sandra-brewer/_DSC0431-Enhanced-NR.jpg",
+  "/media/sandra-brewer/_DSC0434-Enhanced-NR.jpg",
+  "/media/sandra-brewer/_DSC0438-Enhanced-NR.jpg",
+  "/media/sandra-brewer/_DSC0439-Enhanced-NR.jpg",
+  "/media/sandra-brewer/_DSC0440-Enhanced-NR.jpg",
+  "/media/sandra-brewer/_DSC0442-Enhanced-NR.jpg",
+  "/media/sandra-brewer/_DSC0446-Enhanced-NR.jpg",
+  "/media/sandra-brewer/_DSC0448-Enhanced-NR.jpg",
+  "/media/sandra-brewer/_DSC0458-Enhanced-NR.jpg",
+  "/media/sandra-brewer/_DSC0460-Enhanced-NR.jpg",
+  "/media/sandra-brewer/_DSC0466-Enhanced-NR.jpg",
+  "/media/sandra-brewer/_DSC0476-Enhanced-NR.jpg",
+  "/media/sandra-brewer/_DSC0482-Enhanced-NR.jpg",
+  "/media/sandra-brewer/_DSC0487-Enhanced-NR.jpg",
 ];
 
 const andraBiondiPhotoFiles = [
@@ -797,11 +801,10 @@ const stateCampaignEmbeds: ArchiveMediaItem[] = [
     kind: "photo",
     src: oneDriveClientExportUrl("Sandra Brewer", "_DSC0251-Enhanced-NR.jpg"),
   },
-  ...createOneDrivePhotoItems({
+  ...createLocalPhotoItems({
     prefix: "sandra-brewer-photo-extra",
     title: "Sandra Brewer Photo",
     category: "Cottesloe",
-    folder: "Sandra Brewer",
     files: sandraBrewerPhotoFiles,
   }),
   {
@@ -1425,13 +1428,6 @@ const stateCandidateArchives: ArchiveCandidate[] = [
       all: archivePreviewUrl("sandra-brewer"),
     },
     media: getCampaignEmbeds(stateCampaignEmbeds, [
-      "sandra-brewer-coverage",
-      "sandra-brewer-photo-one",
-      "sandra-brewer-photo-two",
-      "sandra-brewer-parliament-one",
-      "sandra-brewer-parliament-two",
-      "sandra-brewer-parliament-three",
-      "sandra-brewer-parliament-four",
       ...getGeneratedMediaIds(
         "sandra-brewer-photo-extra",
         sandraBrewerPhotoFiles,
@@ -1854,13 +1850,6 @@ const stateCampaignMedia: ArchiveMediaItem[] = [
     ...getGeneratedMediaIds("scott-edwardes-photo", scottEdwardesPhotoFiles),
     "hayley-edwards-photo-one",
     "hayley-edwards-photo-two",
-    "sandra-brewer-coverage",
-    "sandra-brewer-photo-one",
-    "sandra-brewer-photo-two",
-    "sandra-brewer-parliament-one",
-    "sandra-brewer-parliament-two",
-    "sandra-brewer-parliament-three",
-    "sandra-brewer-parliament-four",
     ...getGeneratedMediaIds(
       "sandra-brewer-photo-extra",
       sandraBrewerPhotoFiles,
