@@ -1824,6 +1824,21 @@ function isOneDrivePhoto(src: string) {
   return src.includes("/i/");
 }
 
+function isHostedMediaSrc(src: string) {
+  return (
+    src.startsWith("/media/") ||
+    Boolean(MEDIA_BASE_URL && src.startsWith(`${MEDIA_BASE_URL}/media/`))
+  );
+}
+
+function getArchiveMediaPreviewImageSrc(item: ArchiveMediaItem) {
+  if (item.poster) return item.poster;
+  if (isOneDrivePhoto(item.src)) return getPhotoPreviewSrc(item.src);
+  if (isArchivePhoto(item) && isHostedMediaSrc(item.src)) return item.src;
+
+  return null;
+}
+
 function getExternalMediaDimensions(src: string) {
   try {
     const url = new URL(src);
@@ -2185,13 +2200,7 @@ function isEmbeddableOneDriveShare(src: string) {
 }
 
 function getCollectionPreviewImageSrc(item: ArchiveMediaItem) {
-  if (item.poster) return item.poster;
-  if (isOneDrivePhoto(item.src)) return getPhotoPreviewSrc(item.src);
-  if (isArchivePhoto(item) && !isEmbeddableOneDriveShare(item.src)) {
-    return item.src;
-  }
-
-  return null;
+  return getArchiveMediaPreviewImageSrc(item);
 }
 
 function getCandidatePreviewImageSrc(
@@ -2393,6 +2402,7 @@ function CampaignMediaSection({
                         key={item.id}
                         minimal
                         ownerName={collection.candidate.name}
+                        fallbackPreviewImageSrc={collection.previewImageSrc}
                       />
                     ))}
                   </div>
@@ -2601,6 +2611,9 @@ function CandidateArchivePage({ candidate }: { candidate: ArchiveCandidate }) {
     candidate.section === "state" ? "State work" : "Federal work";
   const backHref =
     candidate.section === "state" ? "#state-media" : "#campaign-media";
+  const fallbackPreviewImageSrc = candidate.media[0]
+    ? getCandidatePreviewImageSrc(candidate, "all", candidate.media[0])
+    : null;
 
   return (
     <section
@@ -2631,6 +2644,7 @@ function CandidateArchivePage({ candidate }: { candidate: ArchiveCandidate }) {
             item={item}
             key={item.id}
             ownerName={candidate.name}
+            fallbackPreviewImageSrc={fallbackPreviewImageSrc}
           />
         ))}
       </div>
@@ -2642,19 +2656,27 @@ function ArchiveMediaCard({
   item,
   minimal = false,
   ownerName,
+  fallbackPreviewImageSrc,
 }: {
   item: ArchiveMediaItem;
   minimal?: boolean;
   ownerName?: string;
+  fallbackPreviewImageSrc?: string | null;
 }) {
   const isPhoto = isArchivePhoto(item);
-  const isLocalPhoto = item.kind === "photo" && !item.src.startsWith("http");
-  const isExternal = item.src.startsWith("http");
+  const isHostedMedia = isHostedMediaSrc(item.src);
+  const isHttpSource = item.src.startsWith("http");
+  const isExternal = isHttpSource && !isHostedMedia;
+  const isInlinePhoto =
+    item.kind === "photo" && (isHostedMedia || !isHttpSource);
   const isEmbeddedVideo = isExternal && !isPhoto && item.kind !== "video";
-  const openHref = isExternal || item.kind === "video" || isLocalPhoto ? item.src : null;
+  const previewImageSrc =
+    getArchiveMediaPreviewImageSrc(item) ?? fallbackPreviewImageSrc ?? null;
+  const openHref =
+    isHttpSource || item.kind === "video" || isInlinePhoto ? item.src : null;
   const openLabel = isExternal
     ? `Open ${item.title} in OneDrive`
-    : isLocalPhoto
+    : isInlinePhoto
       ? `Open ${item.title} photo`
       : `Open ${item.title} video`;
   const hoverName = ownerName ?? item.category;
@@ -2690,18 +2712,8 @@ function ArchiveMediaCard({
           aria-label={openLabel}
         >
           <div className={frameClassName} style={frameStyle}>
-            {item.kind === "video" && !isExternal ? (
-              <video
-                src={item.src}
-                poster={item.poster}
-                muted
-                loop
-                autoPlay
-                playsInline
-                preload="metadata"
-              />
-            ) : isLocalPhoto ? (
-              <img src={item.src} alt="" loading="lazy" />
+            {previewImageSrc ? (
+              <img src={previewImageSrc} alt="" loading="lazy" />
             ) : (
               <span className="external-campaign-placeholder" aria-hidden="true" />
             )}
@@ -2711,6 +2723,9 @@ function ArchiveMediaCard({
               ) : (
                 <Play size={18} fill="currentColor" />
               )}
+            </span>
+            <span className="media-hover-name" aria-hidden="true">
+              {hoverName}
             </span>
           </div>
         </a>
@@ -2731,7 +2746,7 @@ function ArchiveMediaCard({
             playsInline
             preload="metadata"
           />
-        ) : isLocalPhoto ? (
+        ) : isInlinePhoto ? (
           <img src={item.src} alt="" loading="lazy" />
         ) : (
           <iframe
