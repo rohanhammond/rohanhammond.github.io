@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import { Fragment, useEffect, useMemo, useRef, useState } from "react";
 import type { CSSProperties } from "react";
 import {
   ArrowUpRight,
@@ -424,7 +424,7 @@ const campaignStats: CampaignStat[] = [
     detail: "Video and photo support across local campaigns.",
   },
   {
-    value: "4",
+    value: "7",
     label: "federal campaigns",
     detail: "Candidate videos, field days, and leader visits.",
   },
@@ -923,14 +923,14 @@ const stateCampaignEmbeds: ArchiveMediaItem[] = [
 const federalCampaignEmbeds: ArchiveMediaItem[] = [
   {
     id: "liam-trish-vince-broll",
-    title: "Liam, Trish & Vince B-roll",
+    title: "Trish Botha B-roll",
     context: "B-roll",
     category: "Candidate Travel",
     src: "https://1drv.ms/v/c/9d9f7c4362637c48/IQRUul58E3usQLbSR6B8gEy1AZm8L9BobVHzsEMbX4Gcjms?width=1920&height=1080",
   },
   {
     id: "liam-trish-vince-vince-broll",
-    title: "Vince Connelly B-roll",
+    title: "Trish Botha Campaign B-roll",
     context: "B-roll",
     category: "Candidate Travel",
     src: "https://1drv.ms/v/c/9d9f7c4362637c48/IQS2jIJcHfhBSZZIN6cpeIGRAci2LfMqut3b8C4qdSP-UxY?width=3840&height=2160",
@@ -1502,9 +1502,9 @@ const federalCandidateArchives: ArchiveCandidate[] = [
     ]),
   },
   {
-    id: "liam-trish-vince",
+    id: "trish-botha",
     section: "federal",
-    name: "Liam, Trish & Vince",
+    name: "Trish Botha",
     seat: "B-roll",
     eyebrow: "2025",
     summary: "B-roll and field material across candidates.",
@@ -1952,43 +1952,45 @@ function App() {
           </aside>
         </section>
 
-        <section className="proof-strip" aria-labelledby="proof-title">
-          <p className="eyebrow" id="proof-title">
-            Background
-          </p>
-          <div className="proof-grid">
-            {campaignStats.map((stat) => (
-              <article className="proof-item" key={stat.label}>
-                <strong>{stat.value}</strong>
-                <span>{stat.label}</span>
-              </article>
-            ))}
-          </div>
-        </section>
-
         <section
-          className="campaign-section"
+          className="experience-split-section"
           id="campaigns"
           aria-labelledby="campaigns-title"
         >
-          <div className="section-heading compact">
-            <p className="eyebrow">Experience</p>
-            <h2 id="campaigns-title">Resume.</h2>
-          </div>
+          <aside className="experience-background-panel" aria-labelledby="proof-title">
+            <p className="eyebrow" id="proof-title">
+              Background
+            </p>
+            <div className="proof-grid">
+              {campaignStats.map((stat) => (
+                <article className="proof-item" key={stat.label}>
+                  <strong>{stat.value}</strong>
+                  <span>{stat.label}</span>
+                </article>
+              ))}
+            </div>
+          </aside>
 
-          <div className="role-list">
-            {campaignRoles.map((role) => (
-              <article className="role-item" key={role.role}>
-                <div className="role-kicker">{role.period}</div>
-                <h3>{role.role}</h3>
-                <p>{role.context}</p>
-                <ul>
-                  {role.points.map((point) => (
-                    <li key={point}>{point}</li>
-                  ))}
-                </ul>
-              </article>
-            ))}
+          <div className="experience-panel">
+            <div className="experience-heading">
+              <p className="eyebrow">Experience</p>
+              <h2 id="campaigns-title">Experience.</h2>
+            </div>
+
+            <div className="role-list">
+              {campaignRoles.map((role) => (
+                <article className="role-item" key={role.role}>
+                  <div className="role-kicker">{role.period}</div>
+                  <h3>{role.role}</h3>
+                  <p>{role.context}</p>
+                  <ul>
+                    {role.points.map((point) => (
+                      <li key={point}>{point}</li>
+                    ))}
+                  </ul>
+                </article>
+              ))}
+            </div>
           </div>
         </section>
 
@@ -2090,14 +2092,6 @@ function getCampaignMediaTab(item: ArchiveMediaItem): CampaignMediaTab {
   return "videos";
 }
 
-function getCampaignMediaCountLabel(tab: CampaignMediaTab, count: number) {
-  if (tab === "all") return `${count} ${count === 1 ? "piece" : "pieces"}`;
-  if (tab === "photos") return `${count} ${count === 1 ? "photo" : "photos"}`;
-  if (tab === "reels") return `${count} ${count === 1 ? "reel" : "reels"}`;
-
-  return `${count} ${count === 1 ? "video" : "videos"}`;
-}
-
 function getCampaignMediaSetLabel(tab: CampaignMediaTab) {
   if (tab === "all") return "Media set";
   if (tab === "photos") return "Photo set";
@@ -2171,15 +2165,7 @@ function CampaignMediaSection({
   const [expandedCollectionId, setExpandedCollectionId] = useState<
     string | null
   >(null);
-  const itemsByTab = useMemo(
-    () => ({
-      all: items,
-      videos: items.filter((item) => getCampaignMediaTab(item) === "videos"),
-      reels: items.filter((item) => getCampaignMediaTab(item) === "reels"),
-      photos: items.filter((item) => getCampaignMediaTab(item) === "photos"),
-    }),
-    [items],
-  );
+  const expandedGalleryRef = useRef<HTMLDivElement | null>(null);
   const collectionsByTab = useMemo(
     () => ({
       all: getCampaignMediaCollections(clients, "all"),
@@ -2201,37 +2187,51 @@ function CampaignMediaSection({
     setExpandedCollectionId(null);
   }, [activeTab]);
 
+  useEffect(() => {
+    if (!expandedCollectionId) return;
+
+    const frame = window.requestAnimationFrame(() => {
+      const prefersReducedMotion = window.matchMedia(
+        "(prefers-reduced-motion: reduce)",
+      ).matches;
+
+      expandedGalleryRef.current?.scrollIntoView({
+        behavior: prefersReducedMotion ? "auto" : "smooth",
+        block: "start",
+      });
+    });
+
+    return () => window.cancelAnimationFrame(frame);
+  }, [expandedCollectionId, activeTab]);
+
   return (
     <section
       className="campaign-video-section campaign-media-suite"
       id={id}
       aria-labelledby={headingId}
     >
-      <div className="section-heading">
+      <div className="section-heading campaign-media-heading">
         <p className="eyebrow">{eyebrow}</p>
         <div>
           <h2 id={headingId}>{title}</h2>
           <p className="section-summary">{summary}</p>
-        </div>
-      </div>
 
-      <div className="media-tabs" role="tablist" aria-label={`${eyebrow} filters`}>
-        {campaignMediaTabs.map((tab) => (
-          <button
-            className={activeTab === tab.id ? "media-tab is-active" : "media-tab"}
-            type="button"
-            role="tab"
-            aria-selected={activeTab === tab.id}
-            aria-controls={panelId}
-            key={tab.id}
-            onClick={() => setActiveTab(tab.id)}
-          >
-            <span>{tab.label}</span>
-            <small>
-              {getCampaignMediaCountLabel(tab.id, itemsByTab[tab.id].length)}
-            </small>
-          </button>
-        ))}
+          <div className="media-tabs" role="tablist" aria-label={`${eyebrow} filters`}>
+            {campaignMediaTabs.map((tab) => (
+              <button
+                className={activeTab === tab.id ? "media-tab is-active" : "media-tab"}
+                type="button"
+                role="tab"
+                aria-selected={activeTab === tab.id}
+                aria-controls={panelId}
+                key={tab.id}
+                onClick={() => setActiveTab(tab.id)}
+              >
+                <span>{tab.label}</span>
+              </button>
+            ))}
+          </div>
+        </div>
       </div>
 
       <div
@@ -2241,75 +2241,71 @@ function CampaignMediaSection({
       >
         {activeCollections.map((collection) => {
           const collectionPanelId = `${panelId}-${collection.candidate.id}`;
+          const isCollectionExpanded =
+            expandedCollection?.candidate.id === collection.candidate.id;
 
           return (
-            <CampaignCollectionCard
-              collection={collection}
-              controlsId={collectionPanelId}
-              isExpanded={
-                expandedCollection?.candidate.id === collection.candidate.id
-              }
-              key={collection.candidate.id}
-              tab={activeTab}
-              onToggle={() =>
-                setExpandedCollectionId((current) =>
-                  current === collection.candidate.id
-                    ? null
-                    : collection.candidate.id,
-                )
-              }
-            />
+            <Fragment key={collection.candidate.id}>
+              <CampaignCollectionCard
+                collection={collection}
+                controlsId={collectionPanelId}
+                isExpanded={isCollectionExpanded}
+                tab={activeTab}
+                onToggle={() =>
+                  setExpandedCollectionId((current) =>
+                    current === collection.candidate.id
+                      ? null
+                      : collection.candidate.id,
+                  )
+                }
+              />
+
+              {isCollectionExpanded && (
+                <div
+                  className="campaign-expanded-gallery"
+                  id={collectionPanelId}
+                  ref={expandedGalleryRef}
+                >
+                  <div className="campaign-expanded-header">
+                    <div>
+                      <p className="eyebrow">{collection.candidate.seat}</p>
+                      <h3>{collection.candidate.name}</h3>
+                    </div>
+
+                    <div className="campaign-expanded-actions">
+                      <a
+                        className="collection-archive-link"
+                        href={`#archive/${collection.candidate.section}/${collection.candidate.id}`}
+                      >
+                        Archive
+                        <ArrowUpRight size={16} aria-hidden="true" />
+                      </a>
+                      <button
+                        className="icon-button"
+                        type="button"
+                        aria-label={`Close ${collection.candidate.name} gallery`}
+                        onClick={() => setExpandedCollectionId(null)}
+                      >
+                        <X size={18} />
+                      </button>
+                    </div>
+                  </div>
+
+                  <div className={`campaign-video-grid is-${activeTab}`}>
+                    {collection.items.map((item) => (
+                      <ArchiveMediaCard
+                        item={item}
+                        key={item.id}
+                        ownerName={collection.candidate.name}
+                      />
+                    ))}
+                  </div>
+                </div>
+              )}
+            </Fragment>
           );
         })}
       </div>
-
-      {expandedCollection && (
-        <div
-          className="campaign-expanded-gallery"
-          id={`${panelId}-${expandedCollection.candidate.id}`}
-        >
-          <div className="campaign-expanded-header">
-            <div>
-              <p className="eyebrow">{expandedCollection.candidate.seat}</p>
-              <h3>{expandedCollection.candidate.name}</h3>
-              <p>
-                {getCampaignMediaCountLabel(
-                  activeTab,
-                  expandedCollection.items.length,
-                )}
-              </p>
-            </div>
-
-            <div className="campaign-expanded-actions">
-              <a
-                className="collection-archive-link"
-                href={`#archive/${expandedCollection.candidate.section}/${expandedCollection.candidate.id}`}
-              >
-                Archive
-                <ArrowUpRight size={16} aria-hidden="true" />
-              </a>
-              <button
-                className="icon-button"
-                type="button"
-                aria-label={`Close ${expandedCollection.candidate.name} gallery`}
-                onClick={() => setExpandedCollectionId(null)}
-              >
-                <X size={18} />
-              </button>
-            </div>
-          </div>
-
-          <div className={`campaign-video-grid is-${activeTab}`}>
-            {expandedCollection.items.map((item) => (
-              <ArchiveMediaCard
-                item={item}
-                key={item.id}
-                ownerName={expandedCollection.candidate.name}
-              />
-            ))}
-          </div>
-        </div>
-      )}
     </section>
   );
 }
@@ -2329,7 +2325,7 @@ function CampaignCollectionCard({
   tab,
   onToggle,
 }: CampaignCollectionCardProps) {
-  const { candidate, items, preview } = collection;
+  const { candidate, preview } = collection;
   const isPhoto = getCampaignMediaTab(preview) === "photos";
   const buttonClassName = [
     "collection-preview-button",
@@ -2376,7 +2372,6 @@ function CampaignCollectionCard({
           <h3>{candidate.name}</h3>
           <p>{candidate.seat}</p>
         </div>
-        <span>{getCampaignMediaCountLabel(tab, items.length)}</span>
       </div>
     </article>
   );
@@ -2526,7 +2521,6 @@ function CandidateArchivePage({ candidate }: { candidate: ArchiveCandidate }) {
         <aside className="candidate-archive-stats">
           <span>{sectionLabel}</span>
           <strong>{candidate.seat}</strong>
-          <span>{candidate.media.length} pieces</span>
         </aside>
       </div>
 

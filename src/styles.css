@@ -293,61 +293,9 @@ h1 {
   line-height: 1.08;
 }
 
-.proof-strip {
-  display: grid;
-  grid-template-columns: minmax(9rem, 0.18fr) minmax(0, 0.82fr);
-  gap: clamp(1.5rem, 4vw, 3rem);
-  align-items: start;
-  padding: clamp(1.5rem, 3vw, 2.5rem) 4vw;
-  border-bottom: 1px solid rgba(42, 37, 31, 0.12);
-  background: #fffdf8;
-  color: #241f1a;
-}
-
-.proof-strip .eyebrow {
-  margin: 0;
-  color: #746957;
-}
-
-.proof-grid {
-  display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: clamp(1rem, 3vw, 2.5rem);
-  border-top: 1px solid rgba(42, 37, 31, 0.12);
-  padding-top: 1rem;
-}
-
-.proof-item {
-  display: grid;
-  min-height: auto;
-  gap: 0.35rem;
-  padding: 0;
-}
-
-.proof-item strong {
-  font-family: Georgia, "Times New Roman", serif;
-  font-size: clamp(1.75rem, 3vw, 3rem);
-  font-weight: 400;
-  letter-spacing: 0;
-  line-height: 1;
-  overflow-wrap: anywhere;
-}
-
-.proof-item span {
-  color: #746957;
-  font-size: 0.76rem;
-  font-weight: 800;
-  letter-spacing: 0.09em;
-  line-height: 1.35;
-  text-transform: uppercase;
-}
-
-.proof-item p {
-  display: none;
-}
-
 .featured-band,
 .campaign-section,
+.experience-split-section,
 .campaign-video-section,
 .archive-section,
 .services-section,
@@ -359,6 +307,7 @@ h1 {
 
 .featured-band,
 .campaign-section,
+.experience-split-section,
 .campaign-video-section,
 .services-section,
 .archive-section,
@@ -397,12 +346,102 @@ h1 {
   margin-bottom: clamp(1.5rem, 4vw, 3rem);
 }
 
+.campaign-media-heading {
+  margin-bottom: clamp(2rem, 4vw, 3.25rem);
+}
+
+.campaign-media-heading > div {
+  width: min(100%, 860px);
+}
+
 .services-section {
   background: #fffdf8;
 }
 
 .campaign-section {
   background: #fffdf8;
+}
+
+.experience-split-section {
+  display: grid;
+  grid-template-columns: minmax(18rem, 0.36fr) minmax(0, 0.64fr);
+  gap: 0;
+  align-items: stretch;
+  padding: 0;
+  background: #fffdf8;
+}
+
+.experience-background-panel {
+  display: grid;
+  align-content: start;
+  gap: clamp(2rem, 4vw, 3.4rem);
+  background: #123f73;
+  color: #fffdf8;
+  padding: clamp(2rem, 5vw, 4.5rem) 4vw;
+}
+
+.experience-background-panel .eyebrow {
+  margin: 0;
+  color: rgba(255, 253, 248, 0.74);
+}
+
+.proof-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  border-top: 1px solid rgba(255, 253, 248, 0.18);
+  border-left: 1px solid rgba(255, 253, 248, 0.18);
+}
+
+.proof-item {
+  display: grid;
+  min-height: clamp(9rem, 17vw, 13rem);
+  align-content: start;
+  gap: 0.55rem;
+  border-right: 1px solid rgba(255, 253, 248, 0.18);
+  border-bottom: 1px solid rgba(255, 253, 248, 0.18);
+  padding: clamp(1.1rem, 2.5vw, 1.6rem);
+}
+
+.proof-item strong {
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(2.25rem, 3vw, 3.25rem);
+  font-weight: 400;
+  letter-spacing: 0;
+  line-height: 1;
+  overflow-wrap: normal;
+}
+
+.proof-item span {
+  color: rgba(255, 253, 248, 0.82);
+  font-size: 0.76rem;
+  font-weight: 900;
+  letter-spacing: 0.08em;
+  line-height: 1.35;
+  text-transform: uppercase;
+}
+
+.proof-item p {
+  display: none;
+}
+
+.experience-panel {
+  padding: clamp(3rem, 7vw, 6.5rem) 4vw;
+}
+
+.experience-heading {
+  display: grid;
+  grid-template-columns: minmax(7rem, 0.22fr) minmax(0, 0.78fr);
+  gap: clamp(1.5rem, 4vw, 3rem);
+  align-items: start;
+  margin-bottom: clamp(2rem, 5vw, 4rem);
+}
+
+.experience-heading h2 {
+  max-width: 760px;
+  margin: 0;
+  font-size: 4.15rem;
+  line-height: 1.04;
+  text-wrap: balance;
 }
 
 .campaign-video-section {
@@ -422,30 +461,28 @@ h1 {
 }
 
 .media-tabs {
-  display: inline-grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 0.25rem;
-  margin: calc(clamp(2rem, 5vw, 4rem) * -0.45) 0 clamp(1.5rem, 3vw, 2.5rem);
-  border: 1px solid rgba(42, 37, 31, 0.14);
-  border-radius: 999px;
-  background: rgba(255, 253, 248, 0.82);
-  padding: 0.25rem;
+  display: grid;
+  width: min(100%, 680px);
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: clamp(0.75rem, 2.2vw, 2rem);
+  margin-top: clamp(1.4rem, 2.8vw, 2rem);
+  border-bottom: 1px solid rgba(42, 37, 31, 0.16);
 }
 
 .media-tab {
-  display: grid;
-  gap: 0.18rem;
-  min-width: min(11rem, 28vw);
+  display: block;
+  min-width: 0;
   border: 0;
-  border-radius: 999px;
+  border-bottom: 2px solid transparent;
+  border-radius: 0;
   background: transparent;
   color: #746957;
   cursor: pointer;
-  padding: 0.8rem 1rem;
+  padding: 0 0 0.75rem;
   text-align: left;
   transition:
-    background 180ms ease,
     color 180ms ease,
+    border-color 180ms ease,
     transform 180ms ease;
 }
 
@@ -456,23 +493,16 @@ h1 {
 }
 
 .media-tab.is-active {
-  background: #123f73;
-  color: #fffdf8;
+  border-bottom-color: #123f73;
+  color: #123f73;
 }
 
 .media-tab span {
-  font-size: 0.82rem;
+  font-size: 0.78rem;
   font-weight: 900;
   letter-spacing: 0.08em;
   line-height: 1.1;
   text-transform: uppercase;
-}
-
-.media-tab small {
-  font-size: 0.72rem;
-  font-weight: 700;
-  letter-spacing: 0;
-  line-height: 1.25;
 }
 
 .campaign-collection-grid {
@@ -674,9 +704,7 @@ h1 {
 }
 
 .collection-meta {
-  display: flex;
-  justify-content: space-between;
-  gap: 1rem;
+  display: block;
   padding-top: 0.9rem;
 }
 
@@ -689,8 +717,7 @@ h1 {
   line-height: 1.15;
 }
 
-.collection-meta p,
-.collection-meta span {
+.collection-meta p {
   margin: 0;
   color: #746957;
   font-size: 0.82rem;
@@ -700,15 +727,12 @@ h1 {
   text-transform: uppercase;
 }
 
-.collection-meta > span {
-  flex: 0 0 auto;
-  text-align: right;
-}
-
 .campaign-expanded-gallery {
+  grid-column: 1 / -1;
   margin-top: clamp(2rem, 4vw, 3.4rem);
   border-top: 1px solid rgba(42, 37, 31, 0.14);
   padding-top: clamp(1.4rem, 3vw, 2.3rem);
+  scroll-margin-top: 96px;
 }
 
 .campaign-expanded-header {
@@ -726,16 +750,6 @@ h1 {
   font-weight: 400;
   letter-spacing: 0;
   line-height: 1.05;
-}
-
-.campaign-expanded-header p:not(.eyebrow) {
-  margin: 0;
-  color: #746957;
-  font-size: 0.82rem;
-  font-weight: 800;
-  letter-spacing: 0.08em;
-  line-height: 1.35;
-  text-transform: uppercase;
 }
 
 .campaign-expanded-actions {
@@ -1603,6 +1617,7 @@ h1 {
   }
 
   .section-heading h2,
+  .experience-heading h2,
   .about-section h2 {
     font-size: 3.55rem;
   }
@@ -1618,8 +1633,9 @@ h1 {
 
 @media (max-width: 900px) {
   .hero-section,
-  .proof-strip,
+  .experience-split-section,
   .section-heading,
+  .experience-heading,
   .subsection-heading,
   .archive-proof-header,
   .candidate-archive-hero,
@@ -1646,6 +1662,7 @@ h1 {
   }
 
   .section-heading h2,
+  .experience-heading h2,
   .about-section h2 {
     max-width: 760px;
     font-size: 3.05rem;
@@ -1769,7 +1786,6 @@ h1 {
   }
 
   .hero-section,
-  .proof-strip,
   .featured-band,
   .campaign-section,
   .campaign-video-section,
@@ -1779,6 +1795,11 @@ h1 {
   .about-section,
   .studio-section,
   .contact-section {
+    padding-inline: 1rem;
+  }
+
+  .experience-background-panel,
+  .experience-panel {
     padding-inline: 1rem;
   }
 
@@ -1797,6 +1818,7 @@ h1 {
   }
 
   .section-heading h2,
+  .experience-heading h2,
   .about-section h2 {
     font-size: 2.35rem;
   }
@@ -1818,13 +1840,21 @@ h1 {
 
   .media-tabs {
     width: 100%;
-    border-radius: 8px;
+    gap: 0.65rem;
+    border-radius: 0;
   }
 
   .media-tab {
-    min-width: 0;
-    border-radius: 6px;
-    padding: 0.78rem 0.85rem;
+    border-radius: 0;
+    padding: 0 0 0.65rem;
+  }
+
+  .media-tab span {
+    font-size: 0.68rem;
+  }
+
+  .media-tab small {
+    font-size: 0.62rem;
   }
 
   .featured-grid,
@@ -1854,15 +1884,6 @@ h1 {
   .campaign-collection-grid.is-reels,
   .campaign-video-grid.is-reels {
     grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-
-  .collection-meta {
-    flex-direction: column;
-    gap: 0.35rem;
-  }
-
-  .collection-meta > span {
-    text-align: left;
   }
 
   .campaign-expanded-header {
