@@ -101,14 +101,23 @@ const archivePiecePreviewUrl = (id: string) =>
 
 const archivePiecePreviewIds = new Set([
   "andra-piece-to-camera",
+  "andra-racecourse-libby",
   "aswath-comms-field-photo",
   "aswath-comms-photo",
+  "hayley-edwards-presser",
   "hayley-edwards-photo-one",
   "hayley-edwards-photo-two",
+  "jonathan-huston-door-knocking",
   "liam-trish-vince-broll",
+  "liam-trish-vince-vince-broll",
   "lisa-olsson-photo",
+  "lisa-olsson-video",
   "mic-fels-dutton-photo",
+  "mic-fels-foreshore-lighting",
+  "mic-fels-playground-upgrades",
   "nitin-vashisht-local-club",
+  "nitin-vashisht-school",
+  "nitin-vashisht-traffic",
   "sandra-brewer-coverage",
   "sandra-brewer-photo-one",
   "sandra-brewer-photo-two",
@@ -121,6 +130,7 @@ const archivePiecePreviewIds = new Set([
   "sean-ayres-photo-two",
   "tom-white-ptc-2",
   "tom-white-ptc-5",
+  "vince-connelly-drone",
   "vince-connelly-photo",
   "vince-connelly-surfing",
 ]);
@@ -1617,7 +1627,7 @@ const federalCandidateArchives: ArchiveCandidate[] = [
     eyebrow: "2025",
     summary: "Leader-visit stills and event coverage.",
     previews: {
-      all: "/media/archive-previews/matt-moran.jpg",
+      all: archivePreviewUrl("matt-moran"),
     },
     media: getCampaignEmbeds(federalCampaignEmbeds, [
       ...getGeneratedMediaIds(
@@ -1703,7 +1713,7 @@ const federalCandidateArchives: ArchiveCandidate[] = [
     eyebrow: "2025",
     summary: "Leader-visit coverage across Perth stops.",
     previews: {
-      all: "/media/archive-previews/matt-moran.jpg",
+      all: archivePreviewUrl("matt-moran"),
     },
     media: getCampaignEmbeds(federalCampaignEmbeds, [
       "mic-fels-dutton-photo",
@@ -2479,11 +2489,7 @@ function CampaignMediaSection({
                         key={item.id}
                         minimal
                         ownerName={collection.candidate.name}
-                        fallbackPreviewImageSrc={
-                          expandedItems.length === 1
-                            ? collection.previewImageSrc
-                            : null
-                        }
+                        fallbackPreviewImageSrc={collection.previewImageSrc}
                       />
                     ))}
                   </div>

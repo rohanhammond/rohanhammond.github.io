@@ -8,3 +8,4 @@ vite.config.d.ts
 .playwright-cli
 output
 tmp
+.claude/
