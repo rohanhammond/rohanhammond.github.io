@@ -143,6 +143,12 @@ const archivePiecePreviewIds = new Set([
 const getArchivePiecePreviewUrl = (id: string) =>
   archivePiecePreviewIds.has(id) ? archivePiecePreviewUrl(id) : undefined;
 
+const shouldUseArchivePreviewStill = (item: ArchiveMediaItem) =>
+  item.id.startsWith("mic-fels-") &&
+  item.src.startsWith("http") &&
+  !isHostedMediaSrc(item.src) &&
+  Boolean(getArchiveMediaPreviewImageSrc(item));
+
 const cloudMediaUrl = (path: string) =>
   `${MEDIA_BASE_URL || PUBLIC_MEDIA_BASE_URL}${path}`;
 
@@ -1669,11 +1675,6 @@ const federalCandidateArchives: ArchiveCandidate[] = [
       "mic-fels-dutton-photo",
       "mic-fels-playground-upgrades",
       "mic-fels-foreshore-lighting",
-      ...getGeneratedMediaIds("mic-fels-video-extra", [
-        "Mic Fels Speech Landscape.m4v",
-        "Peter Dutton Speech.m4v",
-      ]),
-      ...getGeneratedMediaIds("mic-fels-photo-extra", micFelsPhotoFiles),
     ]),
   },
   {
@@ -1743,11 +1744,6 @@ const federalCandidateArchives: ArchiveCandidate[] = [
         "John Howard Highlight Reel.m4v",
         "John Howard Speeches.m4v",
       ]),
-      ...getGeneratedMediaIds("mic-fels-video-extra", [
-        "Mic Fels Speech Landscape.m4v",
-        "Peter Dutton Speech.m4v",
-      ]),
-      ...getGeneratedMediaIds("mic-fels-photo-extra", micFelsPhotoFiles),
       "liam-trish-vince-broll",
       "liam-trish-vince-vince-broll",
     ]),
@@ -1779,10 +1775,6 @@ const federalCampaignMedia: ArchiveMediaItem[] = getCampaignEmbeds(
       "3. Food-4K.mov",
     ]),
     "mic-fels-foreshore-lighting",
-    ...getGeneratedMediaIds("mic-fels-video-extra", [
-      "Mic Fels Speech Landscape.m4v",
-      "Peter Dutton Speech.m4v",
-    ]),
     "vince-connelly-photo",
     ...getGeneratedMediaIds(
       "vince-connelly-photo-extra",
@@ -1800,7 +1792,6 @@ const federalCampaignMedia: ArchiveMediaItem[] = getCampaignEmbeds(
       "John Howard Speeches.m4v",
     ]),
     "mic-fels-dutton-photo",
-    ...getGeneratedMediaIds("mic-fels-photo-extra", micFelsPhotoFiles),
     ...seanAyresCloudPhotoIds,
     "sean-ayres-field-work",
     "sean-ayres-photo-one",
@@ -2872,6 +2863,10 @@ function ArchiveMediaCard({
   const isEmbeddedVideo = isExternal && !isPhoto && item.kind !== "video";
   const previewImageSrc =
     getArchiveMediaPreviewImageSrc(item) ?? fallbackPreviewImageSrc ?? null;
+  const previewStillSrc =
+    shouldUseArchivePreviewStill(item) && previewImageSrc
+      ? previewImageSrc
+      : null;
   const openHref =
     isHttpSource || item.kind === "video" || isInlinePhoto ? item.src : null;
   const previewLabel = isExternal
@@ -2946,6 +2941,8 @@ function ArchiveMediaCard({
             playsInline
             preload="metadata"
           />
+        ) : previewStillSrc ? (
+          <img src={previewStillSrc} alt="" loading="lazy" />
         ) : isInlinePhoto ? (
           <img src={item.src} alt="" loading="lazy" />
         ) : isEmbeddedVideo ? (
@@ -3066,6 +3063,9 @@ function ArchiveLightbox({
   const isPhoto = isArchivePhoto(item);
   const isDirectVideo = item.kind === "video";
   const renderDirectPhoto = canRenderArchivePhotoDirectly(item);
+  const previewStillSrc = shouldUseArchivePreviewStill(item)
+    ? getArchiveMediaPreviewImageSrc(item)
+    : null;
   const mediaStyle = getExternalMediaFrameStyle(item.src);
   const mediaClassName = [
     "lightbox-media",
@@ -3152,6 +3152,8 @@ function ArchiveLightbox({
               playsInline
               autoPlay
             />
+          ) : previewStillSrc ? (
+            <img src={previewStillSrc} alt={item.title} />
           ) : renderDirectPhoto ? (
             <img src={getPhotoPreviewSrc(item.src)} alt={item.title} />
           ) : (
