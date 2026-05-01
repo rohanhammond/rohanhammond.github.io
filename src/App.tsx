@@ -81,6 +81,7 @@ type ExternalMediaFrameStyle = CSSProperties & {
 };
 
 const PHOTO_PREVIEW_MAX_SIZE = 1800;
+const PUBLIC_MEDIA_BASE_URL = "https://pub-44f737fca8834fddaf1698ca1ceca309.r2.dev";
 const MEDIA_BASE_URL = (import.meta.env.VITE_MEDIA_BASE_URL ?? "").replace(
   /\/$/,
   "",
@@ -93,6 +94,9 @@ const mediaUrl = (path: string) =>
 
 const archivePreviewUrl = (name: string) =>
   mediaUrl(`/media/archive-previews/${name}.jpg`);
+
+const cloudMediaUrl = (path: string) =>
+  `${MEDIA_BASE_URL || PUBLIC_MEDIA_BASE_URL}${path}`;
 
 const profile = {
   name: "Rohan Hammond",
@@ -405,22 +409,17 @@ const vinceConnellyPhotoFiles = [
 ];
 
 const mattMoranDuttonPhotoFiles = [
-  "_DSC2523-Enhanced-NR-2.jpg",
-  "_DSC2524-Enhanced-NR-2.jpg",
-  "_DSC2526-Enhanced-NR-2.jpg",
-  "_DSC2530-Enhanced-NR-2.jpg",
   "_DSC2531-Enhanced-NR-2.jpg",
-  "_DSC2534-Enhanced-NR-2.jpg",
-  "_DSC2542-Enhanced-NR-2.jpg",
-  "_DSC2547-Enhanced-NR-2.jpg",
-  "_DSC2558-Enhanced-NR-2.jpg",
-  "_DSC2567-Enhanced-NR-2.jpg",
-  "_DSC2575-Enhanced-NR-2.jpg",
-  "_DSC2583-Enhanced-NR-2.jpg",
-  "_DSC2590-Enhanced-NR-2.jpg",
-  "_DSC2593-Enhanced-NR-2.jpg",
-  "_DSC2606-Enhanced-NR-2.jpg",
-  "_DSC2626-Enhanced-NR-2.jpg",
+  "568A0681.jpg",
+  "568A0694.jpg",
+  "568A0712.jpg",
+  "568A0742.jpg",
+  "568A0765.jpg",
+  "568A0942.jpg",
+  "568A0956.jpg",
+  "568A1572.jpg",
+  "IMG_0773.jpg",
+  "IMG_0843.jpg",
 ];
 
 const micFelsPhotoFiles = [
@@ -544,6 +543,63 @@ const campaignVideoItems: MediaItem[] = [
   },
 ];
 
+const jonathanHustonExampleReelItems: ArchiveMediaItem[] = [
+  {
+    id: "jonathan-huston-matilda-bay-ptc",
+    kind: "video",
+    title: "Matilda Bay PTC",
+    context: "Example reel",
+    category: "Jonathan Huston",
+    src: cloudMediaUrl("/media/jonathan-huston/reels/jono-matilda-bay-ptc.m4v"),
+    poster: mediaUrl("/media/jonathan-huston/reels/jono-matilda-bay-ptc-poster.jpg"),
+    orientation: "portrait",
+  },
+  {
+    id: "jonathan-huston-public-sector-discipline",
+    kind: "video",
+    title: "Public Sector Discipline",
+    context: "Example reel",
+    category: "Jonathan Huston",
+    src: cloudMediaUrl("/media/jonathan-huston/reels/public-sector-discipline.m4v"),
+    poster: mediaUrl("/media/jonathan-huston/reels/public-sector-discipline-poster.jpg"),
+    orientation: "portrait",
+  },
+  {
+    id: "jonathan-huston-public-sector-reform",
+    kind: "video",
+    title: "Public Sector Reform",
+    context: "Example reel",
+    category: "Jonathan Huston",
+    src: cloudMediaUrl("/media/jonathan-huston/reels/public-sector-reform.m4v"),
+    poster: mediaUrl("/media/jonathan-huston/reels/public-sector-reform-poster.jpg"),
+    orientation: "portrait",
+  },
+  {
+    id: "jonathan-huston-cemeteries",
+    kind: "video",
+    title: "Cemeteries",
+    context: "Example reel",
+    category: "Jonathan Huston",
+    src: cloudMediaUrl("/media/jonathan-huston/reels/cemeteries.m4v"),
+    poster: mediaUrl("/media/jonathan-huston/reels/cemeteries-poster.jpg"),
+    orientation: "portrait",
+  },
+  {
+    id: "jonathan-huston-road-rail-water",
+    kind: "video",
+    title: "Road, Rail & Water",
+    context: "Example reel",
+    category: "Jonathan Huston",
+    src: cloudMediaUrl("/media/jonathan-huston/reels/road-rail-water.m4v"),
+    poster: mediaUrl("/media/jonathan-huston/reels/road-rail-water-poster.jpg"),
+    orientation: "portrait",
+  },
+];
+
+const jonathanHustonExampleReelIds = jonathanHustonExampleReelItems.map(
+  (item) => item.id,
+);
+
 const stateCampaignEmbeds: ArchiveMediaItem[] = [
   {
     id: "jonathan-huston-door-knocking",
@@ -552,6 +608,7 @@ const stateCampaignEmbeds: ArchiveMediaItem[] = [
     category: "Jonathan Huston",
     src: "https://1drv.ms/v/c/9d9f7c4362637c48/IQSiaTAmA04yR5iYTG0ZkaQkAZQv5V7RTDSoiG8PPGHjABk?width=3840&height=2160",
   },
+  ...jonathanHustonExampleReelItems,
   ...createOneDrivePhotoItems({
     prefix: "jonathan-huston-photo",
     title: "Jonathan Huston Photo",
@@ -1137,60 +1194,9 @@ const federalCampaignEmbeds: ArchiveMediaItem[] = [
     folder: "Mic Fels x Peter Dutton/Photos",
     files: micFelsPhotoFiles,
   }),
-  {
-    id: "matt-moran-dutton-photo",
-    title: "Matt Moran Dutton Event",
-    context: "Photo",
-    category: "Bullwinkel",
-    src: "https://1drv.ms/i/c/9d9f7c4362637c48/IQRT_F3t7LglQKXuWSsXNbTkAe8-krqh372A6dRDo5HwRQQ?width=5760&height=3840",
-  },
-  {
-    id: "matt-moran-dutton-photo-two",
-    title: "Matt Moran Dutton Still",
-    context: "Photo",
-    category: "Bullwinkel",
-    kind: "photo",
-    src: oneDriveClientExportUrl(
-      "Matt Moran Media/Dutton Photos",
-      "_DSC2496-Enhanced-NR-2.jpg",
-    ),
-  },
-  {
-    id: "matt-moran-dutton-photo-three",
-    title: "Matt Moran Event Still",
-    context: "Photo",
-    category: "Bullwinkel",
-    kind: "photo",
-    src: oneDriveClientExportUrl(
-      "Matt Moran Media/Dutton Photos",
-      "_DSC2511-Enhanced-NR-2.jpg",
-    ),
-  },
-  {
-    id: "matt-moran-dutton-photo-four",
-    title: "Matt Moran Field Still",
-    context: "Photo",
-    category: "Bullwinkel",
-    kind: "photo",
-    src: oneDriveClientExportUrl(
-      "Matt Moran Media/Dutton Photos",
-      "_DSC2514-Enhanced-NR-2.jpg",
-    ),
-  },
-  {
-    id: "matt-moran-dutton-photo-five",
-    title: "Matt Moran Campaign Still",
-    context: "Photo",
-    category: "Bullwinkel",
-    kind: "photo",
-    src: oneDriveClientExportUrl(
-      "Matt Moran Media/Dutton Photos",
-      "_DSC2522-Enhanced-NR-2.jpg",
-    ),
-  },
   ...createOneDrivePhotoItems({
-    prefix: "matt-moran-dutton-photo-extra",
-    title: "Matt Moran Photo",
+    prefix: "matt-moran-dutton-photo",
+    title: "Matt Moran Dutton Photo",
     category: "Bullwinkel",
     folder: "Matt Moran Media/Dutton Photos",
     files: mattMoranDuttonPhotoFiles,
@@ -1249,6 +1255,7 @@ const stateCandidateArchives: ArchiveCandidate[] = [
       ...getLocalCampaignVideos(),
       ...getCampaignEmbeds(stateCampaignEmbeds, [
         "jonathan-huston-door-knocking",
+        ...jonathanHustonExampleReelIds,
         ...getGeneratedMediaIds(
           "jonathan-huston-photo",
           jonathanHustonPhotoFiles,
@@ -1499,16 +1506,11 @@ const federalCandidateArchives: ArchiveCandidate[] = [
     eyebrow: "2025",
     summary: "Leader-visit stills and event coverage.",
     previews: {
-      all: archivePreviewUrl("matt-moran"),
+      all: "/media/archive-previews/matt-moran.jpg",
     },
     media: getCampaignEmbeds(federalCampaignEmbeds, [
-      "matt-moran-dutton-photo",
-      "matt-moran-dutton-photo-two",
-      "matt-moran-dutton-photo-three",
-      "matt-moran-dutton-photo-four",
-      "matt-moran-dutton-photo-five",
       ...getGeneratedMediaIds(
-        "matt-moran-dutton-photo-extra",
+        "matt-moran-dutton-photo",
         mattMoranDuttonPhotoFiles,
       ),
       ...getGeneratedMediaIds("matt-moran-video-extra", [
@@ -1589,15 +1591,12 @@ const federalCandidateArchives: ArchiveCandidate[] = [
     eyebrow: "2025",
     summary: "Leader-visit coverage across Perth stops.",
     previews: {
-      all: archivePreviewUrl("matt-moran"),
+      all: "/media/archive-previews/matt-moran.jpg",
     },
     media: getCampaignEmbeds(federalCampaignEmbeds, [
       "mic-fels-dutton-photo",
-      "matt-moran-dutton-photo",
-      "matt-moran-dutton-photo-two",
-      "matt-moran-dutton-photo-three",
       ...getGeneratedMediaIds(
-        "matt-moran-dutton-photo-extra",
+        "matt-moran-dutton-photo",
         mattMoranDuttonPhotoFiles.slice(0, 6),
       ),
       ...getGeneratedMediaIds("matt-moran-video-extra", [
@@ -1651,13 +1650,8 @@ const federalCampaignMedia: ArchiveMediaItem[] = getCampaignEmbeds(
       "vince-connelly-photo-extra",
       vinceConnellyPhotoFiles,
     ),
-    "matt-moran-dutton-photo",
-    "matt-moran-dutton-photo-two",
-    "matt-moran-dutton-photo-three",
-    "matt-moran-dutton-photo-four",
-    "matt-moran-dutton-photo-five",
     ...getGeneratedMediaIds(
-      "matt-moran-dutton-photo-extra",
+      "matt-moran-dutton-photo",
       mattMoranDuttonPhotoFiles,
     ),
     ...getGeneratedMediaIds("matt-moran-video-extra", [
@@ -1688,6 +1682,7 @@ const stateCampaignMedia: ArchiveMediaItem[] = [
   ...getLocalCampaignVideos(),
   ...getCampaignEmbeds(stateCampaignEmbeds, [
     "jonathan-huston-door-knocking",
+    ...jonathanHustonExampleReelIds,
     ...getGeneratedMediaIds("jonathan-huston-photo", jonathanHustonPhotoFiles),
     "hayley-edwards-presser",
     ...getGeneratedMediaIds(
@@ -1827,6 +1822,7 @@ function isOneDrivePhoto(src: string) {
 function isHostedMediaSrc(src: string) {
   return (
     src.startsWith("/media/") ||
+    src.startsWith(`${PUBLIC_MEDIA_BASE_URL}/media/`) ||
     Boolean(MEDIA_BASE_URL && src.startsWith(`${MEDIA_BASE_URL}/media/`))
   );
 }
