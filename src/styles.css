@@ -854,6 +854,18 @@ h1 {
   grid-template-columns: repeat(auto-fit, minmax(190px, 260px));
 }
 
+.campaign-expanded-gallery .campaign-video-grid.is-single {
+  grid-template-columns: minmax(0, min(100%, 640px));
+  justify-content: center;
+}
+
+.campaign-expanded-gallery .campaign-video-grid.is-pair {
+  width: min(100%, 1320px);
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  justify-content: center;
+  margin-inline: auto;
+}
+
 .campaign-video-grid.is-reels .media-meta {
   align-items: flex-start;
   flex-direction: column;
@@ -1100,6 +1112,10 @@ h1 {
 
 .external-campaign-card.is-minimal {
   min-width: 0;
+}
+
+.external-campaign-card.is-minimal .external-campaign-frame img {
+  object-fit: cover;
 }
 
 .archive-play-tile {

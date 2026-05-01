@@ -2144,6 +2144,17 @@ function getCampaignMediaCollections(
     .filter(isDefined);
 }
 
+function getExpandedCampaignMediaItems(
+  items: ArchiveMediaItem[],
+  tab: CampaignMediaTab,
+) {
+  if (tab !== "all") return items;
+
+  const motionItems = items.filter((item) => getCampaignMediaTab(item) !== "photos");
+
+  return motionItems.length > 0 ? motionItems : items;
+}
+
 type CampaignMediaSectionProps = {
   id: string;
   eyebrow: string;
@@ -2243,6 +2254,18 @@ function CampaignMediaSection({
           const collectionPanelId = `${panelId}-${collection.candidate.id}`;
           const isCollectionExpanded =
             expandedCollection?.candidate.id === collection.candidate.id;
+          const expandedItems = getExpandedCampaignMediaItems(
+            collection.items,
+            activeTab,
+          );
+          const expandedGridClassName = [
+            "campaign-video-grid",
+            `is-${activeTab}`,
+            expandedItems.length === 1 ? "is-single" : "",
+            expandedItems.length === 2 ? "is-pair" : "",
+          ]
+            .filter(Boolean)
+            .join(" ");
 
           return (
             <Fragment key={collection.candidate.id}>
@@ -2277,8 +2300,8 @@ function CampaignMediaSection({
                     </button>
                   </div>
 
-                  <div className={`campaign-video-grid is-${activeTab}`}>
-                    {collection.items.map((item) => (
+                  <div className={expandedGridClassName}>
+                    {expandedItems.map((item) => (
                       <ArchiveMediaCard
                         item={item}
                         key={item.id}
@@ -2566,22 +2589,6 @@ function ArchiveMediaCard({
   if (minimal) {
     const playableHref = openHref ?? item.src;
 
-    if (isPhoto && !isLocalPhoto) {
-      return (
-        <article className={cardClassName}>
-          <div className={frameClassName} style={frameStyle}>
-            <iframe
-              src={isPhoto ? getPhotoPreviewSrc(item.src) : item.src}
-              title={item.title}
-              loading="lazy"
-              allow="autoplay; fullscreen; encrypted-media"
-              allowFullScreen
-            />
-          </div>
-        </article>
-      );
-    }
-
     return (
       <article className={cardClassName}>
         <a
@@ -2607,11 +2614,13 @@ function ArchiveMediaCard({
             ) : (
               <span className="external-campaign-placeholder" aria-hidden="true" />
             )}
-            {!isPhoto && (
-              <span className="play-indicator" aria-hidden="true">
+            <span className="play-indicator" aria-hidden="true">
+              {isPhoto ? (
+                <Images size={18} />
+              ) : (
                 <Play size={18} fill="currentColor" />
-              </span>
-            )}
+              )}
+            </span>
           </div>
         </a>
       </article>
