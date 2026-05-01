@@ -2008,6 +2008,66 @@ function getPhotoPreviewSrc(src: string) {
   }
 }
 
+function canRenderArchivePhotoDirectly(item: ArchiveMediaItem) {
+  return (
+    isArchivePhoto(item) &&
+    (!item.src.startsWith("http") ||
+      isHostedMediaSrc(item.src) ||
+      isOneDrivePhoto(item.src))
+  );
+}
+
+function useArchiveLightbox(items: ArchiveMediaItem[]) {
+  const [activeItemId, setActiveItemId] = useState<string | null>(null);
+  const activeIndex =
+    activeItemId === null
+      ? -1
+      : items.findIndex((item) => item.id === activeItemId);
+  const activeItem = activeIndex >= 0 ? items[activeIndex] : null;
+
+  const openItem = (item: ArchiveMediaItem) => {
+    setActiveItemId(item.id);
+  };
+
+  const closeItem = () => {
+    setActiveItemId(null);
+  };
+
+  const goToPrevious = () => {
+    setActiveItemId((current) => {
+      if (!current || items.length === 0) return current;
+
+      const currentIndex = items.findIndex((item) => item.id === current);
+      const previousIndex =
+        currentIndex <= 0 ? items.length - 1 : currentIndex - 1;
+
+      return items[previousIndex]?.id ?? current;
+    });
+  };
+
+  const goToNext = () => {
+    setActiveItemId((current) => {
+      if (!current || items.length === 0) return current;
+
+      const currentIndex = items.findIndex((item) => item.id === current);
+      const nextIndex =
+        currentIndex < 0 || currentIndex >= items.length - 1
+          ? 0
+          : currentIndex + 1;
+
+      return items[nextIndex]?.id ?? current;
+    });
+  };
+
+  return {
+    activeItem,
+    closeItem,
+    goToNext,
+    goToPrevious,
+    openItem,
+  };
+}
+
 function App() {
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
   const [menuOpen, setMenuOpen] = useState(false);
@@ -2394,6 +2454,14 @@ function CampaignMediaSection({
     activeCollections.find(
       (collection) => collection.candidate.id === expandedCollectionId,
     ) ?? null;
+  const lightboxItems = useMemo(
+    () =>
+      expandedCollection
+        ? getExpandedCampaignMediaItems(expandedCollection.items, activeTab)
+        : items,
+    [activeTab, expandedCollection, items],
+  );
+  const archiveLightbox = useArchiveLightbox(lightboxItems);
   const headingId = `${id}-title`;
   const panelId = `${id}-panel`;
 
@@ -2490,6 +2558,7 @@ function CampaignMediaSection({
                         minimal
                         ownerName={collection.candidate.name}
                         fallbackPreviewImageSrc={collection.previewImageSrc}
+                        onOpen={archiveLightbox.openItem}
                       />
                     ))}
                   </div>
@@ -2499,6 +2568,14 @@ function CampaignMediaSection({
           );
         })}
       </div>
+      {archiveLightbox.activeItem && (
+        <ArchiveLightbox
+          item={archiveLightbox.activeItem}
+          onClose={archiveLightbox.closeItem}
+          onNext={archiveLightbox.goToNext}
+          onPrevious={archiveLightbox.goToPrevious}
+        />
+      )}
     </section>
   );
 }
@@ -2701,6 +2778,7 @@ function CandidateArchivePage({ candidate }: { candidate: ArchiveCandidate }) {
   const fallbackPreviewImageSrc = candidate.media[0]
     ? getCandidatePreviewImageSrc(candidate, "all", candidate.media[0])
     : null;
+  const archiveLightbox = useArchiveLightbox(candidate.media);
 
   return (
     <section
@@ -2732,9 +2810,18 @@ function CandidateArchivePage({ candidate }: { candidate: ArchiveCandidate }) {
             key={item.id}
             ownerName={candidate.name}
             fallbackPreviewImageSrc={fallbackPreviewImageSrc}
+            onOpen={archiveLightbox.openItem}
           />
         ))}
       </div>
+      {archiveLightbox.activeItem && (
+        <ArchiveLightbox
+          item={archiveLightbox.activeItem}
+          onClose={archiveLightbox.closeItem}
+          onNext={archiveLightbox.goToNext}
+          onPrevious={archiveLightbox.goToPrevious}
+        />
+      )}
     </section>
   );
 }
@@ -2744,11 +2831,13 @@ function ArchiveMediaCard({
   minimal = false,
   ownerName,
   fallbackPreviewImageSrc,
+  onOpen,
 }: {
   item: ArchiveMediaItem;
   minimal?: boolean;
   ownerName?: string;
   fallbackPreviewImageSrc?: string | null;
+  onOpen: (item: ArchiveMediaItem) => void;
 }) {
   const isPhoto = isArchivePhoto(item);
   const isHostedMedia = isHostedMediaSrc(item.src);
@@ -2761,11 +2850,14 @@ function ArchiveMediaCard({
     getArchiveMediaPreviewImageSrc(item) ?? fallbackPreviewImageSrc ?? null;
   const openHref =
     isHttpSource || item.kind === "video" || isInlinePhoto ? item.src : null;
-  const openLabel = isExternal
-    ? `Open ${item.title} in OneDrive`
+  const previewLabel = isExternal
+    ? `Preview ${item.title}`
     : isInlinePhoto
       ? `Open ${item.title} photo`
       : `Open ${item.title} video`;
+  const sourceLabel = isExternal
+    ? `Open ${item.title} source`
+    : previewLabel;
   const hoverName = ownerName ?? item.category;
   const frameStyle = getExternalMediaFrameStyle(item.src);
   const frameClassName = [
@@ -2787,16 +2879,13 @@ function ArchiveMediaCard({
     .join(" ");
 
   if (minimal) {
-    const playableHref = openHref ?? item.src;
-
     return (
       <article className={cardClassName}>
-        <a
+        <button
           className="archive-play-tile"
-          href={playableHref}
-          target="_blank"
-          rel="noreferrer"
-          aria-label={openLabel}
+          type="button"
+          aria-label={previewLabel}
+          onClick={() => onOpen(item)}
         >
           <div className={frameClassName} style={frameStyle}>
             {previewImageSrc ? (
@@ -2815,7 +2904,7 @@ function ArchiveMediaCard({
               {hoverName}
             </span>
           </div>
-        </a>
+        </button>
       </article>
     );
   }
@@ -2835,6 +2924,12 @@ function ArchiveMediaCard({
           />
         ) : isInlinePhoto ? (
           <img src={item.src} alt="" loading="lazy" />
+        ) : isEmbeddedVideo ? (
+          previewImageSrc ? (
+            <img src={previewImageSrc} alt="" loading="lazy" />
+          ) : (
+            <span className="external-campaign-placeholder" aria-hidden="true" />
+          )
         ) : (
           <iframe
             src={isPhoto ? getPhotoPreviewSrc(item.src) : item.src}
@@ -2844,9 +2939,20 @@ function ArchiveMediaCard({
             allowFullScreen
           />
         )}
+        {isEmbeddedVideo && (
+          <span className="play-indicator" aria-hidden="true">
+            <Play size={18} fill="currentColor" />
+          </span>
+        )}
         <span className="media-hover-name" aria-hidden="true">
           {hoverName}
         </span>
+        <button
+          className="archive-frame-open-button"
+          type="button"
+          aria-label={previewLabel}
+          onClick={() => onOpen(item)}
+        />
       </div>
 
       <div className="external-campaign-meta">
@@ -2859,7 +2965,7 @@ function ArchiveMediaCard({
             href={openHref}
             target="_blank"
             rel="noreferrer"
-            aria-label={openLabel}
+            aria-label={sourceLabel}
           >
             <ExternalLink size={18} aria-hidden="true" />
           </a>
@@ -2917,6 +3023,130 @@ function ExternalCampaignCard({ item }: { item: ExternalCampaignEmbed }) {
       </div>
       <span>{item.category}</span>
     </article>
+  );
+}
+
+type ArchiveLightboxProps = {
+  item: ArchiveMediaItem;
+  onClose: () => void;
+  onPrevious: () => void;
+  onNext: () => void;
+};
+
+function ArchiveLightbox({
+  item,
+  onClose,
+  onPrevious,
+  onNext,
+}: ArchiveLightboxProps) {
+  const isPhoto = isArchivePhoto(item);
+  const isDirectVideo = item.kind === "video";
+  const renderDirectPhoto = canRenderArchivePhotoDirectly(item);
+  const mediaStyle = getExternalMediaFrameStyle(item.src);
+  const mediaClassName = [
+    "lightbox-media",
+    "archive-lightbox-media",
+    isPhoto ? "is-photo" : "is-video",
+    item.orientation ? `is-${item.orientation}` : "",
+  ]
+    .filter(Boolean)
+    .join(" ");
+
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        onClose();
+      }
+
+      if (event.key === "ArrowRight") {
+        onNext();
+      }
+
+      if (event.key === "ArrowLeft") {
+        onPrevious();
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    document.body.classList.add("is-locked");
+
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+      document.body.classList.remove("is-locked");
+    };
+  }, [onClose, onNext, onPrevious]);
+
+  return (
+    <div
+      className="lightbox"
+      role="dialog"
+      aria-modal="true"
+      aria-label={`${item.title} preview`}
+      onMouseDown={(event) => {
+        if (event.target === event.currentTarget) {
+          onClose();
+        }
+      }}
+    >
+      <div className="lightbox-toolbar">
+        <button
+          className="icon-button"
+          type="button"
+          aria-label="Previous media"
+          onClick={onPrevious}
+        >
+          <ChevronLeft size={20} />
+        </button>
+        <button
+          className="icon-button"
+          type="button"
+          aria-label="Next media"
+          onClick={onNext}
+        >
+          <ChevronRight size={20} />
+        </button>
+        <button
+          className="icon-button"
+          type="button"
+          aria-label="Close preview"
+          onClick={onClose}
+        >
+          <X size={20} />
+        </button>
+      </div>
+
+      <figure className="lightbox-panel archive-lightbox-panel">
+        <div className={mediaClassName} style={mediaStyle}>
+          {isDirectVideo ? (
+            <video
+              key={item.id}
+              src={item.src}
+              poster={
+                item.poster ?? getArchiveMediaPreviewImageSrc(item) ?? undefined
+              }
+              controls
+              playsInline
+              autoPlay
+            />
+          ) : renderDirectPhoto ? (
+            <img src={getPhotoPreviewSrc(item.src)} alt={item.title} />
+          ) : (
+            <iframe
+              key={item.id}
+              src={isPhoto ? getPhotoPreviewSrc(item.src) : item.src}
+              title={item.title}
+              allow="autoplay; fullscreen; encrypted-media"
+              allowFullScreen
+            />
+          )}
+        </div>
+        <figcaption>
+          <span>{item.category}</span>
+          <strong>{item.title}</strong>
+          <span>{item.context}</span>
+        </figcaption>
+      </figure>
+    </div>
   );
 }
 

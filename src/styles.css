@@ -1075,8 +1075,15 @@ h1 {
 
 .archive-play-tile {
   display: block;
+  width: 100%;
+  padding: 0;
+  border: 0;
+  appearance: none;
+  background: transparent;
   color: inherit;
   cursor: pointer;
+  font: inherit;
+  text-align: inherit;
 }
 
 .archive-play-tile .external-campaign-frame,
@@ -1093,6 +1100,22 @@ h1 {
   border-color: rgba(18, 63, 115, 0.62);
   box-shadow: 0 14px 34px rgba(42, 37, 31, 0.13);
   transform: translateY(-1px);
+}
+
+.archive-frame-open-button {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  padding: 0;
+  border: 0;
+  appearance: none;
+  background: transparent;
+  cursor: pointer;
+}
+
+.archive-frame-open-button:focus-visible {
+  outline: 3px solid rgba(255, 253, 248, 0.92);
+  outline-offset: -6px;
 }
 
 .external-campaign-placeholder {
@@ -1527,7 +1550,8 @@ h1 {
 }
 
 .lightbox-media img,
-.lightbox-media video {
+.lightbox-media video,
+.lightbox-media iframe {
   display: block;
   max-width: 100%;
   max-height: calc(100svh - 8rem);
@@ -1539,6 +1563,24 @@ h1 {
 .lightbox-media video {
   width: min(100%, 920px);
   background: #111;
+}
+
+.lightbox-media iframe {
+  width: min(100%, 1120px);
+  height: auto;
+  aspect-ratio: var(--media-aspect, 16 / 9);
+  border: 0;
+  background: #111;
+}
+
+.archive-lightbox-media.is-portrait iframe {
+  width: min(100%, 430px);
+  aspect-ratio: var(--media-aspect, 9 / 16);
+}
+
+.archive-lightbox-media.is-square iframe {
+  width: min(100%, 720px);
+  aspect-ratio: var(--media-aspect, 1 / 1);
 }
 
 .lightbox-panel figcaption {
