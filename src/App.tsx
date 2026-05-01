@@ -61,12 +61,14 @@ type ArchiveCandidate = {
   eyebrow: string;
   summary: string;
   media: ArchiveMediaItem[];
+  previews?: Partial<Record<CampaignMediaTab, string>>;
 };
 
 type CampaignMediaCollection = {
   candidate: ArchiveCandidate;
   items: ArchiveMediaItem[];
   preview: ArchiveMediaItem;
+  previewImageSrc: string | null;
 };
 
 type ArchiveRoute = {
@@ -88,6 +90,9 @@ const mediaUrl = (path: string) =>
   MEDIA_BASE_URL && path.startsWith("/")
     ? `${MEDIA_BASE_URL}${path}`
     : path;
+
+const archivePreviewUrl = (name: string) =>
+  mediaUrl(`/media/archive-previews/${name}.jpg`);
 
 const profile = {
   name: "Rohan Hammond",
@@ -1234,6 +1239,12 @@ const stateCandidateArchives: ArchiveCandidate[] = [
     seat: "Nedlands",
     eyebrow: "Elected member media",
     summary: "Local updates, issue videos, reels, and photos.",
+    previews: {
+      all: mediaUrl("/media/campaign-videos/jono-door-knocking-recap-poster.jpg"),
+      videos: mediaUrl("/media/campaign-videos/jono-door-knocking-recap-poster.jpg"),
+      reels: mediaUrl("/media/campaign-videos/jono-hospital-services-poster.jpg"),
+      photos: mediaUrl("/media/campaign-videos/jono-door-knocking-recap-poster.jpg"),
+    },
     media: [
       ...getLocalCampaignVideos(),
       ...getCampaignEmbeds(stateCampaignEmbeds, [
@@ -1252,6 +1263,9 @@ const stateCandidateArchives: ArchiveCandidate[] = [
     seat: "Field coverage",
     eyebrow: "2025",
     summary: "Press clips, field photos, and campaign coverage.",
+    previews: {
+      all: archivePreviewUrl("hayley-edwards"),
+    },
     media: getCampaignEmbeds(stateCampaignEmbeds, [
       "hayley-edwards-presser",
       "hayley-edwards-photo-one",
@@ -1269,6 +1283,9 @@ const stateCandidateArchives: ArchiveCandidate[] = [
     seat: "Riverton",
     eyebrow: "2025",
     summary: "Local issue videos and community coverage.",
+    previews: {
+      all: archivePreviewUrl("nitin-vashisht"),
+    },
     media: getCampaignEmbeds(stateCampaignEmbeds, [
       "nitin-vashisht-local-club",
       "nitin-vashisht-school",
@@ -1287,6 +1304,9 @@ const stateCandidateArchives: ArchiveCandidate[] = [
     seat: "Cottesloe",
     eyebrow: "2025",
     summary: "Photos and campaign event coverage.",
+    previews: {
+      all: archivePreviewUrl("sandra-brewer"),
+    },
     media: getCampaignEmbeds(stateCampaignEmbeds, [
       "sandra-brewer-coverage",
       "sandra-brewer-photo-one",
@@ -1308,6 +1328,9 @@ const stateCandidateArchives: ArchiveCandidate[] = [
     seat: "State work",
     eyebrow: "2025",
     summary: "Local issue videos, stills, and field coverage.",
+    previews: {
+      all: mediaUrl("/media/amalfi-interview.jpg"),
+    },
     media: getCampaignEmbeds(stateCampaignEmbeds, [
       "chris-dowson-swimming-club",
       "chris-dowson-local-parks",
@@ -1328,6 +1351,9 @@ const stateCandidateArchives: ArchiveCandidate[] = [
     seat: "Victoria Park",
     eyebrow: "2025",
     summary: "Candidate videos and local issue coverage.",
+    previews: {
+      all: archivePreviewUrl("andra-biondi"),
+    },
     media: getCampaignEmbeds(stateCampaignEmbeds, [
       "andra-piece-to-camera",
       "andra-racecourse-libby",
@@ -1345,6 +1371,9 @@ const stateCandidateArchives: ArchiveCandidate[] = [
     seat: "Morley",
     eyebrow: "2025",
     summary: "Field photography and local campaign stills.",
+    previews: {
+      all: archivePreviewUrl("aswath-chavittupara"),
+    },
     media: getCampaignEmbeds(stateCampaignEmbeds, [
       "aswath-comms-photo",
       "aswath-comms-field-photo",
@@ -1361,6 +1390,12 @@ const stateCandidateArchives: ArchiveCandidate[] = [
     seat: "State work",
     eyebrow: "2025",
     summary: "Short videos, portraits, and campaign stills.",
+    previews: {
+      all: mediaUrl("/media/michelle-hoffman/michelle-video-1-poster.jpg"),
+      videos: mediaUrl("/media/michelle-hoffman/michelle-video-1-poster.jpg"),
+      reels: mediaUrl("/media/michelle-hoffman/michelle-video-1-poster.jpg"),
+      photos: mediaUrl("/media/michelle-hoffman/michelle-photo-1.jpg"),
+    },
     media: getCampaignEmbeds(stateCampaignEmbeds, [
       "michelle-hoffman-video-one",
       "michelle-hoffman-video-two",
@@ -1383,6 +1418,9 @@ const stateCandidateArchives: ArchiveCandidate[] = [
     seat: "Hillarys",
     eyebrow: "2025",
     summary: "Video, portraits, and field coverage.",
+    previews: {
+      all: archivePreviewUrl("lisa-olsson"),
+    },
     media: getCampaignEmbeds(stateCampaignEmbeds, [
       "lisa-olsson-video",
       "lisa-olsson-photo",
@@ -1396,6 +1434,9 @@ const stateCandidateArchives: ArchiveCandidate[] = [
     seat: "Kingsley",
     eyebrow: "2025",
     summary: "Short videos for local issues and community updates.",
+    previews: {
+      all: archivePreviewUrl("scott-edwardes"),
+    },
     media: getCampaignEmbeds(stateCampaignEmbeds, [
       "scott-edwardes-road",
       "scott-edwardes-student",
@@ -1414,6 +1455,9 @@ const federalCandidateArchives: ArchiveCandidate[] = [
     seat: "Curtin",
     eyebrow: "2025",
     summary: "Piece-to-camera videos and social cuts.",
+    previews: {
+      all: archivePreviewUrl("tom-white"),
+    },
     media: getCampaignEmbeds(federalCampaignEmbeds, [
       "tom-white-ptc-5",
       "tom-white-ptc-2",
@@ -1430,6 +1474,9 @@ const federalCandidateArchives: ArchiveCandidate[] = [
     seat: "Moore",
     eyebrow: "2025",
     summary: "Video, drone coverage, and stills.",
+    previews: {
+      all: archivePreviewUrl("vince-connelly"),
+    },
     media: getCampaignEmbeds(federalCampaignEmbeds, [
       "vince-connelly-surfing",
       "vince-connelly-drone",
@@ -1451,6 +1498,9 @@ const federalCandidateArchives: ArchiveCandidate[] = [
     seat: "Bullwinkel",
     eyebrow: "2025",
     summary: "Leader-visit stills and event coverage.",
+    previews: {
+      all: archivePreviewUrl("matt-moran"),
+    },
     media: getCampaignEmbeds(federalCampaignEmbeds, [
       "matt-moran-dutton-photo",
       "matt-moran-dutton-photo-two",
@@ -1477,6 +1527,9 @@ const federalCandidateArchives: ArchiveCandidate[] = [
     seat: "Swan",
     eyebrow: "2025",
     summary: "Photos, local videos, and event coverage.",
+    previews: {
+      all: archivePreviewUrl("mic-fels"),
+    },
     media: getCampaignEmbeds(federalCampaignEmbeds, [
       "mic-fels-dutton-photo",
       "mic-fels-playground-upgrades",
@@ -1495,6 +1548,9 @@ const federalCandidateArchives: ArchiveCandidate[] = [
     seat: "Burt",
     eyebrow: "2025",
     summary: "Field photography and campaign stills.",
+    previews: {
+      all: archivePreviewUrl("sean-ayres"),
+    },
     media: getCampaignEmbeds(federalCampaignEmbeds, [
       "sean-ayres-field-work",
       "sean-ayres-photo-one",
@@ -1517,6 +1573,9 @@ const federalCandidateArchives: ArchiveCandidate[] = [
     seat: "B-roll",
     eyebrow: "2025",
     summary: "B-roll and field material across candidates.",
+    previews: {
+      all: archivePreviewUrl("trish-botha"),
+    },
     media: getCampaignEmbeds(federalCampaignEmbeds, [
       "liam-trish-vince-broll",
       "liam-trish-vince-vince-broll",
@@ -1529,6 +1588,9 @@ const federalCandidateArchives: ArchiveCandidate[] = [
     seat: "Leader visits",
     eyebrow: "2025",
     summary: "Leader-visit coverage across Perth stops.",
+    previews: {
+      all: archivePreviewUrl("matt-moran"),
+    },
     media: getCampaignEmbeds(federalCampaignEmbeds, [
       "mic-fels-dutton-photo",
       "matt-moran-dutton-photo",
@@ -2132,6 +2194,18 @@ function getCollectionPreviewImageSrc(item: ArchiveMediaItem) {
   return null;
 }
 
+function getCandidatePreviewImageSrc(
+  candidate: ArchiveCandidate,
+  tab: CampaignMediaTab,
+  preview: ArchiveMediaItem,
+) {
+  return (
+    candidate.previews?.[tab] ??
+    candidate.previews?.all ??
+    getCollectionPreviewImageSrc(preview)
+  );
+}
+
 function getCampaignMediaCollections(
   clients: ArchiveCandidate[],
   tab: CampaignMediaTab,
@@ -2150,6 +2224,7 @@ function getCampaignMediaCollections(
         candidate,
         items: mediaItems,
         preview,
+        previewImageSrc: getCandidatePreviewImageSrc(candidate, tab, preview),
       };
     })
     .filter(isDefined);
@@ -2374,7 +2449,10 @@ function CampaignCollectionCard({
         aria-label={`Open ${candidate.name} ${tab}`}
         onClick={onToggle}
       >
-        <CampaignCollectionPreviewVisual item={preview} />
+        <CampaignCollectionPreviewVisual
+          item={preview}
+          imageSrc={collection.previewImageSrc}
+        />
         <span className="collection-preview-title" aria-hidden="true">
           <span>{getCampaignMediaSetLabel(tab)}</span>
           <strong>{candidate.name}</strong>
@@ -2400,12 +2478,14 @@ function CampaignCollectionCard({
 
 type CampaignCollectionPreviewVisualProps = {
   item: ArchiveMediaItem;
+  imageSrc: string | null;
 };
 
 function CampaignCollectionPreviewVisual({
   item,
+  imageSrc,
 }: CampaignCollectionPreviewVisualProps) {
-  const previewImageSrc = getCollectionPreviewImageSrc(item);
+  const previewImageSrc = imageSrc ?? getCollectionPreviewImageSrc(item);
   const [failedImageSrc, setFailedImageSrc] = useState<string | null>(null);
 
   if (previewImageSrc && failedImageSrc !== previewImageSrc) {
