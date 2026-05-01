@@ -51,6 +51,7 @@ type ExternalCampaignEmbed = {
 type ArchiveMediaItem = ExternalCampaignEmbed & {
   kind?: "embed" | "video" | "photo";
   poster?: string;
+  preview?: string;
 };
 
 type ArchiveCandidate = {
@@ -94,6 +95,38 @@ const mediaUrl = (path: string) =>
 
 const archivePreviewUrl = (name: string) =>
   mediaUrl(`/media/archive-previews/${name}.jpg`);
+
+const archivePiecePreviewUrl = (id: string) =>
+  mediaUrl(`/media/archive-piece-previews/${id}.jpg`);
+
+const archivePiecePreviewIds = new Set([
+  "andra-piece-to-camera",
+  "aswath-comms-field-photo",
+  "aswath-comms-photo",
+  "hayley-edwards-photo-one",
+  "hayley-edwards-photo-two",
+  "liam-trish-vince-broll",
+  "lisa-olsson-photo",
+  "mic-fels-dutton-photo",
+  "nitin-vashisht-local-club",
+  "sandra-brewer-coverage",
+  "sandra-brewer-photo-one",
+  "sandra-brewer-photo-two",
+  "scott-edwardes-health",
+  "scott-edwardes-police",
+  "scott-edwardes-road",
+  "scott-edwardes-student",
+  "sean-ayres-field-work",
+  "sean-ayres-photo-one",
+  "sean-ayres-photo-two",
+  "tom-white-ptc-2",
+  "tom-white-ptc-5",
+  "vince-connelly-photo",
+  "vince-connelly-surfing",
+]);
+
+const getArchivePiecePreviewUrl = (id: string) =>
+  archivePiecePreviewIds.has(id) ? archivePiecePreviewUrl(id) : undefined;
 
 const cloudMediaUrl = (path: string) =>
   `${MEDIA_BASE_URL || PUBLIC_MEDIA_BASE_URL}${path}`;
@@ -393,6 +426,12 @@ const seanAyresPhotoFiles = [
   "_DSC4677.jpg",
   "_DSC4679.jpg",
   "_DSC4689.jpg",
+];
+
+const seanAyresCloudPhotoIds = [
+  "sean-ayres-cover-event",
+  "sean-ayres-supporter-sign",
+  "sean-ayres-event-guests",
 ];
 
 const vinceConnellyPhotoFiles = [
@@ -1011,6 +1050,30 @@ const federalCampaignEmbeds: ArchiveMediaItem[] = [
     src: mediaUrl(file),
   })),
   {
+    id: "sean-ayres-cover-event",
+    title: "Sean Ayres Event Cover",
+    context: "Photo",
+    category: "Burt",
+    kind: "photo",
+    src: mediaUrl("/media/sean-ayres/_DSC5079.jpg"),
+  },
+  {
+    id: "sean-ayres-supporter-sign",
+    title: "Sean Ayres Supporter Sign",
+    context: "Photo",
+    category: "Burt",
+    kind: "photo",
+    src: mediaUrl("/media/sean-ayres/_DSC4947.jpg"),
+  },
+  {
+    id: "sean-ayres-event-guests",
+    title: "Sean Ayres Community Guests",
+    context: "Photo",
+    category: "Burt",
+    kind: "photo",
+    src: mediaUrl("/media/sean-ayres/_DSC4723.jpg"),
+  },
+  {
     id: "liam-trish-vince-broll",
     title: "Trish Botha B-roll",
     context: "B-roll",
@@ -1238,10 +1301,16 @@ const federalCampaignEmbeds: ArchiveMediaItem[] = [
 const isDefined = <T,>(item: T | undefined): item is T => Boolean(item);
 
 const getCampaignEmbeds = (
-  items: ExternalCampaignEmbed[],
+  items: ArchiveMediaItem[],
   ids: string[],
 ): ArchiveMediaItem[] =>
-  ids.map((id) => items.find((item) => item.id === id)).filter(isDefined);
+  ids
+    .map((id) => items.find((item) => item.id === id))
+    .filter(isDefined)
+    .map((item) => ({
+      ...item,
+      preview: item.preview ?? getArchivePiecePreviewUrl(item.id),
+    }));
 
 const getLocalCampaignVideos = (): ArchiveMediaItem[] =>
   campaignVideoItems.map((item) => ({
@@ -1586,6 +1655,7 @@ const federalCandidateArchives: ArchiveCandidate[] = [
       all: archivePreviewUrl("sean-ayres"),
     },
     media: getCampaignEmbeds(federalCampaignEmbeds, [
+      ...seanAyresCloudPhotoIds,
       "sean-ayres-field-work",
       "sean-ayres-photo-one",
       "sean-ayres-photo-two",
@@ -1696,6 +1766,7 @@ const federalCampaignMedia: ArchiveMediaItem[] = getCampaignEmbeds(
     ]),
     "mic-fels-dutton-photo",
     ...getGeneratedMediaIds("mic-fels-photo-extra", micFelsPhotoFiles),
+    ...seanAyresCloudPhotoIds,
     "sean-ayres-field-work",
     "sean-ayres-photo-one",
     "sean-ayres-photo-two",
@@ -1861,6 +1932,7 @@ function isHostedMediaSrc(src: string) {
 }
 
 function getArchiveMediaPreviewImageSrc(item: ArchiveMediaItem) {
+  if (item.preview) return item.preview;
   if (item.poster) return item.poster;
   if (isOneDrivePhoto(item.src)) return getPhotoPreviewSrc(item.src);
   if (isArchivePhoto(item) && isHostedMediaSrc(item.src)) return item.src;
@@ -2397,7 +2469,11 @@ function CampaignMediaSection({
                         key={item.id}
                         minimal
                         ownerName={collection.candidate.name}
-                        fallbackPreviewImageSrc={collection.previewImageSrc}
+                        fallbackPreviewImageSrc={
+                          expandedItems.length === 1
+                            ? collection.previewImageSrc
+                            : null
+                        }
                       />
                     ))}
                   </div>
