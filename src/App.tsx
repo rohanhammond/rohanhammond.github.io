@@ -1642,6 +1642,9 @@ const federalCandidateArchives: ArchiveCandidate[] = [
     previews: {
       all: archivePreviewUrl("matt-moran"),
     },
+    previewPosition: {
+      all: "center 30%",
+    },
     media: getCampaignEmbeds(federalCampaignEmbeds, [
       ...getGeneratedMediaIds(
         "matt-moran-dutton-photo",
@@ -1727,6 +1730,9 @@ const federalCandidateArchives: ArchiveCandidate[] = [
     summary: "Leader-visit coverage across Perth stops.",
     previews: {
       all: archivePreviewUrl("matt-moran"),
+    },
+    previewPosition: {
+      all: "center 30%",
     },
     media: getCampaignEmbeds(federalCampaignEmbeds, [
       "mic-fels-dutton-photo",
