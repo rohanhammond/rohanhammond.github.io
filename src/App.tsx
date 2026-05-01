@@ -1516,9 +1516,9 @@ const stateCandidateArchives: ArchiveCandidate[] = [
       photos: mediaUrl("/media/michelle-hoffman/michelle-photo-1.jpg"),
     },
     previewPosition: {
-      all: "center 12%",
-      videos: "center 12%",
-      reels: "center 12%",
+      all: "center 8%",
+      videos: "center 8%",
+      reels: "center 8%",
     },
     media: getCampaignEmbeds(stateCampaignEmbeds, [
       "michelle-hoffman-video-one",
@@ -1546,7 +1546,7 @@ const stateCandidateArchives: ArchiveCandidate[] = [
       all: archivePreviewUrl("lisa-olsson"),
     },
     previewPosition: {
-      all: "center 18%",
+      all: "center 14%",
     },
     media: getCampaignEmbeds(stateCampaignEmbeds, [
       "lisa-olsson-video",
