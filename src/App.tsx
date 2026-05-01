@@ -79,6 +79,15 @@ type ExternalMediaFrameStyle = CSSProperties & {
 };
 
 const PHOTO_PREVIEW_MAX_SIZE = 1800;
+const MEDIA_BASE_URL = (import.meta.env.VITE_MEDIA_BASE_URL ?? "").replace(
+  /\/$/,
+  "",
+);
+
+const mediaUrl = (path: string) =>
+  MEDIA_BASE_URL && path.startsWith("/")
+    ? `${MEDIA_BASE_URL}${path}`
+    : path;
 
 const profile = {
   name: "Rohan Hammond",
@@ -168,7 +177,7 @@ const createLocalPhotoItems = ({
     context: "Photo",
     category,
     kind: "photo",
-    src: file,
+    src: mediaUrl(file),
     orientation,
   }));
 
@@ -471,8 +480,8 @@ const campaignVideoItems: MediaItem[] = [
   {
     id: "jono-door-knocking-recap",
     type: "video",
-    src: "/media/campaign-videos/jono-door-knocking-recap.mp4",
-    poster: "/media/campaign-videos/jono-door-knocking-recap-poster.jpg",
+    src: mediaUrl("/media/campaign-videos/jono-door-knocking-recap.mp4"),
+    poster: mediaUrl("/media/campaign-videos/jono-door-knocking-recap-poster.jpg"),
     title: "Door Knocking Recap",
     category: "Jonathan Huston",
     year: "2025",
@@ -481,8 +490,8 @@ const campaignVideoItems: MediaItem[] = [
   {
     id: "jono-bowling-club",
     type: "video",
-    src: "/media/campaign-videos/jono-bowling-club.mp4",
-    poster: "/media/campaign-videos/jono-bowling-club-poster.jpg",
+    src: mediaUrl("/media/campaign-videos/jono-bowling-club.mp4"),
+    poster: mediaUrl("/media/campaign-videos/jono-bowling-club-poster.jpg"),
     title: "Dalkeith Nedlands Bowling Club",
     category: "Community Issue",
     year: "2025",
@@ -491,8 +500,8 @@ const campaignVideoItems: MediaItem[] = [
   {
     id: "jono-traffic",
     type: "video",
-    src: "/media/campaign-videos/jono-traffic.mp4",
-    poster: "/media/campaign-videos/jono-traffic-poster.jpg",
+    src: mediaUrl("/media/campaign-videos/jono-traffic.mp4"),
+    poster: mediaUrl("/media/campaign-videos/jono-traffic-poster.jpg"),
     title: "Thomas Street Traffic",
     category: "Local Issue",
     year: "2025",
@@ -501,8 +510,8 @@ const campaignVideoItems: MediaItem[] = [
   {
     id: "jono-high-rise",
     type: "video",
-    src: "/media/campaign-videos/jono-high-rise.mp4",
-    poster: "/media/campaign-videos/jono-high-rise-poster.jpg",
+    src: mediaUrl("/media/campaign-videos/jono-high-rise.mp4"),
+    poster: mediaUrl("/media/campaign-videos/jono-high-rise-poster.jpg"),
     title: "High-Rise Planning",
     category: "Planning Issue",
     year: "2025",
@@ -511,8 +520,8 @@ const campaignVideoItems: MediaItem[] = [
   {
     id: "jono-iga-door-knocking",
     type: "video",
-    src: "/media/campaign-videos/jono-iga-door-knocking.mp4",
-    poster: "/media/campaign-videos/jono-iga-door-knocking-poster.jpg",
+    src: mediaUrl("/media/campaign-videos/jono-iga-door-knocking.mp4"),
+    poster: mediaUrl("/media/campaign-videos/jono-iga-door-knocking-poster.jpg"),
     title: "IGA Door Knocking",
     category: "Field work",
     year: "2024",
@@ -521,8 +530,8 @@ const campaignVideoItems: MediaItem[] = [
   {
     id: "jono-hospital-services",
     type: "video",
-    src: "/media/campaign-videos/jono-hospital-services.mp4",
-    poster: "/media/campaign-videos/jono-hospital-services-poster.jpg",
+    src: mediaUrl("/media/campaign-videos/jono-hospital-services.mp4"),
+    poster: mediaUrl("/media/campaign-videos/jono-hospital-services-poster.jpg"),
     title: "Hospital Services",
     category: "Health Services",
     year: "2024",
@@ -784,8 +793,8 @@ const stateCampaignEmbeds: ArchiveMediaItem[] = [
     title: "Michelle Hoffman Video 1",
     context: "Video",
     category: "Michelle Hoffman",
-    src: "/media/michelle-hoffman/michelle-video-1.mp4",
-    poster: "/media/michelle-hoffman/michelle-video-1-poster.jpg",
+    src: mediaUrl("/media/michelle-hoffman/michelle-video-1.mp4"),
+    poster: mediaUrl("/media/michelle-hoffman/michelle-video-1-poster.jpg"),
     orientation: "portrait",
   },
   {
@@ -794,8 +803,8 @@ const stateCampaignEmbeds: ArchiveMediaItem[] = [
     title: "Michelle Hoffman Video 2",
     context: "Video",
     category: "Michelle Hoffman",
-    src: "/media/michelle-hoffman/michelle-video-2.mp4",
-    poster: "/media/michelle-hoffman/michelle-video-2-poster.jpg",
+    src: mediaUrl("/media/michelle-hoffman/michelle-video-2.mp4"),
+    poster: mediaUrl("/media/michelle-hoffman/michelle-video-2-poster.jpg"),
     orientation: "portrait",
   },
   {
@@ -804,8 +813,8 @@ const stateCampaignEmbeds: ArchiveMediaItem[] = [
     title: "Michelle Hoffman Video 3",
     context: "Video",
     category: "Michelle Hoffman",
-    src: "/media/michelle-hoffman/michelle-video-3.mp4",
-    poster: "/media/michelle-hoffman/michelle-video-3-poster.jpg",
+    src: mediaUrl("/media/michelle-hoffman/michelle-video-3.mp4"),
+    poster: mediaUrl("/media/michelle-hoffman/michelle-video-3-poster.jpg"),
     orientation: "portrait",
   },
   {
@@ -814,8 +823,8 @@ const stateCampaignEmbeds: ArchiveMediaItem[] = [
     title: "Michelle Hoffman Video 4",
     context: "Video",
     category: "Michelle Hoffman",
-    src: "/media/michelle-hoffman/michelle-video-4.mp4",
-    poster: "/media/michelle-hoffman/michelle-video-4-poster.jpg",
+    src: mediaUrl("/media/michelle-hoffman/michelle-video-4.mp4"),
+    poster: mediaUrl("/media/michelle-hoffman/michelle-video-4-poster.jpg"),
     orientation: "portrait",
   },
   {
@@ -824,7 +833,7 @@ const stateCampaignEmbeds: ArchiveMediaItem[] = [
     title: "Michelle Hoffman Portrait",
     context: "Photo",
     category: "Michelle Hoffman",
-    src: "/media/michelle-hoffman/michelle-photo-1.jpg",
+    src: mediaUrl("/media/michelle-hoffman/michelle-photo-1.jpg"),
     orientation: "portrait",
   },
   {
@@ -833,7 +842,7 @@ const stateCampaignEmbeds: ArchiveMediaItem[] = [
     title: "Michelle Hoffman Parliament Still",
     context: "Photo",
     category: "Michelle Hoffman",
-    src: "/media/michelle-hoffman/michelle-photo-2.jpg",
+    src: mediaUrl("/media/michelle-hoffman/michelle-photo-2.jpg"),
   },
   {
     id: "michelle-hoffman-photo-three",
@@ -841,7 +850,7 @@ const stateCampaignEmbeds: ArchiveMediaItem[] = [
     title: "Michelle Hoffman Interview Still",
     context: "Photo",
     category: "Michelle Hoffman",
-    src: "/media/michelle-hoffman/michelle-photo-3.jpg",
+    src: mediaUrl("/media/michelle-hoffman/michelle-photo-3.jpg"),
   },
   {
     id: "michelle-hoffman-photo-four",
@@ -849,7 +858,7 @@ const stateCampaignEmbeds: ArchiveMediaItem[] = [
     title: "Michelle Hoffman Field Still",
     context: "Photo",
     category: "Michelle Hoffman",
-    src: "/media/michelle-hoffman/michelle-photo-4.jpg",
+    src: mediaUrl("/media/michelle-hoffman/michelle-photo-4.jpg"),
   },
   ...createLocalPhotoItems({
     prefix: "michelle-hoffman-photo-extra",
@@ -1693,8 +1702,8 @@ const portfolioMediaItems: MediaItem[] = [
   {
     id: "campaign-video",
     type: "video",
-    src: "/media/amalfi-media-strategy.mp4",
-    poster: "/media/amalfi-media-strategy-poster.jpg",
+    src: mediaUrl("/media/amalfi-media-strategy.mp4"),
+    poster: mediaUrl("/media/amalfi-media-strategy-poster.jpg"),
     title: "Media Reel",
     category: "Video",
     year: "2025",
@@ -1704,7 +1713,7 @@ const portfolioMediaItems: MediaItem[] = [
   {
     id: "interview",
     type: "image",
-    src: "/media/amalfi-interview.jpg",
+    src: mediaUrl("/media/amalfi-interview.jpg"),
     title: "Interview work",
     category: "Photo",
     year: "2025",
@@ -1712,7 +1721,7 @@ const portfolioMediaItems: MediaItem[] = [
   {
     id: "community",
     type: "image",
-    src: "/media/amalfi-community.jpg",
+    src: mediaUrl("/media/amalfi-community.jpg"),
     title: "Community photos",
     category: "Photography",
     year: "2025",
@@ -1720,7 +1729,7 @@ const portfolioMediaItems: MediaItem[] = [
   {
     id: "portrait",
     type: "image",
-    src: "/media/amalfi-portrait.jpg",
+    src: mediaUrl("/media/amalfi-portrait.jpg"),
     title: "Portraits",
     category: "Portrait",
     year: "2025",
@@ -1730,7 +1739,7 @@ const portfolioMediaItems: MediaItem[] = [
 const mediaItems = [...campaignVideoItems, ...portfolioMediaItems];
 
 const aboutPhoto = {
-  src: "/media/rohan-contact/rohan-headshot-01.jpg",
+  src: mediaUrl("/media/rohan-contact/rohan-headshot-01.jpg"),
   alt: "Rohan Hammond portrait",
 };
 
@@ -1944,7 +1953,7 @@ function App() {
           </div>
 
           <aside className="hero-visual" aria-label="About image">
-            <img src="/media/amalfi-founder.jpg" alt="" />
+            <img src={mediaUrl("/media/amalfi-founder.jpg")} alt="" />
             <div className="hero-note">
               <span>Liberal digital media</span>
               <strong>Advice. Film. Photos.</strong>
@@ -2116,7 +2125,9 @@ function isEmbeddableOneDriveShare(src: string) {
 function getCollectionPreviewImageSrc(item: ArchiveMediaItem) {
   if (item.poster) return item.poster;
   if (isOneDrivePhoto(item.src)) return getPhotoPreviewSrc(item.src);
-  if (isArchivePhoto(item) && !item.src.startsWith("http")) return item.src;
+  if (isArchivePhoto(item) && !isEmbeddableOneDriveShare(item.src)) {
+    return item.src;
+  }
 
   return null;
 }

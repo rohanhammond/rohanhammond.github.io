@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "vite --config vite.config.ts --host 0.0.0.0",
     "build": "tsc --noEmit && vite build --config vite.config.ts",
+    "media:upload": "node scripts/upload-r2-media.mjs",
     "preview": "vite preview --config vite.config.ts --host 0.0.0.0"
   },
   "dependencies": {
