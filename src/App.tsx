@@ -93,17 +93,7 @@ const profile = {
 
 const contactDetails = {
   email: "rohan@amalfi.media",
-  address: "2 Park Road, Crawley",
-  mapsUrl:
-    "https://www.google.com/maps/search/?api=1&query=2%20Park%20Road%20Crawley%20WA",
 };
-
-const services = [
-  "Digital advice",
-  "Filming",
-  "Photography",
-  "Editing",
-];
 
 const oneDriveClientExportUrl = (folder: string, file: string) => {
   const parent = `/personal/9d9f7c4362637c48/Documents/Client Exports/${folder}`;
@@ -114,6 +104,318 @@ const oneDriveClientExportUrl = (folder: string, file: string) => {
 
   return `https://onedrive.live.com/?${params.toString()}`;
 };
+
+const getGeneratedMediaId = (prefix: string, index: number) =>
+  `${prefix}-${String(index + 1).padStart(2, "0")}`;
+
+const getGeneratedMediaIds = (prefix: string, files: readonly string[]) =>
+  files.map((_, index) => getGeneratedMediaId(prefix, index));
+
+type OneDriveMediaConfig = {
+  prefix: string;
+  title: string;
+  category: string;
+  folder: string;
+  files: readonly string[];
+  orientation?: ArchiveMediaItem["orientation"];
+};
+
+const createOneDrivePhotoItems = ({
+  prefix,
+  title,
+  category,
+  folder,
+  files,
+  orientation,
+}: OneDriveMediaConfig): ArchiveMediaItem[] =>
+  files.map((file, index) => ({
+    id: getGeneratedMediaId(prefix, index),
+    title: `${title} ${index + 1}`,
+    context: "Photo",
+    category,
+    kind: "photo",
+    src: oneDriveClientExportUrl(folder, file),
+    orientation,
+  }));
+
+const createOneDriveVideoItems = ({
+  prefix,
+  title,
+  category,
+  folder,
+  files,
+  orientation,
+}: OneDriveMediaConfig): ArchiveMediaItem[] =>
+  files.map((file, index) => ({
+    id: getGeneratedMediaId(prefix, index),
+    title: `${title} ${index + 1}`,
+    context: "Video",
+    category,
+    src: oneDriveClientExportUrl(folder, file),
+    orientation,
+  }));
+
+const createLocalPhotoItems = ({
+  prefix,
+  title,
+  category,
+  files,
+  orientation,
+}: Omit<OneDriveMediaConfig, "folder">): ArchiveMediaItem[] =>
+  files.map((file, index) => ({
+    id: getGeneratedMediaId(prefix, index),
+    title: `${title} ${index + 5}`,
+    context: "Photo",
+    category,
+    kind: "photo",
+    src: file,
+    orientation,
+  }));
+
+const jonathanHustonPhotoFiles = [
+  "_DSC0448-Enhanced-NR.jpg",
+  "_DSC0448-Enhanced-NR-2.jpg",
+  "_DSC0458-Enhanced-NR.jpg",
+  "_DSC0476-Enhanced-NR.jpg",
+  "_DSC0482-Enhanced-NR.jpg",
+  "_DSC0487-Enhanced-NR.jpg",
+  "_DSC5263-Enhanced-NR.jpg",
+  "_DSC5388-Enhanced-NR.jpg",
+  "_DSC5408-Enhanced-NR.jpg",
+  "_DSC5505-Enhanced-NR.jpg",
+  "_DSC5536-Enhanced-NR.jpg",
+  "_DSC5540-Enhanced-NR.jpg",
+  "_DSC6786.jpg",
+  "_DSC6806.jpg",
+  "_DSC8063.jpg",
+  "_DSC8064.jpg",
+  "_DSC8065.jpg",
+  "_DSC8066.jpg",
+  "_DSC8101-Edit.jpg",
+  "_DSC8127-Enhanced-NR.jpg",
+];
+
+const hayleyEdwardsPhotoFiles = [
+  "_DSC1582.jpg",
+  "_DSC1752.jpg",
+  "_DSC1891.jpg",
+  "_DSC1912.jpg",
+  "_DSC1924.jpg",
+  "_DSC1941.jpg",
+  "_DSC1989.jpg",
+  "_DSC6261.jpg",
+  "_DSC6274.jpg",
+  "_DSC6329.jpg",
+  "_DSC6340.jpg",
+  "_DSC6344.jpg",
+  "_DSC6387.jpg",
+  "_DSC6585.jpg",
+  "_DSC6732.jpg",
+  "_DSC6743.jpg",
+  "_DSC6783.jpg",
+  "_DSC6807.jpg",
+];
+
+const nitinVashishtPhotoFiles = [
+  "_DSC1375.jpg",
+  "_DSC1443.jpg",
+  "_DSC1473.jpg",
+  "_DSC1496.jpg",
+  "_DSC1507.jpg",
+  "_DSC1511.jpg",
+  "_DSC1528.jpg",
+  "_DSC1559.jpg",
+  "_DSC1594.jpg",
+  "_DSC1601.jpg",
+  "_DSC1611.jpg",
+  "_DSC1616.jpg",
+  "_DSC1621.jpg",
+  "_DSC1666.jpg",
+  "_DSC1687.jpg",
+  "_DSC1707.jpg",
+  "_DSC1720.jpg",
+  "_DSC1737.jpg",
+  "_DSC1754.jpg",
+  "_DSC1767.jpg",
+];
+
+const sandraBrewerPhotoFiles = [
+  "_DSC0268-Enhanced-NR.jpg",
+  "_DSC0298-Enhanced-NR.jpg",
+  "_DSC0302-Enhanced-NR.jpg",
+  "_DSC0317-Enhanced-NR.jpg",
+  "_DSC0322-Enhanced-NR.jpg",
+  "_DSC0330-Enhanced-NR.jpg",
+  "_DSC0404-Enhanced-NR.jpg",
+  "_DSC0416-Enhanced-NR.jpg",
+  "_DSC0426-Enhanced-NR.jpg",
+  "_DSC0431-Enhanced-NR.jpg",
+  "_DSC0434-Enhanced-NR.jpg",
+  "_DSC0438-Enhanced-NR.jpg",
+  "_DSC0439-Enhanced-NR.jpg",
+  "_DSC0440-Enhanced-NR.jpg",
+  "_DSC0442-Enhanced-NR.jpg",
+  "_DSC0446-Enhanced-NR.jpg",
+];
+
+const andraBiondiPhotoFiles = [
+  "_DSC0036-Enhanced-NR.jpg",
+  "_DSC0047-Enhanced-NR.jpg",
+  "_DSC0065-Enhanced-NR.jpg",
+  "_DSC0068-Enhanced-NR.jpg",
+  "_DSC7432.jpg",
+  "_DSC7446.jpg",
+  "_DSC7454.jpg",
+  "_DSC7459.jpg",
+  "_DSC7463.jpg",
+  "_DSC7467-Enhanced-NR.jpg",
+  "_DSC7491-Enhanced-NR.jpg",
+  "_DSC7504-Enhanced-NR.jpg",
+  "_DSC7506.jpg",
+  "_DSC7512.jpg",
+  "_DSC7515.jpg",
+  "_DSC7525.jpg",
+  "_DSC7528.jpg",
+  "_DSC7532.jpg",
+  "_DSC7538.jpg",
+  "_DSC7574-Enhanced-NR.jpg",
+];
+
+const aswathChavittuparaPhotoFiles = [
+  "_DSC3421.jpg",
+  "_DSC3436.jpg",
+  "_DSC3447.jpg",
+  "_DSC3452.jpg",
+  "_DSC3465.jpg",
+  "_DSC3491.jpg",
+  "_DSC3498.jpg",
+  "_DSC3555.jpg",
+  "_DSC3611.jpg",
+  "_DSC3619.jpg",
+  "_DSC3633.jpg",
+  "_DSC3642.jpg",
+  "_DSC3646.jpg",
+  "_DSC3655.jpg",
+  "_DSC3663.jpg",
+  "_DSC3671.jpg",
+  "_DSC3682.jpg",
+  "_DSC3688.jpg",
+  "_DSC3701.jpg",
+  "_DSC3712.jpg",
+];
+
+const michelleHoffmanPhotoFiles = [
+  "/media/michelle-hoffman/album/michelle-photo-05.jpg",
+  "/media/michelle-hoffman/album/michelle-photo-06.jpg",
+  "/media/michelle-hoffman/album/michelle-photo-07.jpg",
+  "/media/michelle-hoffman/album/michelle-photo-08.jpg",
+  "/media/michelle-hoffman/album/michelle-photo-09.jpg",
+  "/media/michelle-hoffman/album/michelle-photo-10.jpg",
+  "/media/michelle-hoffman/album/michelle-photo-11.jpg",
+  "/media/michelle-hoffman/album/michelle-photo-12.jpg",
+  "/media/michelle-hoffman/album/michelle-photo-13.jpg",
+  "/media/michelle-hoffman/album/michelle-photo-14.jpg",
+  "/media/michelle-hoffman/album/michelle-photo-15.jpg",
+  "/media/michelle-hoffman/album/michelle-photo-16.jpg",
+  "/media/michelle-hoffman/album/michelle-photo-17.jpg",
+  "/media/michelle-hoffman/album/michelle-photo-18.jpg",
+  "/media/michelle-hoffman/album/michelle-photo-19.jpg",
+  "/media/michelle-hoffman/album/michelle-photo-20.jpg",
+];
+
+const lisaOlssonPhotoFiles = [
+  "_DSC0541.jpg",
+  "_DSC0543.jpg",
+  "_DSC0546.jpg",
+  "_DSC0548.jpg",
+  "_DSC0556.jpg",
+  "_DSC0559.jpg",
+];
+
+const scottEdwardesPhotoFiles = [
+  "_DSC1024.jpg",
+  "_DSC1031.jpg",
+  "_DSC1036.jpg",
+  "_DSC1038.jpg",
+  "_DSC1041.jpg",
+  "_DSC1069.jpg",
+  "_DSC1105.jpg",
+  "_DSC1111.jpg",
+  "_DSC1118.jpg",
+  "_DSC1132.jpg",
+  "_DSC1144.jpg",
+  "_DSC1171.jpg",
+  "_DSC1177.jpg",
+  "_DSC1195.jpg",
+  "_DSC1213.jpg",
+  "_DSC1260.jpg",
+  "_DSC1277.jpg",
+  "_DSC1284.jpg",
+  "_DSC1297.jpg",
+  "_DSC1298.jpg",
+];
+
+const seanAyresPhotoFiles = [
+  "_DSC4620.jpg",
+  "_DSC4629.jpg",
+  "_DSC4631.jpg",
+  "_DSC4655.jpg",
+  "_DSC4661.jpg",
+  "_DSC4675.jpg",
+  "_DSC4677.jpg",
+  "_DSC4679.jpg",
+  "_DSC4689.jpg",
+];
+
+const vinceConnellyPhotoFiles = [
+  "_DSC2693.jpg",
+  "_DSC2697.jpg",
+  "_DSC2706.jpg",
+  "_DSC2709.jpg",
+  "_DSC2713-Enhanced-NR.jpg",
+  "_DSC2717.jpg",
+  "_DSC2719.jpg",
+  "_DSC2722.jpg",
+  "_DSC2723.jpg",
+  "_DSC3697.jpg",
+  "_DSC3735.jpg",
+  "_DSC3742.jpg",
+  "_DSC3743.jpg",
+  "_DSC3749.jpg",
+  "_DSC3750.jpg",
+  "_DSC3757.jpg",
+  "_DSC3759.jpg",
+  "_DSC3771.jpg",
+  "_DSC3772.jpg",
+  "_DSC3773.jpg",
+];
+
+const mattMoranDuttonPhotoFiles = [
+  "_DSC2523-Enhanced-NR-2.jpg",
+  "_DSC2524-Enhanced-NR-2.jpg",
+  "_DSC2526-Enhanced-NR-2.jpg",
+  "_DSC2530-Enhanced-NR-2.jpg",
+  "_DSC2531-Enhanced-NR-2.jpg",
+  "_DSC2534-Enhanced-NR-2.jpg",
+  "_DSC2542-Enhanced-NR-2.jpg",
+  "_DSC2547-Enhanced-NR-2.jpg",
+  "_DSC2558-Enhanced-NR-2.jpg",
+  "_DSC2567-Enhanced-NR-2.jpg",
+  "_DSC2575-Enhanced-NR-2.jpg",
+  "_DSC2583-Enhanced-NR-2.jpg",
+  "_DSC2590-Enhanced-NR-2.jpg",
+  "_DSC2593-Enhanced-NR-2.jpg",
+  "_DSC2606-Enhanced-NR-2.jpg",
+  "_DSC2626-Enhanced-NR-2.jpg",
+];
+
+const micFelsPhotoFiles = [
+  "_DSC2942-Enhanced-NR.jpg",
+  "_DSC2950-Enhanced-NR.jpg",
+  "_DSC2953-Enhanced-NR.jpg",
+  "_DSC2957-Enhanced-NR.jpg",
+  "_DSC2967-Enhanced-NR.jpg",
+];
 
 const campaignStats: CampaignStat[] = [
   {
@@ -236,6 +538,13 @@ const stateCampaignEmbeds: ArchiveMediaItem[] = [
     category: "Jonathan Huston",
     src: "https://1drv.ms/v/c/9d9f7c4362637c48/IQSiaTAmA04yR5iYTG0ZkaQkAZQv5V7RTDSoiG8PPGHjABk?width=3840&height=2160",
   },
+  ...createOneDrivePhotoItems({
+    prefix: "jonathan-huston-photo",
+    title: "Jonathan Huston Photo",
+    category: "Nedlands",
+    folder: "Jonathan Huston/Photos",
+    files: jonathanHustonPhotoFiles,
+  }),
   {
     id: "hayley-edwards-presser",
     title: "Hayley Edwards Presser",
@@ -257,6 +566,13 @@ const stateCampaignEmbeds: ArchiveMediaItem[] = [
     category: "Hayley Edwards + Libby Mettam",
     src: "https://1drv.ms/i/c/9d9f7c4362637c48/IQS3RMv7JNr7SZ6TZO8KKF0HAZzNo5ePRe4PSdoZ3x5fumI?width=5673&height=3782",
   },
+  ...createOneDrivePhotoItems({
+    prefix: "hayley-edwards-photo-extra",
+    title: "Hayley Edwards Photo",
+    category: "Field coverage",
+    folder: "Hayley Edwards + Libby Mettam Presser",
+    files: hayleyEdwardsPhotoFiles,
+  }),
   {
     id: "nitin-vashisht-local-club",
     title: "Nitin Vashisht Local Club Piece",
@@ -278,6 +594,20 @@ const stateCampaignEmbeds: ArchiveMediaItem[] = [
     category: "Nitin Vashisht",
     src: "https://1drv.ms/v/c/9d9f7c4362637c48/IQTVc_maXyqYQbm9qtEbOcO0AeCQg5h7u4bf4PfDJyBdmO4",
   },
+  ...createOneDriveVideoItems({
+    prefix: "nitin-vashisht-video-extra",
+    title: "Nitin Vashisht Video",
+    category: "Riverton",
+    folder: "Nitin Vashisht",
+    files: ["1. The Esplanade.mp4"],
+  }),
+  ...createOneDrivePhotoItems({
+    prefix: "nitin-vashisht-photo",
+    title: "Nitin Vashisht Photo",
+    category: "Riverton",
+    folder: "Nitin Vashisht/Photos",
+    files: nitinVashishtPhotoFiles,
+  }),
   {
     id: "sandra-brewer-coverage",
     title: "Sandra Brewer Coverage",
@@ -332,6 +662,13 @@ const stateCampaignEmbeds: ArchiveMediaItem[] = [
     kind: "photo",
     src: oneDriveClientExportUrl("Sandra Brewer", "_DSC0251-Enhanced-NR.jpg"),
   },
+  ...createOneDrivePhotoItems({
+    prefix: "sandra-brewer-photo-extra",
+    title: "Sandra Brewer Photo",
+    category: "Cottesloe",
+    folder: "Sandra Brewer",
+    files: sandraBrewerPhotoFiles,
+  }),
   {
     id: "chris-dowson-swimming-club",
     title: "Chris Dowson Swimming Club",
@@ -353,6 +690,13 @@ const stateCampaignEmbeds: ArchiveMediaItem[] = [
     category: "Chris Dowson",
     src: oneDriveClientExportUrl("Chris Dowson", "3. Small Businesses-.mov"),
   },
+  ...createOneDriveVideoItems({
+    prefix: "chris-dowson-video-extra",
+    title: "Chris Dowson Video",
+    category: "State work",
+    folder: "Chris Dowson",
+    files: ["4. Color Graded Clips Clip 1.m4v"],
+  }),
   {
     id: "chris-dowson-photo-one",
     title: "Chris Dowson Still",
@@ -399,6 +743,20 @@ const stateCampaignEmbeds: ArchiveMediaItem[] = [
     category: "Victoria Park",
     src: "https://1drv.ms/v/c/9d9f7c4362637c48/IQSIsVqxoUn9TIu61NCf8ADLAZsf6NLewXar8uKrMNzkPbw?width=3840&height=2160",
   },
+  ...createOneDriveVideoItems({
+    prefix: "andra-biondi-video-extra",
+    title: "Andra Biondi Video",
+    category: "Victoria Park",
+    folder: "Andra Biondi",
+    files: ["1. Follow my page-4K.mov", "2. Health-Up to 4K.mov"],
+  }),
+  ...createOneDrivePhotoItems({
+    prefix: "andra-biondi-photo",
+    title: "Andra Biondi Photo",
+    category: "Victoria Park",
+    folder: "Andra Biondi/Photos",
+    files: andraBiondiPhotoFiles,
+  }),
   {
     id: "aswath-comms-photo",
     title: "Aswath Chavittupara Field",
@@ -413,6 +771,13 @@ const stateCampaignEmbeds: ArchiveMediaItem[] = [
     category: "Morley",
     src: "https://1drv.ms/i/c/9d9f7c4362637c48/IQQ5qfwpfliESYi4uYXmV1pnAb3TGbBINFg9CpEhMlhfJMY?width=5021&height=3347",
   },
+  ...createOneDrivePhotoItems({
+    prefix: "aswath-chavittupara-photo",
+    title: "Aswath Chavittupara Photo",
+    category: "Morley",
+    folder: "Aswath COMMS Plan Photos",
+    files: aswathChavittuparaPhotoFiles,
+  }),
   {
     id: "michelle-hoffman-video-one",
     kind: "video",
@@ -486,6 +851,12 @@ const stateCampaignEmbeds: ArchiveMediaItem[] = [
     category: "Michelle Hoffman",
     src: "/media/michelle-hoffman/michelle-photo-4.jpg",
   },
+  ...createLocalPhotoItems({
+    prefix: "michelle-hoffman-photo-extra",
+    title: "Michelle Hoffman Photo",
+    category: "Michelle Hoffman",
+    files: michelleHoffmanPhotoFiles,
+  }),
   {
     id: "lisa-olsson-video",
     title: "Lisa Olsson Piece",
@@ -501,6 +872,13 @@ const stateCampaignEmbeds: ArchiveMediaItem[] = [
     src: "https://1drv.ms/i/c/9d9f7c4362637c48/IQQdxNVXMH96T7dIdgd5tSaQAZlJfpfz7LyjwORS79omJxw?width=4000&height=6000",
     orientation: "portrait",
   },
+  ...createOneDrivePhotoItems({
+    prefix: "lisa-olsson-photo-extra",
+    title: "Lisa Olsson Photo",
+    category: "Hillarys",
+    folder: "Lisa Olsson",
+    files: lisaOlssonPhotoFiles,
+  }),
   {
     id: "scott-edwardes-road",
     title: "Scott Edwardes Road Clip",
@@ -533,6 +911,13 @@ const stateCampaignEmbeds: ArchiveMediaItem[] = [
     src: "https://1drv.ms/v/c/9d9f7c4362637c48/IQQFRNcufpm5QqcE9jwv32FgAf_3LBmzaqvp_maHhvxPCKk?width=1080&height=1920",
     orientation: "portrait",
   },
+  ...createOneDrivePhotoItems({
+    prefix: "scott-edwardes-photo",
+    title: "Scott Edwardes Photo",
+    category: "Kingsley",
+    folder: "Scott Edwardes/Photos",
+    files: scottEdwardesPhotoFiles,
+  }),
 ];
 
 const federalCampaignEmbeds: ArchiveMediaItem[] = [
@@ -635,6 +1020,13 @@ const federalCampaignEmbeds: ArchiveMediaItem[] = [
     kind: "photo",
     src: oneDriveClientExportUrl("Sean Ayres for Burt", "_DSC4802.jpg"),
   },
+  ...createOneDrivePhotoItems({
+    prefix: "sean-ayres-photo-extra",
+    title: "Sean Ayres Photo",
+    category: "Burt",
+    folder: "Sean Ayres for Burt",
+    files: seanAyresPhotoFiles,
+  }),
   {
     id: "tom-white-ptc-5",
     title: "Tom White Piece-to-Camera",
@@ -651,6 +1043,14 @@ const federalCampaignEmbeds: ArchiveMediaItem[] = [
     src: "https://1drv.ms/v/c/9d9f7c4362637c48/IQQKS1UCY2ntTLZahyzOG8ttAQJXXxKmiKUYGDaQvuTheqo?width=1920&height=1920",
     orientation: "square",
   },
+  ...createOneDriveVideoItems({
+    prefix: "tom-white-video-extra",
+    title: "Tom White Video",
+    category: "Curtin",
+    folder: "Tom White",
+    files: ["Piece to Camera Clip 3.m4v", "Piece to Camera Clip 4.m4v"],
+    orientation: "square",
+  }),
   {
     id: "vince-connelly-surfing",
     title: "Vince Connelly Surfing Piece",
@@ -673,6 +1073,20 @@ const federalCampaignEmbeds: ArchiveMediaItem[] = [
     category: "Moore",
     src: "https://1drv.ms/i/c/9d9f7c4362637c48/IQSkCZVfisfoS51qJIp5qnHCAe1fattGkOzig4xXZq3eluQ?width=6000&height=4000",
   },
+  ...createOneDriveVideoItems({
+    prefix: "vince-connelly-video-extra",
+    title: "Vince Connelly Video",
+    category: "Moore",
+    folder: "Vince Connelly",
+    files: ["1. Sign Waving.mp4", "3. Food-4K.mov"],
+  }),
+  ...createOneDrivePhotoItems({
+    prefix: "vince-connelly-photo-extra",
+    title: "Vince Connelly Photo",
+    category: "Moore",
+    folder: "Vince Connelly/Photos",
+    files: vinceConnellyPhotoFiles,
+  }),
   {
     id: "mic-fels-dutton-photo",
     title: "Mic Fels with Peter Dutton",
@@ -695,6 +1109,20 @@ const federalCampaignEmbeds: ArchiveMediaItem[] = [
     src: "https://1drv.ms/v/c/9d9f7c4362637c48/IQRLb2mZ6ySnT7vz31-Ieq_tAYMbmLvQquKqWzjzR109_jk?width=1296&height=2304",
     orientation: "portrait",
   },
+  ...createOneDriveVideoItems({
+    prefix: "mic-fels-video-extra",
+    title: "Mic Fels Video",
+    category: "Swan",
+    folder: "Mic Fels x Peter Dutton/Videos",
+    files: ["Mic Fels Speech Landscape.m4v", "Peter Dutton Speech.m4v"],
+  }),
+  ...createOneDrivePhotoItems({
+    prefix: "mic-fels-photo-extra",
+    title: "Mic Fels Photo",
+    category: "Swan",
+    folder: "Mic Fels x Peter Dutton/Photos",
+    files: micFelsPhotoFiles,
+  }),
   {
     id: "matt-moran-dutton-photo",
     title: "Matt Moran Dutton Event",
@@ -746,6 +1174,27 @@ const federalCampaignEmbeds: ArchiveMediaItem[] = [
       "_DSC2522-Enhanced-NR-2.jpg",
     ),
   },
+  ...createOneDrivePhotoItems({
+    prefix: "matt-moran-dutton-photo-extra",
+    title: "Matt Moran Photo",
+    category: "Bullwinkel",
+    folder: "Matt Moran Media/Dutton Photos",
+    files: mattMoranDuttonPhotoFiles,
+  }),
+  ...createOneDriveVideoItems({
+    prefix: "matt-moran-video-extra",
+    title: "Matt Moran Video",
+    category: "Bullwinkel",
+    folder: "Matt Moran Media/Peter Dutton Video",
+    files: ["Peter Dutton Speeches.m4v"],
+  }),
+  ...createOneDriveVideoItems({
+    prefix: "matt-moran-howard-video",
+    title: "Matt Moran Howard Video",
+    category: "Bullwinkel",
+    folder: "Matt Moran Media/John Howard Videos",
+    files: ["John Howard Highlight Reel.m4v", "John Howard Speeches.m4v"],
+  }),
 ];
 
 const isDefined = <T,>(item: T | undefined): item is T => Boolean(item);
@@ -780,6 +1229,10 @@ const stateCandidateArchives: ArchiveCandidate[] = [
       ...getLocalCampaignVideos(),
       ...getCampaignEmbeds(stateCampaignEmbeds, [
         "jonathan-huston-door-knocking",
+        ...getGeneratedMediaIds(
+          "jonathan-huston-photo",
+          jonathanHustonPhotoFiles,
+        ),
       ]),
     ],
   },
@@ -794,6 +1247,10 @@ const stateCandidateArchives: ArchiveCandidate[] = [
       "hayley-edwards-presser",
       "hayley-edwards-photo-one",
       "hayley-edwards-photo-two",
+      ...getGeneratedMediaIds(
+        "hayley-edwards-photo-extra",
+        hayleyEdwardsPhotoFiles,
+      ),
     ]),
   },
   {
@@ -807,6 +1264,11 @@ const stateCandidateArchives: ArchiveCandidate[] = [
       "nitin-vashisht-local-club",
       "nitin-vashisht-school",
       "nitin-vashisht-traffic",
+      ...getGeneratedMediaIds(
+        "nitin-vashisht-video-extra",
+        ["1. The Esplanade.mp4"],
+      ),
+      ...getGeneratedMediaIds("nitin-vashisht-photo", nitinVashishtPhotoFiles),
     ]),
   },
   {
@@ -824,6 +1286,10 @@ const stateCandidateArchives: ArchiveCandidate[] = [
       "sandra-brewer-parliament-two",
       "sandra-brewer-parliament-three",
       "sandra-brewer-parliament-four",
+      ...getGeneratedMediaIds(
+        "sandra-brewer-photo-extra",
+        sandraBrewerPhotoFiles,
+      ),
     ]),
   },
   {
@@ -837,6 +1303,9 @@ const stateCandidateArchives: ArchiveCandidate[] = [
       "chris-dowson-swimming-club",
       "chris-dowson-local-parks",
       "chris-dowson-small-business",
+      ...getGeneratedMediaIds("chris-dowson-video-extra", [
+        "4. Color Graded Clips Clip 1.m4v",
+      ]),
       "chris-dowson-photo-one",
       "chris-dowson-photo-two",
       "chris-dowson-photo-three",
@@ -853,6 +1322,11 @@ const stateCandidateArchives: ArchiveCandidate[] = [
     media: getCampaignEmbeds(stateCampaignEmbeds, [
       "andra-piece-to-camera",
       "andra-racecourse-libby",
+      ...getGeneratedMediaIds("andra-biondi-video-extra", [
+        "1. Follow my page-4K.mov",
+        "2. Health-Up to 4K.mov",
+      ]),
+      ...getGeneratedMediaIds("andra-biondi-photo", andraBiondiPhotoFiles),
     ]),
   },
   {
@@ -865,6 +1339,10 @@ const stateCandidateArchives: ArchiveCandidate[] = [
     media: getCampaignEmbeds(stateCampaignEmbeds, [
       "aswath-comms-photo",
       "aswath-comms-field-photo",
+      ...getGeneratedMediaIds(
+        "aswath-chavittupara-photo",
+        aswathChavittuparaPhotoFiles,
+      ),
     ]),
   },
   {
@@ -883,6 +1361,10 @@ const stateCandidateArchives: ArchiveCandidate[] = [
       "michelle-hoffman-photo-two",
       "michelle-hoffman-photo-three",
       "michelle-hoffman-photo-four",
+      ...getGeneratedMediaIds(
+        "michelle-hoffman-photo-extra",
+        michelleHoffmanPhotoFiles,
+      ),
     ]),
   },
   {
@@ -895,6 +1377,7 @@ const stateCandidateArchives: ArchiveCandidate[] = [
     media: getCampaignEmbeds(stateCampaignEmbeds, [
       "lisa-olsson-video",
       "lisa-olsson-photo",
+      ...getGeneratedMediaIds("lisa-olsson-photo-extra", lisaOlssonPhotoFiles),
     ]),
   },
   {
@@ -909,6 +1392,7 @@ const stateCandidateArchives: ArchiveCandidate[] = [
       "scott-edwardes-student",
       "scott-edwardes-police",
       "scott-edwardes-health",
+      ...getGeneratedMediaIds("scott-edwardes-photo", scottEdwardesPhotoFiles),
     ]),
   },
 ];
@@ -924,6 +1408,10 @@ const federalCandidateArchives: ArchiveCandidate[] = [
     media: getCampaignEmbeds(federalCampaignEmbeds, [
       "tom-white-ptc-5",
       "tom-white-ptc-2",
+      ...getGeneratedMediaIds("tom-white-video-extra", [
+        "Piece to Camera Clip 3.m4v",
+        "Piece to Camera Clip 4.m4v",
+      ]),
     ]),
   },
   {
@@ -937,6 +1425,14 @@ const federalCandidateArchives: ArchiveCandidate[] = [
       "vince-connelly-surfing",
       "vince-connelly-drone",
       "vince-connelly-photo",
+      ...getGeneratedMediaIds("vince-connelly-video-extra", [
+        "1. Sign Waving.mp4",
+        "3. Food-4K.mov",
+      ]),
+      ...getGeneratedMediaIds(
+        "vince-connelly-photo-extra",
+        vinceConnellyPhotoFiles,
+      ),
     ]),
   },
   {
@@ -952,6 +1448,17 @@ const federalCandidateArchives: ArchiveCandidate[] = [
       "matt-moran-dutton-photo-three",
       "matt-moran-dutton-photo-four",
       "matt-moran-dutton-photo-five",
+      ...getGeneratedMediaIds(
+        "matt-moran-dutton-photo-extra",
+        mattMoranDuttonPhotoFiles,
+      ),
+      ...getGeneratedMediaIds("matt-moran-video-extra", [
+        "Peter Dutton Speeches.m4v",
+      ]),
+      ...getGeneratedMediaIds("matt-moran-howard-video", [
+        "John Howard Highlight Reel.m4v",
+        "John Howard Speeches.m4v",
+      ]),
     ]),
   },
   {
@@ -965,6 +1472,11 @@ const federalCandidateArchives: ArchiveCandidate[] = [
       "mic-fels-dutton-photo",
       "mic-fels-playground-upgrades",
       "mic-fels-foreshore-lighting",
+      ...getGeneratedMediaIds("mic-fels-video-extra", [
+        "Mic Fels Speech Landscape.m4v",
+        "Peter Dutton Speech.m4v",
+      ]),
+      ...getGeneratedMediaIds("mic-fels-photo-extra", micFelsPhotoFiles),
     ]),
   },
   {
@@ -986,6 +1498,7 @@ const federalCandidateArchives: ArchiveCandidate[] = [
       "sean-ayres-photo-eight",
       "sean-ayres-photo-nine",
       "sean-ayres-photo-ten",
+      ...getGeneratedMediaIds("sean-ayres-photo-extra", seanAyresPhotoFiles),
     ]),
   },
   {
@@ -1012,6 +1525,22 @@ const federalCandidateArchives: ArchiveCandidate[] = [
       "matt-moran-dutton-photo",
       "matt-moran-dutton-photo-two",
       "matt-moran-dutton-photo-three",
+      ...getGeneratedMediaIds(
+        "matt-moran-dutton-photo-extra",
+        mattMoranDuttonPhotoFiles.slice(0, 6),
+      ),
+      ...getGeneratedMediaIds("matt-moran-video-extra", [
+        "Peter Dutton Speeches.m4v",
+      ]),
+      ...getGeneratedMediaIds("matt-moran-howard-video", [
+        "John Howard Highlight Reel.m4v",
+        "John Howard Speeches.m4v",
+      ]),
+      ...getGeneratedMediaIds("mic-fels-video-extra", [
+        "Mic Fels Speech Landscape.m4v",
+        "Peter Dutton Speech.m4v",
+      ]),
+      ...getGeneratedMediaIds("mic-fels-photo-extra", micFelsPhotoFiles),
       "liam-trish-vince-broll",
       "liam-trish-vince-vince-broll",
     ]),
@@ -1028,19 +1557,47 @@ const federalCampaignMedia: ArchiveMediaItem[] = getCampaignEmbeds(
   [
     "tom-white-ptc-5",
     "tom-white-ptc-2",
+    ...getGeneratedMediaIds("tom-white-video-extra", [
+      "Piece to Camera Clip 3.m4v",
+      "Piece to Camera Clip 4.m4v",
+    ]),
     "vince-connelly-drone",
     "liam-trish-vince-vince-broll",
     "liam-trish-vince-broll",
     "mic-fels-playground-upgrades",
     "vince-connelly-surfing",
+    ...getGeneratedMediaIds("vince-connelly-video-extra", [
+      "1. Sign Waving.mp4",
+      "3. Food-4K.mov",
+    ]),
     "mic-fels-foreshore-lighting",
+    ...getGeneratedMediaIds("mic-fels-video-extra", [
+      "Mic Fels Speech Landscape.m4v",
+      "Peter Dutton Speech.m4v",
+    ]),
     "vince-connelly-photo",
+    ...getGeneratedMediaIds(
+      "vince-connelly-photo-extra",
+      vinceConnellyPhotoFiles,
+    ),
     "matt-moran-dutton-photo",
     "matt-moran-dutton-photo-two",
     "matt-moran-dutton-photo-three",
     "matt-moran-dutton-photo-four",
     "matt-moran-dutton-photo-five",
+    ...getGeneratedMediaIds(
+      "matt-moran-dutton-photo-extra",
+      mattMoranDuttonPhotoFiles,
+    ),
+    ...getGeneratedMediaIds("matt-moran-video-extra", [
+      "Peter Dutton Speeches.m4v",
+    ]),
+    ...getGeneratedMediaIds("matt-moran-howard-video", [
+      "John Howard Highlight Reel.m4v",
+      "John Howard Speeches.m4v",
+    ]),
     "mic-fels-dutton-photo",
+    ...getGeneratedMediaIds("mic-fels-photo-extra", micFelsPhotoFiles),
     "sean-ayres-field-work",
     "sean-ayres-photo-one",
     "sean-ayres-photo-two",
@@ -1052,6 +1609,7 @@ const federalCampaignMedia: ArchiveMediaItem[] = getCampaignEmbeds(
     "sean-ayres-photo-eight",
     "sean-ayres-photo-nine",
     "sean-ayres-photo-ten",
+    ...getGeneratedMediaIds("sean-ayres-photo-extra", seanAyresPhotoFiles),
   ],
 );
 
@@ -1059,17 +1617,32 @@ const stateCampaignMedia: ArchiveMediaItem[] = [
   ...getLocalCampaignVideos(),
   ...getCampaignEmbeds(stateCampaignEmbeds, [
     "jonathan-huston-door-knocking",
+    ...getGeneratedMediaIds("jonathan-huston-photo", jonathanHustonPhotoFiles),
     "hayley-edwards-presser",
+    ...getGeneratedMediaIds(
+      "hayley-edwards-photo-extra",
+      hayleyEdwardsPhotoFiles,
+    ),
     "nitin-vashisht-local-club",
     "nitin-vashisht-school",
     "nitin-vashisht-traffic",
+    ...getGeneratedMediaIds("nitin-vashisht-video-extra", [
+      "1. The Esplanade.mp4",
+    ]),
+    ...getGeneratedMediaIds("nitin-vashisht-photo", nitinVashishtPhotoFiles),
     "andra-piece-to-camera",
     "andra-racecourse-libby",
+    ...getGeneratedMediaIds("andra-biondi-video-extra", [
+      "1. Follow my page-4K.mov",
+      "2. Health-Up to 4K.mov",
+    ]),
+    ...getGeneratedMediaIds("andra-biondi-photo", andraBiondiPhotoFiles),
     "lisa-olsson-video",
     "scott-edwardes-road",
     "scott-edwardes-student",
     "scott-edwardes-police",
     "scott-edwardes-health",
+    ...getGeneratedMediaIds("scott-edwardes-photo", scottEdwardesPhotoFiles),
     "hayley-edwards-photo-one",
     "hayley-edwards-photo-two",
     "sandra-brewer-coverage",
@@ -1079,15 +1652,26 @@ const stateCampaignMedia: ArchiveMediaItem[] = [
     "sandra-brewer-parliament-two",
     "sandra-brewer-parliament-three",
     "sandra-brewer-parliament-four",
+    ...getGeneratedMediaIds(
+      "sandra-brewer-photo-extra",
+      sandraBrewerPhotoFiles,
+    ),
     "chris-dowson-swimming-club",
     "chris-dowson-local-parks",
     "chris-dowson-small-business",
+    ...getGeneratedMediaIds("chris-dowson-video-extra", [
+      "4. Color Graded Clips Clip 1.m4v",
+    ]),
     "chris-dowson-photo-one",
     "chris-dowson-photo-two",
     "chris-dowson-photo-three",
     "chris-dowson-photo-four",
     "aswath-comms-photo",
     "aswath-comms-field-photo",
+    ...getGeneratedMediaIds(
+      "aswath-chavittupara-photo",
+      aswathChavittuparaPhotoFiles,
+    ),
     "michelle-hoffman-video-one",
     "michelle-hoffman-video-two",
     "michelle-hoffman-video-three",
@@ -1096,7 +1680,12 @@ const stateCampaignMedia: ArchiveMediaItem[] = [
     "michelle-hoffman-photo-two",
     "michelle-hoffman-photo-three",
     "michelle-hoffman-photo-four",
+    ...getGeneratedMediaIds(
+      "michelle-hoffman-photo-extra",
+      michelleHoffmanPhotoFiles,
+    ),
     "lisa-olsson-photo",
+    ...getGeneratedMediaIds("lisa-olsson-photo-extra", lisaOlssonPhotoFiles),
   ]),
 ];
 
@@ -1219,17 +1808,6 @@ function App() {
     getArchiveRoute,
   );
 
-  const featuredItems = useMemo(
-    () => portfolioMediaItems.filter((item) => item.featured),
-    [],
-  );
-  const archiveItems = useMemo(
-    () =>
-      portfolioMediaItems.filter(
-        (item) => !item.featured && item.id !== "portrait",
-      ),
-    [],
-  );
   const activeArchive = useMemo(
     () =>
       archiveRoute
@@ -1822,22 +2400,6 @@ function CampaignCollectionPreviewVisual({
         loading="lazy"
         onError={() => setFailedImageSrc(previewImageSrc)}
       />
-    );
-  }
-
-  if (isEmbeddableOneDriveShare(item.src)) {
-    return (
-      <span className="collection-preview-embed-wrap">
-        <iframe
-          className="collection-preview-embed"
-          src={item.src}
-          title={`${item.title} preview`}
-          loading="lazy"
-          allow="autoplay; fullscreen; encrypted-media"
-          tabIndex={-1}
-          aria-hidden="true"
-        />
-      </span>
     );
   }
 
