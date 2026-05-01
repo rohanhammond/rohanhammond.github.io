@@ -2266,29 +2266,15 @@ function CampaignMediaSection({
                   id={collectionPanelId}
                   ref={expandedGalleryRef}
                 >
-                  <div className="campaign-expanded-header">
-                    <div>
-                      <p className="eyebrow">{collection.candidate.seat}</p>
-                      <h3>{collection.candidate.name}</h3>
-                    </div>
-
-                    <div className="campaign-expanded-actions">
-                      <a
-                        className="collection-archive-link"
-                        href={`#archive/${collection.candidate.section}/${collection.candidate.id}`}
-                      >
-                        Archive
-                        <ArrowUpRight size={16} aria-hidden="true" />
-                      </a>
-                      <button
-                        className="icon-button"
-                        type="button"
-                        aria-label={`Close ${collection.candidate.name} gallery`}
-                        onClick={() => setExpandedCollectionId(null)}
-                      >
-                        <X size={18} />
-                      </button>
-                    </div>
+                  <div className="campaign-expanded-toolbar">
+                    <button
+                      className="icon-button"
+                      type="button"
+                      aria-label={`Close ${collection.candidate.name} gallery`}
+                      onClick={() => setExpandedCollectionId(null)}
+                    >
+                      <X size={18} />
+                    </button>
                   </div>
 
                   <div className={`campaign-video-grid is-${activeTab}`}>
@@ -2296,6 +2282,7 @@ function CampaignMediaSection({
                       <ArchiveMediaCard
                         item={item}
                         key={item.id}
+                        minimal
                         ownerName={collection.candidate.name}
                       />
                     ))}
@@ -2539,9 +2526,11 @@ function CandidateArchivePage({ candidate }: { candidate: ArchiveCandidate }) {
 
 function ArchiveMediaCard({
   item,
+  minimal = false,
   ownerName,
 }: {
   item: ArchiveMediaItem;
+  minimal?: boolean;
   ownerName?: string;
 }) {
   const isPhoto = isArchivePhoto(item);
@@ -2569,9 +2558,65 @@ function ArchiveMediaCard({
     "external-campaign-card",
     "archive-media-card",
     item.kind === "video" ? "is-video" : isPhoto ? "is-photo" : "is-video",
+    minimal ? "is-minimal" : "",
   ]
     .filter(Boolean)
     .join(" ");
+
+  if (minimal) {
+    const playableHref = openHref ?? item.src;
+
+    if (isPhoto && !isLocalPhoto) {
+      return (
+        <article className={cardClassName}>
+          <div className={frameClassName} style={frameStyle}>
+            <iframe
+              src={isPhoto ? getPhotoPreviewSrc(item.src) : item.src}
+              title={item.title}
+              loading="lazy"
+              allow="autoplay; fullscreen; encrypted-media"
+              allowFullScreen
+            />
+          </div>
+        </article>
+      );
+    }
+
+    return (
+      <article className={cardClassName}>
+        <a
+          className="archive-play-tile"
+          href={playableHref}
+          target="_blank"
+          rel="noreferrer"
+          aria-label={openLabel}
+        >
+          <div className={frameClassName} style={frameStyle}>
+            {item.kind === "video" && !isExternal ? (
+              <video
+                src={item.src}
+                poster={item.poster}
+                muted
+                loop
+                autoPlay
+                playsInline
+                preload="metadata"
+              />
+            ) : isLocalPhoto ? (
+              <img src={item.src} alt="" loading="lazy" />
+            ) : (
+              <span className="external-campaign-placeholder" aria-hidden="true" />
+            )}
+            {!isPhoto && (
+              <span className="play-indicator" aria-hidden="true">
+                <Play size={18} fill="currentColor" />
+              </span>
+            )}
+          </div>
+        </a>
+      </article>
+    );
+  }
 
   return (
     <article className={cardClassName}>
