@@ -821,6 +821,14 @@ h1 {
   margin-inline: auto;
 }
 
+.campaign-expanded-gallery
+  .external-campaign-card.is-minimal
+  .external-campaign-frame.is-video.is-portrait {
+  width: min(100%, 320px);
+  margin-inline: auto;
+  aspect-ratio: 4 / 5;
+}
+
 .campaign-video-grid.is-reels .media-meta {
   align-items: flex-start;
   flex-direction: column;

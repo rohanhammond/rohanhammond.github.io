@@ -90,7 +90,7 @@ const MEDIA_BASE_URL = (import.meta.env.VITE_MEDIA_BASE_URL ?? "").replace(
   "",
 );
 const RESOLVED_MEDIA_BASE_URL = MEDIA_BASE_URL || PUBLIC_MEDIA_BASE_URL;
-const ARCHIVE_PIECE_PREVIEW_VERSION = "20260501";
+const ARCHIVE_PIECE_PREVIEW_VERSION = "20260502";
 
 const mediaUrl = (path: string) =>
   path.startsWith("/") ? `${RESOLVED_MEDIA_BASE_URL}${path}` : path;
@@ -2449,6 +2449,7 @@ function getExpandedCampaignMediaItems(
   tab: CampaignMediaTab,
 ) {
   if (tab !== "all") return items;
+  if (items.some((item) => item.id === "mic-fels-dutton-photo")) return items;
 
   const motionItems = items.filter((item) => getCampaignMediaTab(item) !== "photos");
 
