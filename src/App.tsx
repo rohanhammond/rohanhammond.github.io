@@ -505,11 +505,11 @@ const mattMoranDuttonPhotoFiles = [
 ];
 
 const micFelsPhotoFiles = [
-  "_DSC2942-Enhanced-NR.jpg",
-  "_DSC2950-Enhanced-NR.jpg",
-  "_DSC2953-Enhanced-NR.jpg",
-  "_DSC2957-Enhanced-NR.jpg",
-  "_DSC2967-Enhanced-NR.jpg",
+  "/media/mic-fels/photos/mic-fels-photo-01.jpg",
+  "/media/mic-fels/photos/mic-fels-photo-02.jpg",
+  "/media/mic-fels/photos/mic-fels-photo-03.jpg",
+  "/media/mic-fels/photos/mic-fels-photo-04.jpg",
+  "/media/mic-fels/photos/mic-fels-photo-05.jpg",
 ];
 
 const campaignStats: CampaignStat[] = [
@@ -1587,6 +1587,7 @@ const federalCandidateArchives: ArchiveCandidate[] = [
       "mic-fels-dutton-photo",
       "mic-fels-playground-upgrades",
       "mic-fels-foreshore-lighting",
+      ...getGeneratedMediaIds("mic-fels-photo-extra", micFelsPhotoFiles),
     ]),
   },
   {
@@ -1692,6 +1693,7 @@ const federalCampaignMedia: ArchiveMediaItem[] = getCampaignEmbeds(
       "John Howard Speeches.m4v",
     ]),
     "mic-fels-dutton-photo",
+    ...getGeneratedMediaIds("mic-fels-photo-extra", micFelsPhotoFiles),
     ...getGeneratedMediaIds("sean-ayres-photo", seanAyresPhotoFiles),
   ],
 );
