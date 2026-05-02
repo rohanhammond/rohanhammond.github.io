@@ -491,17 +491,26 @@ const vinceConnellyPhotoFiles = [
 ];
 
 const mattMoranDuttonPhotoFiles = [
-  "_DSC2531-Enhanced-NR-2.jpg",
-  "568A0681.jpg",
-  "568A0694.jpg",
-  "568A0712.jpg",
-  "568A0742.jpg",
-  "568A0765.jpg",
-  "568A0942.jpg",
-  "568A0956.jpg",
-  "568A1572.jpg",
-  "IMG_0773.jpg",
-  "IMG_0843.jpg",
+  "/media/matt-moran/dutton-photos/_DSC2496-Enhanced-NR-2.jpg",
+  "/media/matt-moran/dutton-photos/_DSC2547-Enhanced-NR-2.jpg",
+  "/media/matt-moran/dutton-photos/_DSC2575-Enhanced-NR-2.jpg",
+  "/media/matt-moran/dutton-photos/_DSC2629-Enhanced-NR-2.jpg",
+  "/media/matt-moran/dutton-photos/_DSC2635-Enhanced-NR-2.jpg",
+  "/media/matt-moran/dutton-photos/_DSC2645-Enhanced-NR-2.jpg",
+  "/media/matt-moran/dutton-photos/_DSC2782-Enhanced-NR-2.jpg",
+  "/media/matt-moran/dutton-photos/_DSC2786-Enhanced-NR-2.jpg",
+  "/media/matt-moran/dutton-photos/568A0515.jpg",
+  "/media/matt-moran/dutton-photos/568A0673.jpg",
+  "/media/matt-moran/dutton-photos/568A0681.jpg",
+  "/media/matt-moran/dutton-photos/568A0797.jpg",
+  "/media/matt-moran/dutton-photos/568A0942.jpg",
+  "/media/matt-moran/dutton-photos/568A1129.jpg",
+  "/media/matt-moran/dutton-photos/568A1190.jpg",
+  "/media/matt-moran/dutton-photos/568A1256.jpg",
+  "/media/matt-moran/dutton-photos/568A1307.jpg",
+  "/media/matt-moran/dutton-photos/568A1399.jpg",
+  "/media/matt-moran/dutton-photos/568A2149.jpg",
+  "/media/matt-moran/dutton-photos/568A2160.jpg",
 ];
 
 const micFelsPhotoFiles = [
@@ -1633,20 +1642,10 @@ const federalCandidateArchives: ArchiveCandidate[] = [
       all: "center 30%",
     },
     media: getCampaignEmbeds(federalCampaignEmbeds, [
-      "mic-fels-dutton-photo",
       ...getGeneratedMediaIds(
         "matt-moran-dutton-photo",
-        mattMoranDuttonPhotoFiles.slice(0, 6),
+        mattMoranDuttonPhotoFiles,
       ),
-      ...getGeneratedMediaIds("matt-moran-video-extra", [
-        "Peter Dutton Speeches.m4v",
-      ]),
-      ...getGeneratedMediaIds("matt-moran-howard-video", [
-        "John Howard Highlight Reel.m4v",
-        "John Howard Speeches.m4v",
-      ]),
-      "liam-trish-vince-broll",
-      "liam-trish-vince-vince-broll",
     ]),
   },
 ];
