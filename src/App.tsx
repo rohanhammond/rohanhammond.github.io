@@ -1292,10 +1292,11 @@ const federalCampaignEmbeds: ArchiveMediaItem[] = [
   }),
   {
     id: "mic-fels-dutton-photo",
+    kind: "photo",
     title: "Mic Fels with Peter Dutton",
     context: "Photo",
     category: "Swan",
-    src: "https://1drv.ms/i/c/9d9f7c4362637c48/IQQpYibKcYRtS4Gn9JLM__FAAUDNl5lOR2B0moiqRPFC2a0?width=5657&height=3771",
+    src: cloudMediaUrl("/media/archive-originals/mic-fels-dutton-photo.jpg"),
   },
   {
     id: "mic-fels-playground-upgrades",
