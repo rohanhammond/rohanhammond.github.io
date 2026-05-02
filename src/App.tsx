@@ -90,7 +90,7 @@ const MEDIA_BASE_URL = (import.meta.env.VITE_MEDIA_BASE_URL ?? "").replace(
   "",
 );
 const RESOLVED_MEDIA_BASE_URL = MEDIA_BASE_URL || PUBLIC_MEDIA_BASE_URL;
-const ARCHIVE_PIECE_PREVIEW_VERSION = "20260502";
+const ARCHIVE_PIECE_PREVIEW_VERSION = "20260504";
 
 const mediaUrl = (path: string) =>
   path.startsWith("/") ? `${RESOLVED_MEDIA_BASE_URL}${path}` : path;
@@ -465,29 +465,6 @@ const seanAyresPhotoFiles = [
   "/media/sean-ayres/_DSC5084.jpg",
   "/media/sean-ayres/_DSC5094.jpg",
   "/media/sean-ayres/_DSC5126.jpg",
-];
-
-const vinceConnellyPhotoFiles = [
-  "_DSC2693.jpg",
-  "_DSC2697.jpg",
-  "_DSC2706.jpg",
-  "_DSC2709.jpg",
-  "_DSC2713-Enhanced-NR.jpg",
-  "_DSC2717.jpg",
-  "_DSC2719.jpg",
-  "_DSC2722.jpg",
-  "_DSC2723.jpg",
-  "_DSC3697.jpg",
-  "_DSC3735.jpg",
-  "_DSC3742.jpg",
-  "_DSC3743.jpg",
-  "_DSC3749.jpg",
-  "_DSC3750.jpg",
-  "_DSC3757.jpg",
-  "_DSC3759.jpg",
-  "_DSC3771.jpg",
-  "_DSC3772.jpg",
-  "_DSC3773.jpg",
 ];
 
 const mattMoranDuttonPhotoFiles = [
@@ -1175,22 +1152,24 @@ const federalCampaignEmbeds: ArchiveMediaItem[] = [
     context: "Photo",
     category: "Moore",
     kind: "photo",
-    src: cloudMediaUrl("/media/vince-connelly/photos/vince-connelly-still.jpg"),
+    src: cloudMediaUrl("/media/vince-connelly/photos/vince-connelly-campaign-sign.jpg"),
   },
-  ...createOneDriveVideoItems({
-    prefix: "vince-connelly-video-extra",
-    title: "Vince Connelly Video",
+  {
+    id: "vince-connelly-sign-waving",
+    title: "Vince Connelly Sign Waving",
+    context: "Photo",
     category: "Moore",
-    folder: "Vince Connelly",
-    files: ["1. Sign Waving.mp4", "3. Food-4K.mov"],
-  }),
-  ...createOneDrivePhotoItems({
-    prefix: "vince-connelly-photo-extra",
-    title: "Vince Connelly Photo",
+    kind: "photo",
+    src: cloudMediaUrl("/media/vince-connelly/photos/vince-connelly-sign-waving.jpg"),
+  },
+  {
+    id: "vince-connelly-supporters",
+    title: "Vince Connelly Supporters",
+    context: "Photo",
     category: "Moore",
-    folder: "Vince Connelly/Photos",
-    files: vinceConnellyPhotoFiles,
-  }),
+    kind: "photo",
+    src: cloudMediaUrl("/media/vince-connelly/photos/vince-connelly-supporters.jpg"),
+  },
   {
     id: "mic-fels-dutton-photo",
     kind: "photo",
@@ -1545,14 +1524,8 @@ const federalCandidateArchives: ArchiveCandidate[] = [
       "vince-connelly-surfing",
       "vince-connelly-drone",
       "vince-connelly-photo",
-      ...getGeneratedMediaIds("vince-connelly-video-extra", [
-        "1. Sign Waving.mp4",
-        "3. Food-4K.mov",
-      ]),
-      ...getGeneratedMediaIds(
-        "vince-connelly-photo-extra",
-        vinceConnellyPhotoFiles,
-      ),
+      "vince-connelly-sign-waving",
+      "vince-connelly-supporters",
     ]),
   },
   {
@@ -1670,16 +1643,10 @@ const federalCampaignMedia: ArchiveMediaItem[] = getCampaignEmbeds(
     "liam-trish-vince-broll",
     "mic-fels-playground-upgrades",
     "vince-connelly-surfing",
-    ...getGeneratedMediaIds("vince-connelly-video-extra", [
-      "1. Sign Waving.mp4",
-      "3. Food-4K.mov",
-    ]),
     "mic-fels-foreshore-lighting",
     "vince-connelly-photo",
-    ...getGeneratedMediaIds(
-      "vince-connelly-photo-extra",
-      vinceConnellyPhotoFiles,
-    ),
+    "vince-connelly-sign-waving",
+    "vince-connelly-supporters",
     ...getGeneratedMediaIds(
       "matt-moran-dutton-photo",
       mattMoranDuttonPhotoFiles,
@@ -2713,6 +2680,7 @@ function CandidateArchivePage({ candidate }: { candidate: ArchiveCandidate }) {
           <ArchiveMediaCard
             item={item}
             key={item.id}
+            minimal
             ownerName={candidate.name}
             fallbackPreviewImageSrc={fallbackPreviewImageSrc}
             onOpen={archiveLightbox.openItem}
@@ -2757,6 +2725,8 @@ function ArchiveMediaCard({
     shouldUseArchivePreviewStill(item) && previewImageSrc
       ? previewImageSrc
       : null;
+  const videoPreviewSrc =
+    item.kind === "video" && previewImageSrc ? previewImageSrc : null;
   const openHref =
     isHttpSource || item.kind === "video" || isInlinePhoto ? item.src : null;
   const previewLabel = isExternal
@@ -2821,7 +2791,9 @@ function ArchiveMediaCard({
   return (
     <article className={cardClassName}>
       <div className={frameClassName} style={frameStyle}>
-        {item.kind === "video" ? (
+        {videoPreviewSrc ? (
+          <img src={videoPreviewSrc} alt="" loading="lazy" />
+        ) : item.kind === "video" ? (
           <video
             src={item.src}
             poster={item.poster}
@@ -2850,7 +2822,7 @@ function ArchiveMediaCard({
             allowFullScreen
           />
         )}
-        {isEmbeddedVideo && (
+        {(item.kind === "video" || isEmbeddedVideo) && (
           <span className="play-indicator" aria-hidden="true">
             <Play size={18} fill="currentColor" />
           </span>

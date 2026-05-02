@@ -1030,6 +1030,14 @@ h1 {
   aspect-ratio: var(--media-aspect, 9 / 16);
 }
 
+.candidate-archive-grid .external-campaign-frame.is-video.is-portrait,
+.campaign-expanded-gallery .campaign-video-grid.is-all
+  .external-campaign-frame.is-video.is-portrait,
+.campaign-expanded-gallery .campaign-video-grid.is-videos
+  .external-campaign-frame.is-video.is-portrait {
+  aspect-ratio: 16 / 9;
+}
+
 .external-campaign-frame.is-photo.is-portrait {
   aspect-ratio: var(--media-aspect, 2 / 3);
 }
