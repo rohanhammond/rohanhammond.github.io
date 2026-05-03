@@ -489,12 +489,28 @@ const michelleHoffmanPhotoOrientations = Object.fromEntries(
 );
 
 const lisaOlssonPhotoFiles = [
-  "_DSC0541.jpg",
-  "_DSC0543.jpg",
-  "_DSC0546.jpg",
-  "_DSC0548.jpg",
-  "_DSC0556.jpg",
-  "_DSC0559.jpg",
+  "/media/lisa-olsson/photos/_DSC0541.jpg",
+  "/media/lisa-olsson/photos/_DSC0543.jpg",
+  "/media/lisa-olsson/photos/_DSC0546.jpg",
+  "/media/lisa-olsson/photos/_DSC0548.jpg",
+  "/media/lisa-olsson/photos/_DSC0556.jpg",
+  "/media/lisa-olsson/photos/_DSC0559.jpg",
+];
+
+const lisaOlssonPhotoOrientations = Object.fromEntries(
+  [
+    "/media/lisa-olsson/photos/_DSC0543.jpg",
+    "/media/lisa-olsson/photos/_DSC0548.jpg",
+    "/media/lisa-olsson/photos/_DSC0559.jpg",
+  ].map((file) => [file, "portrait" as const]),
+);
+
+const lisaOlssonVideoFiles = [
+  "/media/lisa-olsson/videos/lisa-olsson-up-to-4k.mp4",
+];
+
+const lisaOlssonPosterFiles = [
+  "/media/lisa-olsson/posters/lisa-olsson-up-to-4k.jpg",
 ];
 
 const scottEdwardesPhotoFiles = [
@@ -1104,28 +1120,19 @@ const stateCampaignEmbeds: ArchiveMediaItem[] = [
     orientations: michelleHoffmanPhotoOrientations,
     titleStartIndex: 5,
   }),
-  {
-    id: "lisa-olsson-video",
-    title: "Lisa Olsson Piece",
-    context: "Video",
+  ...createLocalVideoItems({
+    prefix: "lisa-olsson-video",
+    title: "Lisa Olsson Video",
     category: "Hillarys",
-    src: "https://1drv.ms/v/c/9d9f7c4362637c48/IQRuhxv_SpLITI1MGN4AP95LAb1o47S89cS2C9VjObocmb8?width=3840&height=2160",
-  },
-  {
-    id: "lisa-olsson-photo",
-    kind: "photo",
-    title: "Lisa Olsson Portrait",
-    context: "Photo",
-    category: "Hillarys",
-    src: cloudMediaUrl("/media/archive-originals/lisa-olsson-photo.jpg"),
-    orientation: "portrait",
-  },
-  ...createOneDrivePhotoItems({
-    prefix: "lisa-olsson-photo-extra",
+    files: lisaOlssonVideoFiles,
+    posters: lisaOlssonPosterFiles,
+  }),
+  ...createLocalPhotoItems({
+    prefix: "lisa-olsson-photo",
     title: "Lisa Olsson Photo",
     category: "Hillarys",
-    folder: "Lisa Olsson",
     files: lisaOlssonPhotoFiles,
+    orientations: lisaOlssonPhotoOrientations,
   }),
   {
     id: "scott-edwardes-road",
@@ -1545,9 +1552,8 @@ const stateCandidateArchives: ArchiveCandidate[] = [
       all: "center 14%",
     },
     media: getCampaignEmbeds(stateCampaignEmbeds, [
-      "lisa-olsson-video",
-      "lisa-olsson-photo",
-      ...getGeneratedMediaIds("lisa-olsson-photo-extra", lisaOlssonPhotoFiles),
+      ...getGeneratedMediaIds("lisa-olsson-video", lisaOlssonVideoFiles),
+      ...getGeneratedMediaIds("lisa-olsson-photo", lisaOlssonPhotoFiles),
     ]),
   },
   {
@@ -1780,7 +1786,7 @@ const stateCampaignMedia: ArchiveMediaItem[] = [
     ...getGeneratedMediaIds("nitin-vashisht-photo", nitinVashishtPhotoFiles),
     ...getGeneratedMediaIds("andra-biondi-video", andraBiondiVideoFiles),
     ...getGeneratedMediaIds("andra-biondi-photo", andraBiondiPhotoFiles),
-    "lisa-olsson-video",
+    ...getGeneratedMediaIds("lisa-olsson-video", lisaOlssonVideoFiles),
     "scott-edwardes-road",
     "scott-edwardes-student",
     "scott-edwardes-police",
@@ -1820,8 +1826,7 @@ const stateCampaignMedia: ArchiveMediaItem[] = [
       "michelle-hoffman-photo-extra",
       michelleHoffmanPhotoFiles,
     ),
-    "lisa-olsson-photo",
-    ...getGeneratedMediaIds("lisa-olsson-photo-extra", lisaOlssonPhotoFiles),
+    ...getGeneratedMediaIds("lisa-olsson-photo", lisaOlssonPhotoFiles),
   ]),
 ];
 
@@ -2384,6 +2389,9 @@ function getExpandedCampaignMediaItems(
     return items;
   }
   if (items.some((item) => item.id.startsWith("andra-biondi-photo-"))) {
+    return items;
+  }
+  if (items.some((item) => item.id.startsWith("lisa-olsson-photo-"))) {
     return items;
   }
 
