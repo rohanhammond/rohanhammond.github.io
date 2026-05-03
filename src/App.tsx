@@ -1373,10 +1373,10 @@ const stateCandidateArchives: ArchiveCandidate[] = [
     eyebrow: "Elected member media",
     summary: "Local updates, issue videos, reels, and photos.",
     previews: {
-      all: mediaUrl("/media/campaign-videos/jono-door-knocking-recap-poster.jpg"),
-      videos: mediaUrl("/media/campaign-videos/jono-door-knocking-recap-poster.jpg"),
+      all: mediaUrl("/media/campaign-videos/jono-bowling-club-poster.jpg"),
+      videos: mediaUrl("/media/campaign-videos/jono-bowling-club-poster.jpg"),
       reels: mediaUrl("/media/campaign-videos/jono-hospital-services-poster.jpg"),
-      photos: mediaUrl("/media/campaign-videos/jono-door-knocking-recap-poster.jpg"),
+      photos: mediaUrl("/media/campaign-videos/jono-bowling-club-poster.jpg"),
     },
     media: [
       ...getLocalCampaignVideos(),
@@ -1439,7 +1439,8 @@ const stateCandidateArchives: ArchiveCandidate[] = [
     eyebrow: "2025",
     summary: "Photos and campaign event coverage.",
     previews: {
-      all: archivePreviewUrl("sandra-brewer"),
+      all: mediaUrl("/media/sandra-brewer/_DSC0322-Enhanced-NR.jpg"),
+      photos: mediaUrl("/media/sandra-brewer/_DSC0322-Enhanced-NR.jpg"),
     },
     media: getCampaignEmbeds(stateCampaignEmbeds, [
       ...getGeneratedMediaIds(
@@ -1515,10 +1516,10 @@ const stateCandidateArchives: ArchiveCandidate[] = [
     eyebrow: "2025",
     summary: "Short videos, portraits, and campaign stills.",
     previews: {
-      all: michellePosterUrl(1),
+      all: mediaUrl("/media/michelle-hoffman/michelle-photo-4.jpg"),
       videos: michellePosterUrl(1),
       reels: michellePosterUrl(1),
-      photos: mediaUrl("/media/michelle-hoffman/michelle-photo-1.jpg"),
+      photos: mediaUrl("/media/michelle-hoffman/michelle-photo-4.jpg"),
     },
     previewPosition: {
       all: "center 8%",
@@ -1548,7 +1549,8 @@ const stateCandidateArchives: ArchiveCandidate[] = [
     eyebrow: "2025",
     summary: "Video, portraits, and field coverage.",
     previews: {
-      all: archivePreviewUrl("lisa-olsson"),
+      all: mediaUrl("/media/lisa-olsson/photos/_DSC0541.jpg"),
+      photos: mediaUrl("/media/lisa-olsson/photos/_DSC0541.jpg"),
     },
     previewPosition: {
       all: "center 14%",
