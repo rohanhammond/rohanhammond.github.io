@@ -230,6 +230,10 @@ type LocalMediaConfig = Omit<OneDriveMediaConfig, "folder"> & {
   orientations?: Partial<Record<string, ArchiveMediaItem["orientation"]>>;
 };
 
+type LocalVideoMediaConfig = LocalMediaConfig & {
+  posters?: readonly string[];
+};
+
 const createLocalPhotoItems = ({
   prefix,
   title,
@@ -246,6 +250,27 @@ const createLocalPhotoItems = ({
     category,
     kind: "photo",
     src: mediaUrl(file),
+    orientation: orientations?.[file] ?? orientation,
+  }));
+
+const createLocalVideoItems = ({
+  prefix,
+  title,
+  category,
+  files,
+  orientation,
+  orientations,
+  posters,
+  titleStartIndex = 1,
+}: LocalVideoMediaConfig): ArchiveMediaItem[] =>
+  files.map((file, index) => ({
+    id: getGeneratedMediaId(prefix, index),
+    title: `${title} ${index + titleStartIndex}`,
+    context: "Video",
+    category,
+    kind: "video",
+    src: mediaUrl(file),
+    poster: posters?.[index] ? mediaUrl(posters[index]) : undefined,
     orientation: orientations?.[file] ?? orientation,
   }));
 
@@ -350,26 +375,60 @@ const sandraBrewerPhotoFiles = [
 ];
 
 const andraBiondiPhotoFiles = [
-  "_DSC0036-Enhanced-NR.jpg",
-  "_DSC0047-Enhanced-NR.jpg",
-  "_DSC0065-Enhanced-NR.jpg",
-  "_DSC0068-Enhanced-NR.jpg",
-  "_DSC7432.jpg",
-  "_DSC7446.jpg",
-  "_DSC7454.jpg",
-  "_DSC7459.jpg",
-  "_DSC7463.jpg",
-  "_DSC7467-Enhanced-NR.jpg",
-  "_DSC7491-Enhanced-NR.jpg",
-  "_DSC7504-Enhanced-NR.jpg",
-  "_DSC7506.jpg",
-  "_DSC7512.jpg",
-  "_DSC7515.jpg",
-  "_DSC7525.jpg",
-  "_DSC7528.jpg",
-  "_DSC7532.jpg",
-  "_DSC7538.jpg",
-  "_DSC7574-Enhanced-NR.jpg",
+  "/media/andra-biondi/photos/_DSC0036-Enhanced-NR.jpg",
+  "/media/andra-biondi/photos/_DSC0047-Enhanced-NR.jpg",
+  "/media/andra-biondi/photos/_DSC7446.jpg",
+  "/media/andra-biondi/photos/_DSC7459.jpg",
+  "/media/andra-biondi/photos/_DSC7463.jpg",
+  "/media/andra-biondi/photos/_DSC7491-Enhanced-NR.jpg",
+  "/media/andra-biondi/photos/_DSC7504-Enhanced-NR.jpg",
+  "/media/andra-biondi/photos/_DSC7506.jpg",
+  "/media/andra-biondi/photos/_DSC7574-Enhanced-NR.jpg",
+  "/media/andra-biondi/photos/_DSC7594-Enhanced-NR.jpg",
+  "/media/andra-biondi/photos/_DSC7651-Enhanced-NR.jpg",
+  "/media/andra-biondi/photos/_DSC7669-Enhanced-NR.jpg",
+  "/media/andra-biondi/photos/_DSC7680-Enhanced-NR.jpg",
+  "/media/andra-biondi/photos/_DSC7709-Enhanced-NR.jpg",
+  "/media/andra-biondi/photos/_DSC7712-Enhanced-NR.jpg",
+  "/media/andra-biondi/photos/_DSC7717-Enhanced-NR.jpg",
+  "/media/andra-biondi/photos/_DSC7722-Enhanced-NR.jpg",
+  "/media/andra-biondi/photos/_DSC9742-Enhanced-NR.jpg",
+  "/media/andra-biondi/photos/_DSC9840-Enhanced-NR.jpg",
+  "/media/andra-biondi/photos/_DSC9975-Enhanced-NR.jpg",
+];
+
+const andraBiondiVideoFiles = [
+  "/media/andra-biondi/videos/1-andra-speech.mp4",
+  "/media/andra-biondi/videos/1-follow-my-page-4k.mp4",
+  "/media/andra-biondi/videos/2-health-up-to-4k.mp4",
+  "/media/andra-biondi/videos/2-michael-speech.mp4",
+  "/media/andra-biondi/videos/3-chris-speech.mp4",
+  "/media/andra-biondi/videos/3-cost-of-living-up-to-4k.mp4",
+  "/media/andra-biondi/videos/4-crime-forum-up-to-4k.mp4",
+  "/media/andra-biondi/videos/5-crime-2-up-to-4k.mp4",
+  "/media/andra-biondi/videos/6-health2-up-to-4k.mp4",
+  "/media/andra-biondi/videos/7-cost-of-living-2-up-to-4k.mp4",
+  "/media/andra-biondi/videos/8-crime-1-up-to-4k.mp4",
+  "/media/andra-biondi/videos/andra-crime-doco-full.mp4",
+  "/media/andra-biondi/videos/andra-piece-to-camera.mp4",
+  "/media/andra-biondi/videos/bruce-crime-doco-full.mp4",
+];
+
+const andraBiondiPosterFiles = [
+  "/media/andra-biondi/posters/1-andra-speech.jpg",
+  "/media/andra-biondi/posters/1-follow-my-page-4k.jpg",
+  "/media/andra-biondi/posters/2-health-up-to-4k.jpg",
+  "/media/andra-biondi/posters/2-michael-speech.jpg",
+  "/media/andra-biondi/posters/3-chris-speech.jpg",
+  "/media/andra-biondi/posters/3-cost-of-living-up-to-4k.jpg",
+  "/media/andra-biondi/posters/4-crime-forum-up-to-4k.jpg",
+  "/media/andra-biondi/posters/5-crime-2-up-to-4k.jpg",
+  "/media/andra-biondi/posters/6-health2-up-to-4k.jpg",
+  "/media/andra-biondi/posters/7-cost-of-living-2-up-to-4k.jpg",
+  "/media/andra-biondi/posters/8-crime-1-up-to-4k.jpg",
+  "/media/andra-biondi/posters/andra-crime-doco-full.jpg",
+  "/media/andra-biondi/posters/andra-piece-to-camera.jpg",
+  "/media/andra-biondi/posters/bruce-crime-doco-full.jpg",
 ];
 
 const aswathChavittuparaPhotoFiles = [
@@ -929,34 +988,17 @@ const stateCampaignEmbeds: ArchiveMediaItem[] = [
     kind: "photo",
     src: cloudMediaUrl("/media/chris-dowson/photos/dsc0668.jpg"),
   },
-  {
-    id: "andra-piece-to-camera",
-    title: "Andra Biondi Piece-to-Camera",
-    context: "Video",
-    category: "Victoria Park",
-    kind: "video",
-    src: cloudMediaUrl("/media/andra-biondi/videos/andra-piece-to-camera.mp4"),
-  },
-  {
-    id: "andra-racecourse-libby",
-    title: "Andra Biondi with Libby Mettam",
-    context: "Video",
-    category: "Victoria Park",
-    kind: "video",
-    src: cloudMediaUrl("/media/andra-biondi/videos/andra-racecourse-libby.mp4"),
-  },
-  ...createOneDriveVideoItems({
-    prefix: "andra-biondi-video-extra",
+  ...createLocalVideoItems({
+    prefix: "andra-biondi-video",
     title: "Andra Biondi Video",
     category: "Victoria Park",
-    folder: "Andra Biondi",
-    files: ["1. Follow my page-4K.mov", "2. Health-Up to 4K.mov"],
+    files: andraBiondiVideoFiles,
+    posters: andraBiondiPosterFiles,
   }),
-  ...createOneDrivePhotoItems({
+  ...createLocalPhotoItems({
     prefix: "andra-biondi-photo",
     title: "Andra Biondi Photo",
     category: "Victoria Park",
-    folder: "Andra Biondi/Photos",
     files: andraBiondiPhotoFiles,
   }),
   {
@@ -1433,12 +1475,7 @@ const stateCandidateArchives: ArchiveCandidate[] = [
       all: archivePreviewUrl("andra-biondi"),
     },
     media: getCampaignEmbeds(stateCampaignEmbeds, [
-      "andra-piece-to-camera",
-      "andra-racecourse-libby",
-      ...getGeneratedMediaIds("andra-biondi-video-extra", [
-        "1. Follow my page-4K.mov",
-        "2. Health-Up to 4K.mov",
-      ]),
+      ...getGeneratedMediaIds("andra-biondi-video", andraBiondiVideoFiles),
       ...getGeneratedMediaIds("andra-biondi-photo", andraBiondiPhotoFiles),
     ]),
   },
@@ -1741,12 +1778,7 @@ const stateCampaignMedia: ArchiveMediaItem[] = [
       "1. The Esplanade.mp4",
     ]),
     ...getGeneratedMediaIds("nitin-vashisht-photo", nitinVashishtPhotoFiles),
-    "andra-piece-to-camera",
-    "andra-racecourse-libby",
-    ...getGeneratedMediaIds("andra-biondi-video-extra", [
-      "1. Follow my page-4K.mov",
-      "2. Health-Up to 4K.mov",
-    ]),
+    ...getGeneratedMediaIds("andra-biondi-video", andraBiondiVideoFiles),
     ...getGeneratedMediaIds("andra-biondi-photo", andraBiondiPhotoFiles),
     "lisa-olsson-video",
     "scott-edwardes-road",
@@ -2349,6 +2381,9 @@ function getExpandedCampaignMediaItems(
     return items;
   }
   if (items.some((item) => item.id.startsWith("vince-connelly-photo-extra-"))) {
+    return items;
+  }
+  if (items.some((item) => item.id.startsWith("andra-biondi-photo-"))) {
     return items;
   }
 
