@@ -1089,6 +1089,14 @@ h1 {
   object-fit: cover;
 }
 
+.external-campaign-card.is-minimal .external-campaign-frame.is-photo.is-portrait {
+  aspect-ratio: 16 / 9;
+}
+
+.external-campaign-card.is-minimal .external-campaign-frame.is-photo.is-portrait img {
+  object-fit: contain;
+}
+
 .archive-play-tile {
   display: block;
   width: 100%;

@@ -102,6 +102,10 @@ const archivePiecePreviewUrl = (id: string) =>
   mediaUrl(
     `/media/archive-piece-previews/${id}.jpg?v=${ARCHIVE_PIECE_PREVIEW_VERSION}`,
   );
+const michellePosterUrl = (index: number) =>
+  mediaUrl(
+    `/media/michelle-hoffman/michelle-video-${index}-poster.jpg?v=20260503`,
+  );
 
 const archivePiecePreviewIds = new Set([
   "andra-piece-to-camera",
@@ -223,6 +227,7 @@ const createOneDriveVideoItems = ({
 
 type LocalMediaConfig = Omit<OneDriveMediaConfig, "folder"> & {
   titleStartIndex?: number;
+  orientations?: Partial<Record<string, ArchiveMediaItem["orientation"]>>;
 };
 
 const createLocalPhotoItems = ({
@@ -231,6 +236,7 @@ const createLocalPhotoItems = ({
   category,
   files,
   orientation,
+  orientations,
   titleStartIndex = 1,
 }: LocalMediaConfig): ArchiveMediaItem[] =>
   files.map((file, index) => ({
@@ -240,7 +246,7 @@ const createLocalPhotoItems = ({
     category,
     kind: "photo",
     src: mediaUrl(file),
-    orientation,
+    orientation: orientations?.[file] ?? orientation,
   }));
 
 const jonathanHustonPhotoFiles = [
@@ -411,6 +417,17 @@ const michelleHoffmanPhotoFiles = [
   "/media/michelle-hoffman/album/michelle-photo-19.jpg",
   "/media/michelle-hoffman/album/michelle-photo-20.jpg",
 ];
+
+const michelleHoffmanPhotoOrientations = Object.fromEntries(
+  [
+    "/media/michelle-hoffman/album/michelle-photo-07.jpg",
+    "/media/michelle-hoffman/album/michelle-photo-08.jpg",
+    "/media/michelle-hoffman/album/michelle-photo-09.jpg",
+    "/media/michelle-hoffman/album/michelle-photo-16.jpg",
+    "/media/michelle-hoffman/album/michelle-photo-19.jpg",
+    "/media/michelle-hoffman/album/michelle-photo-20.jpg",
+  ].map((file) => [file, "portrait" as const]),
+);
 
 const lisaOlssonPhotoFiles = [
   "_DSC0541.jpg",
@@ -939,7 +956,7 @@ const stateCampaignEmbeds: ArchiveMediaItem[] = [
     context: "Video",
     category: "Michelle Hoffman",
     src: mediaUrl("/media/michelle-hoffman/michelle-video-1.mp4"),
-    poster: mediaUrl("/media/michelle-hoffman/michelle-video-1-poster.jpg"),
+    poster: michellePosterUrl(1),
     orientation: "portrait",
   },
   {
@@ -949,7 +966,7 @@ const stateCampaignEmbeds: ArchiveMediaItem[] = [
     context: "Video",
     category: "Michelle Hoffman",
     src: mediaUrl("/media/michelle-hoffman/michelle-video-2.mp4"),
-    poster: mediaUrl("/media/michelle-hoffman/michelle-video-2-poster.jpg"),
+    poster: michellePosterUrl(2),
     orientation: "portrait",
   },
   {
@@ -959,7 +976,7 @@ const stateCampaignEmbeds: ArchiveMediaItem[] = [
     context: "Video",
     category: "Michelle Hoffman",
     src: mediaUrl("/media/michelle-hoffman/michelle-video-3.mp4"),
-    poster: mediaUrl("/media/michelle-hoffman/michelle-video-3-poster.jpg"),
+    poster: michellePosterUrl(3),
     orientation: "portrait",
   },
   {
@@ -969,7 +986,7 @@ const stateCampaignEmbeds: ArchiveMediaItem[] = [
     context: "Video",
     category: "Michelle Hoffman",
     src: mediaUrl("/media/michelle-hoffman/michelle-video-4.mp4"),
-    poster: mediaUrl("/media/michelle-hoffman/michelle-video-4-poster.jpg"),
+    poster: michellePosterUrl(4),
     orientation: "portrait",
   },
   {
@@ -1010,6 +1027,7 @@ const stateCampaignEmbeds: ArchiveMediaItem[] = [
     title: "Michelle Hoffman Photo",
     category: "Michelle Hoffman",
     files: michelleHoffmanPhotoFiles,
+    orientations: michelleHoffmanPhotoOrientations,
     titleStartIndex: 5,
   }),
   {
@@ -1412,9 +1430,9 @@ const stateCandidateArchives: ArchiveCandidate[] = [
     eyebrow: "2025",
     summary: "Short videos, portraits, and campaign stills.",
     previews: {
-      all: mediaUrl("/media/michelle-hoffman/michelle-video-1-poster.jpg"),
-      videos: mediaUrl("/media/michelle-hoffman/michelle-video-1-poster.jpg"),
-      reels: mediaUrl("/media/michelle-hoffman/michelle-video-1-poster.jpg"),
+      all: michellePosterUrl(1),
+      videos: michellePosterUrl(1),
+      reels: michellePosterUrl(1),
       photos: mediaUrl("/media/michelle-hoffman/michelle-photo-1.jpg"),
     },
     previewPosition: {
