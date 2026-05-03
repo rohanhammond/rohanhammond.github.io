@@ -2304,8 +2304,13 @@ function getExpandedCampaignMediaItems(
 ) {
   if (tab !== "all") return items;
   if (items.some((item) => item.id === "mic-fels-dutton-photo")) return items;
+  if (items.some((item) => item.id === "michelle-hoffman-photo-one")) {
+    return items;
+  }
 
-  const motionItems = items.filter((item) => getCampaignMediaTab(item) !== "photos");
+  const motionItems = items.filter(
+    (item) => getCampaignMediaTab(item) !== "photos",
+  );
 
   return motionItems.length > 0 ? motionItems : items;
 }
@@ -2786,7 +2791,7 @@ function ArchiveMediaCard({
         >
           <div className={frameClassName} style={frameStyle}>
             {previewImageSrc ? (
-              <img src={previewImageSrc} alt="" loading="lazy" />
+              <img src={previewImageSrc} alt="" loading="eager" />
             ) : (
               <span className="external-campaign-placeholder" aria-hidden="true" />
             )}
