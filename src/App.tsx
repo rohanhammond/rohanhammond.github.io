@@ -484,6 +484,38 @@ const seanAyresPhotoFiles = [
   "/media/sean-ayres/_DSC5126.jpg",
 ];
 
+const vinceConnellyPhotoFiles = [
+  "/media/vince-connelly/photos/_DSC2693.jpg",
+  "/media/vince-connelly/photos/_DSC2697.jpg",
+  "/media/vince-connelly/photos/_DSC2706.jpg",
+  "/media/vince-connelly/photos/_DSC2709.jpg",
+  "/media/vince-connelly/photos/_DSC2713-Enhanced-NR.jpg",
+  "/media/vince-connelly/photos/_DSC2717.jpg",
+  "/media/vince-connelly/photos/_DSC2719.jpg",
+  "/media/vince-connelly/photos/_DSC2722.jpg",
+  "/media/vince-connelly/photos/_DSC2723.jpg",
+  "/media/vince-connelly/photos/_DSC3697.jpg",
+  "/media/vince-connelly/photos/_DSC3735.jpg",
+  "/media/vince-connelly/photos/_DSC3742.jpg",
+  "/media/vince-connelly/photos/_DSC3743.jpg",
+  "/media/vince-connelly/photos/_DSC3749.jpg",
+  "/media/vince-connelly/photos/_DSC3750.jpg",
+  "/media/vince-connelly/photos/_DSC3757.jpg",
+  "/media/vince-connelly/photos/_DSC3759.jpg",
+  "/media/vince-connelly/photos/_DSC3771.jpg",
+  "/media/vince-connelly/photos/_DSC3772.jpg",
+  "/media/vince-connelly/photos/_DSC3773.jpg",
+  "/media/vince-connelly/photos/_DSC3774.jpg",
+  "/media/vince-connelly/photos/_DSC3838.jpg",
+  "/media/vince-connelly/photos/_DSC3844.jpg",
+  "/media/vince-connelly/photos/_DSC3878.jpg",
+  "/media/vince-connelly/photos/_DSC3906.jpg",
+  "/media/vince-connelly/photos/_DSC3914.jpg",
+  "/media/vince-connelly/photos/_DSC3963.jpg",
+  "/media/vince-connelly/photos/_DSC3973.jpg",
+  "/media/vince-connelly/photos/_DSC3976.jpg",
+];
+
 const mattMoranDuttonPhotoFiles = [
   "/media/matt-moran/dutton-photos/_DSC2496-Enhanced-NR-2.jpg",
   "/media/matt-moran/dutton-photos/_DSC2547-Enhanced-NR-2.jpg",
@@ -1188,6 +1220,13 @@ const federalCampaignEmbeds: ArchiveMediaItem[] = [
     kind: "photo",
     src: cloudMediaUrl("/media/vince-connelly/photos/vince-connelly-supporters.jpg"),
   },
+  ...createOneDrivePhotoItems({
+    prefix: "vince-connelly-photo-extra",
+    title: "Vince Connelly Photo",
+    category: "Moore",
+    folder: "Vince Connelly/Photos",
+    files: vinceConnellyPhotoFiles,
+  }),
   {
     id: "mic-fels-dutton-photo",
     kind: "photo",
@@ -1541,9 +1580,10 @@ const federalCandidateArchives: ArchiveCandidate[] = [
     media: getCampaignEmbeds(federalCampaignEmbeds, [
       "vince-connelly-surfing",
       "vince-connelly-drone",
-      "vince-connelly-photo",
-      "vince-connelly-sign-waving",
-      "vince-connelly-supporters",
+      ...getGeneratedMediaIds(
+        "vince-connelly-photo-extra",
+        vinceConnellyPhotoFiles,
+      ),
     ]),
   },
   {
@@ -1662,9 +1702,10 @@ const federalCampaignMedia: ArchiveMediaItem[] = getCampaignEmbeds(
     "mic-fels-playground-upgrades",
     "vince-connelly-surfing",
     "mic-fels-foreshore-lighting",
-    "vince-connelly-photo",
-    "vince-connelly-sign-waving",
-    "vince-connelly-supporters",
+    ...getGeneratedMediaIds(
+      "vince-connelly-photo-extra",
+      vinceConnellyPhotoFiles,
+    ),
     ...getGeneratedMediaIds(
       "matt-moran-dutton-photo",
       mattMoranDuttonPhotoFiles,
@@ -2305,6 +2346,9 @@ function getExpandedCampaignMediaItems(
   if (tab !== "all") return items;
   if (items.some((item) => item.id === "mic-fels-dutton-photo")) return items;
   if (items.some((item) => item.id === "michelle-hoffman-photo-one")) {
+    return items;
+  }
+  if (items.some((item) => item.id.startsWith("vince-connelly-photo-extra-"))) {
     return items;
   }
 
