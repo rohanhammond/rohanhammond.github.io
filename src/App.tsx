@@ -74,6 +74,8 @@ type CampaignMediaCollection = {
   previewPosition: string | null;
 };
 
+type ArchiveMediaCarouselTab = "photography" | "videography";
+
 type ArchiveRoute = {
   section: "state" | "federal";
   candidateId: string;
@@ -2402,6 +2404,190 @@ function getExpandedCampaignMediaItems(
   return motionItems.length > 0 ? motionItems : items;
 }
 
+function getArchiveMediaCarouselItems(
+  items: ArchiveMediaItem[],
+  tab: ArchiveMediaCarouselTab,
+) {
+  return items.filter((item) =>
+    tab === "photography" ? isArchivePhoto(item) : !isArchivePhoto(item),
+  );
+}
+
+function getDefaultArchiveMediaCarouselTab(items: ArchiveMediaItem[]) {
+  return getArchiveMediaCarouselItems(items, "photography").length > 0
+    ? "photography"
+    : "videography";
+}
+
+type ArchiveMediaCarouselProps = {
+  items: ArchiveMediaItem[];
+  ownerName?: string;
+  fallbackPreviewImageSrc?: string | null;
+  onClose?: () => void;
+  closeLabel?: string;
+};
+
+function ArchiveMediaCarousel({
+  items,
+  ownerName,
+  fallbackPreviewImageSrc,
+  onClose,
+  closeLabel = "Close media gallery",
+}: ArchiveMediaCarouselProps) {
+  const trackRef = useRef<HTMLDivElement | null>(null);
+  const [activeTab, setActiveTab] = useState<ArchiveMediaCarouselTab>(() =>
+    getDefaultArchiveMediaCarouselTab(items),
+  );
+
+  const photographyItems = useMemo(
+    () => getArchiveMediaCarouselItems(items, "photography"),
+    [items],
+  );
+  const videographyItems = useMemo(
+    () => getArchiveMediaCarouselItems(items, "videography"),
+    [items],
+  );
+  const activeItems = useMemo(
+    () =>
+      activeTab === "photography" ? photographyItems : videographyItems,
+    [activeTab, photographyItems, videographyItems],
+  );
+  const archiveLightbox = useArchiveLightbox(activeItems);
+  const hasPhotography = photographyItems.length > 0;
+  const hasVideography = videographyItems.length > 0;
+  const showTabs = hasPhotography && hasVideography;
+
+  useEffect(() => {
+    if (activeTab === "photography" && photographyItems.length > 0) return;
+    if (activeTab === "videography" && videographyItems.length > 0) return;
+
+    setActiveTab(getDefaultArchiveMediaCarouselTab(items));
+  }, [activeTab, items, photographyItems.length, videographyItems.length]);
+
+  useEffect(() => {
+    trackRef.current?.scrollTo({ left: 0, behavior: "smooth" });
+  }, [activeTab]);
+
+  const scrollCarousel = (direction: "previous" | "next") => {
+    const track = trackRef.current;
+
+    if (!track) return;
+
+    const amount = track.clientWidth * 0.85;
+    track.scrollBy({
+      left: direction === "next" ? amount : -amount,
+      behavior: "smooth",
+    });
+  };
+
+  return (
+    <>
+      <div className="archive-media-carousel">
+        <div className="archive-media-carousel-toolbar">
+          {showTabs ? (
+            <div
+              className="archive-media-carousel-tabs"
+              role="tablist"
+              aria-label="Media type"
+            >
+              <button
+                className={
+                  activeTab === "photography"
+                    ? "archive-media-tab is-active"
+                    : "archive-media-tab"
+                }
+                type="button"
+                role="tab"
+                aria-selected={activeTab === "photography"}
+                aria-label={`Photography (${photographyItems.length})`}
+                disabled={!hasPhotography}
+                onClick={() => setActiveTab("photography")}
+              >
+                Photography
+              </button>
+              <button
+                className={
+                  activeTab === "videography"
+                    ? "archive-media-tab is-active"
+                    : "archive-media-tab"
+                }
+                type="button"
+                role="tab"
+                aria-selected={activeTab === "videography"}
+                aria-label={`Videography (${videographyItems.length})`}
+                disabled={!hasVideography}
+                onClick={() => setActiveTab("videography")}
+              >
+                Videography
+              </button>
+            </div>
+          ) : (
+            <div aria-hidden="true" />
+          )}
+
+          <div className="archive-media-carousel-actions">
+            <button
+              className="icon-button"
+              type="button"
+              aria-label="Scroll previous media"
+              onClick={() => scrollCarousel("previous")}
+            >
+              <ChevronLeft size={18} />
+            </button>
+            <button
+              className="icon-button"
+              type="button"
+              aria-label="Scroll next media"
+              onClick={() => scrollCarousel("next")}
+            >
+              <ChevronRight size={18} />
+            </button>
+            {onClose && (
+              <button
+                className="icon-button"
+                type="button"
+                aria-label={closeLabel}
+                onClick={onClose}
+              >
+                <X size={18} />
+              </button>
+            )}
+          </div>
+        </div>
+
+        {activeItems.length > 0 ? (
+          <div className="archive-media-carousel-track" ref={trackRef}>
+            {activeItems.map((item) => (
+              <div className="archive-media-carousel-slide" key={item.id}>
+                <ArchiveMediaCard
+                  item={item}
+                  minimal
+                  ownerName={ownerName}
+                  fallbackPreviewImageSrc={fallbackPreviewImageSrc}
+                  onOpen={archiveLightbox.openItem}
+                />
+              </div>
+            ))}
+          </div>
+        ) : (
+          <p className="archive-media-carousel-empty">
+            No media available in this tab.
+          </p>
+        )}
+      </div>
+
+      {archiveLightbox.activeItem && (
+        <ArchiveLightbox
+          item={archiveLightbox.activeItem}
+          onClose={archiveLightbox.closeItem}
+          onNext={archiveLightbox.goToNext}
+          onPrevious={archiveLightbox.goToPrevious}
+        />
+      )}
+    </>
+  );
+}
+
 type CampaignMediaSectionProps = {
   id: string;
   eyebrow: string;
@@ -2432,14 +2618,6 @@ function CampaignMediaSection({
     activeCollections.find(
       (collection) => collection.candidate.id === expandedCollectionId,
     ) ?? null;
-  const lightboxItems = useMemo(
-    () =>
-      expandedCollection
-        ? getExpandedCampaignMediaItems(expandedCollection.items, activeTab)
-        : items,
-    [activeTab, expandedCollection, items],
-  );
-  const archiveLightbox = useArchiveLightbox(lightboxItems);
   const headingId = `${id}-title`;
   const panelId = `${id}-panel`;
 
@@ -2482,18 +2660,6 @@ function CampaignMediaSection({
           const collectionPanelId = `${panelId}-${collection.candidate.id}`;
           const isCollectionExpanded =
             expandedCollection?.candidate.id === collection.candidate.id;
-          const expandedItems = getExpandedCampaignMediaItems(
-            collection.items,
-            activeTab,
-          );
-          const expandedGridClassName = [
-            "campaign-video-grid",
-            `is-${activeTab}`,
-            expandedItems.length === 1 ? "is-single" : "",
-            expandedItems.length === 2 ? "is-pair" : "",
-          ]
-            .filter(Boolean)
-            .join(" ");
 
           return (
             <Fragment key={collection.candidate.id}>
@@ -2517,43 +2683,22 @@ function CampaignMediaSection({
                   id={collectionPanelId}
                   ref={expandedGalleryRef}
                 >
-                  <div className="campaign-expanded-toolbar">
-                    <button
-                      className="icon-button"
-                      type="button"
-                      aria-label={`Close ${collection.candidate.name} gallery`}
-                      onClick={() => setExpandedCollectionId(null)}
-                    >
-                      <X size={18} />
-                    </button>
-                  </div>
-
-                  <div className={expandedGridClassName}>
-                    {expandedItems.map((item) => (
-                      <ArchiveMediaCard
-                        item={item}
-                        key={item.id}
-                        minimal
-                        ownerName={collection.candidate.name}
-                        fallbackPreviewImageSrc={collection.previewImageSrc}
-                        onOpen={archiveLightbox.openItem}
-                      />
-                    ))}
-                  </div>
+                  <ArchiveMediaCarousel
+                    items={getExpandedCampaignMediaItems(
+                      collection.items,
+                      activeTab,
+                    )}
+                    ownerName={collection.candidate.name}
+                    fallbackPreviewImageSrc={collection.previewImageSrc}
+                    closeLabel={`Close ${collection.candidate.name} gallery`}
+                    onClose={() => setExpandedCollectionId(null)}
+                  />
                 </div>
               )}
             </Fragment>
           );
         })}
       </div>
-      {archiveLightbox.activeItem && (
-        <ArchiveLightbox
-          item={archiveLightbox.activeItem}
-          onClose={archiveLightbox.closeItem}
-          onNext={archiveLightbox.goToNext}
-          onPrevious={archiveLightbox.goToPrevious}
-        />
-      )}
     </section>
   );
 }
