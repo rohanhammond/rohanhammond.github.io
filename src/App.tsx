@@ -290,6 +290,9 @@ const libbyMettamPhotoFiles = [
   "/media/libby-mettam/10.jpg",
   "/media/libby-mettam/11.jpg",
 ];
+const jonathanHustonMlaThumbnail = mediaUrl(
+  "/media/jonathan-huston/jonathan-huston-mla-thumbnail.jpg",
+);
 
 const jonathanHustonPhotoFiles = [
   "_DSC0448-Enhanced-NR.jpg",
@@ -1416,10 +1419,10 @@ const stateCandidateArchives: ArchiveCandidate[] = [
     eyebrow: "Elected member media",
     summary: "Local updates, issue videos, reels, and photos.",
     previews: {
-      all: mediaUrl("/media/campaign-videos/jono-bowling-club-poster.jpg"),
+      all: jonathanHustonMlaThumbnail,
       videos: mediaUrl("/media/campaign-videos/jono-bowling-club-poster.jpg"),
       reels: mediaUrl("/media/campaign-videos/jono-hospital-services-poster.jpg"),
-      photos: mediaUrl("/media/campaign-videos/jono-bowling-club-poster.jpg"),
+      photos: jonathanHustonMlaThumbnail,
     },
     media: [
       ...getLocalCampaignVideos(),
