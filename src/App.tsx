@@ -558,6 +558,9 @@ const scottEdwardesPhotoFiles = [
   "_DSC1297.jpg",
   "_DSC1298.jpg",
 ];
+const scottEdwardesThumbnail = mediaUrl(
+  "/media/scott-edwardes/scott-edwardes-thumbnail.jpg",
+);
 
 const seanAyresPhotoFiles = [
   "/media/sean-ayres/_DSC4617.jpg",
@@ -1618,7 +1621,8 @@ const stateCandidateArchives: ArchiveCandidate[] = [
     eyebrow: "2025",
     summary: "Short videos for local issues and community updates.",
     previews: {
-      all: archivePreviewUrl("scott-edwardes"),
+      all: scottEdwardesThumbnail,
+      photos: scottEdwardesThumbnail,
     },
     media: getCampaignEmbeds(stateCampaignEmbeds, [
       "scott-edwardes-road",
