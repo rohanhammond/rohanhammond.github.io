@@ -483,6 +483,9 @@ const aswathChavittuparaPhotoFiles = [
 const aswathChavittuparaPhotoPaths = aswathChavittuparaPhotoFiles.map(
   (file) => `/media/aswath-chavittupara/${file}`,
 );
+const aswathChavittuparaThumbnail = mediaUrl(
+  "/media/aswath-chavittupara/aswath-chavittupara-thumbnail.jpg",
+);
 
 const michelleHoffmanPhotoFiles = [
   "/media/michelle-hoffman/album/michelle-photo-05.jpg",
@@ -1556,7 +1559,7 @@ const stateCandidateArchives: ArchiveCandidate[] = [
     eyebrow: "2025",
     summary: "Field photography and local campaign stills.",
     previews: {
-      all: archivePreviewUrl("aswath-chavittupara"),
+      all: aswathChavittuparaThumbnail,
     },
     media: getCampaignEmbeds(stateCampaignEmbeds, [
       "aswath-comms-photo",
