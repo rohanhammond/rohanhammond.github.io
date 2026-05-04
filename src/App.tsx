@@ -1734,7 +1734,7 @@ const federalCandidateArchives: ArchiveCandidate[] = [
     eyebrow: "2025",
     summary: "Photos, local videos, and event coverage.",
     previews: {
-      all: archivePreviewUrl("mic-fels"),
+      all: mediaUrl("/media/mic-fels/mic-fels-thumbnail.jpg"),
     },
     media: getCampaignEmbeds(federalCampaignEmbeds, [
       "mic-fels-dutton-photo",
