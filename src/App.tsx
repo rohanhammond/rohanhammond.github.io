@@ -1688,7 +1688,7 @@ const federalCandidateArchives: ArchiveCandidate[] = [
     eyebrow: "2025",
     summary: "Video, drone coverage, and stills.",
     previews: {
-      all: archivePreviewUrl("vince-connelly"),
+      all: mediaUrl("/media/vince-connelly/vince-connelly-thumbnail.jpg"),
     },
     media: getCampaignEmbeds(federalCampaignEmbeds, [
       "vince-connelly-surfing",
