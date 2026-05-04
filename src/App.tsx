@@ -642,6 +642,9 @@ const mattMoranDuttonPhotoFiles = [
   "/media/matt-moran/dutton-photos/568A2149.jpg",
   "/media/matt-moran/dutton-photos/568A2160.jpg",
 ];
+const mattMoranThumbnail = mediaUrl(
+  "/media/matt-moran/matt-moran-thumbnail.jpg",
+);
 
 const micFelsPhotoFiles = [
   "/media/mic-fels/photos/mic-fels-photo-01.jpg",
@@ -1771,10 +1774,7 @@ const federalCandidateArchives: ArchiveCandidate[] = [
     eyebrow: "2025",
     summary: "Leader-visit coverage across Perth stops.",
     previews: {
-      all: archivePreviewUrl("matt-moran"),
-    },
-    previewPosition: {
-      all: "center 30%",
+      all: mattMoranThumbnail,
     },
     media: getCampaignEmbeds(federalCampaignEmbeds, [
       ...getGeneratedMediaIds(
