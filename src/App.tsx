@@ -590,6 +590,9 @@ const seanAyresPhotoFiles = [
   "/media/sean-ayres/_DSC5094.jpg",
   "/media/sean-ayres/_DSC5126.jpg",
 ];
+const seanAyresThumbnail = mediaUrl(
+  "/media/sean-ayres/sean-ayres-thumbnail.jpg",
+);
 
 const vinceConnellyPhotoFiles = [
   "/media/vince-connelly/photos/_DSC2693.jpg",
@@ -1748,7 +1751,7 @@ const federalCandidateArchives: ArchiveCandidate[] = [
     eyebrow: "2025",
     summary: "Field photography and campaign stills.",
     previews: {
-      all: archivePreviewUrl("sean-ayres"),
+      all: seanAyresThumbnail,
     },
     media: getCampaignEmbeds(federalCampaignEmbeds, [
       ...getGeneratedMediaIds("sean-ayres-photo", seanAyresPhotoFiles),
