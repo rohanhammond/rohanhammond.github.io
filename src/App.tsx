@@ -453,6 +453,9 @@ const andraBiondiPosterFiles = [
   "/media/andra-biondi/posters/andra-piece-to-camera.jpg",
   "/media/andra-biondi/posters/bruce-crime-doco-full.jpg",
 ];
+const andraBiondiThumbnail = mediaUrl(
+  "/media/andra-biondi/andra-biondi-thumbnail.jpg",
+);
 
 const aswathChavittuparaPhotoFiles = [
   "_DSC3421.jpg",
@@ -1535,7 +1538,7 @@ const stateCandidateArchives: ArchiveCandidate[] = [
     eyebrow: "2025",
     summary: "Candidate videos and local issue coverage.",
     previews: {
-      all: archivePreviewUrl("andra-biondi"),
+      all: andraBiondiThumbnail,
     },
     media: getCampaignEmbeds(stateCampaignEmbeds, [
       ...getGeneratedMediaIds("andra-biondi-video", andraBiondiVideoFiles),
