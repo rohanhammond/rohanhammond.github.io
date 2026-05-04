@@ -370,6 +370,9 @@ const nitinVashishtPhotoFiles = [
   "_DSC1754.jpg",
   "_DSC1767.jpg",
 ];
+const nitinVashishtThumbnail = mediaUrl(
+  "/media/nitin-vashisht/nitin-vashisht-thumbnail.jpg",
+);
 
 const sandraBrewerPhotoFiles = [
   "/media/sandra-brewer/_DSC0028-Enhanced-NR.jpg",
@@ -1464,7 +1467,8 @@ const stateCandidateArchives: ArchiveCandidate[] = [
     eyebrow: "2025",
     summary: "Local issue videos and community coverage.",
     previews: {
-      all: archivePreviewUrl("nitin-vashisht"),
+      all: nitinVashishtThumbnail,
+      photos: nitinVashishtThumbnail,
     },
     media: getCampaignEmbeds(stateCampaignEmbeds, [
       "nitin-vashisht-local-club",
