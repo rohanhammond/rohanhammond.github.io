@@ -274,6 +274,21 @@ const createLocalVideoItems = ({
     orientation: orientations?.[file] ?? orientation,
   }));
 
+const libbyMettamCover = "/media/libby-mettam/cover.jpg";
+const libbyMettamPhotoFiles = [
+  "/media/libby-mettam/1.jpg",
+  "/media/libby-mettam/2.jpg",
+  "/media/libby-mettam/3.jpg",
+  "/media/libby-mettam/4.jpg",
+  "/media/libby-mettam/5.jpg",
+  "/media/libby-mettam/6.jpg",
+  "/media/libby-mettam/7.jpg",
+  "/media/libby-mettam/8.jpg",
+  "/media/libby-mettam/9.jpg",
+  "/media/libby-mettam/10.jpg",
+  "/media/libby-mettam/11.jpg",
+];
+
 const jonathanHustonPhotoFiles = [
   "_DSC0448-Enhanced-NR.jpg",
   "_DSC0448-Enhanced-NR-2.jpg",
@@ -792,7 +807,19 @@ const jonathanHustonExampleReelIds = jonathanHustonExampleReelItems.map(
   (item) => item.id,
 );
 
+const libbyMettamPhotoItems: ArchiveMediaItem[] = libbyMettamPhotoFiles.map(
+  (file, index) => ({
+    id: getGeneratedMediaId("libby-mettam-photo", index),
+    title: `Libby Mettam Photo ${index + 1}`,
+    context: "Photo",
+    category: "Libby Mettam",
+    kind: "photo",
+    src: file,
+  }),
+);
+
 const stateCampaignEmbeds: ArchiveMediaItem[] = [
+  ...libbyMettamPhotoItems,
   {
     id: "jonathan-huston-door-knocking",
     title: "Jonathan Huston Door Knocking",
@@ -1364,6 +1391,22 @@ const getLocalCampaignVideos = (): ArchiveMediaItem[] =>
 
 const stateCandidateArchives: ArchiveCandidate[] = [
   {
+    id: "libby-mettam",
+    section: "state",
+    name: "Libby Mettam",
+    seat: "State campaign",
+    eyebrow: "2025",
+    summary: "Campaign photo coverage and social-ready stills.",
+    previews: {
+      all: libbyMettamCover,
+      photos: libbyMettamCover,
+    },
+    media: getCampaignEmbeds(
+      stateCampaignEmbeds,
+      getGeneratedMediaIds("libby-mettam-photo", libbyMettamPhotoFiles),
+    ),
+  },
+  {
     id: "jonathan-huston",
     section: "state",
     name: "Jonathan Huston",
@@ -1769,6 +1812,7 @@ const federalCampaignMedia: ArchiveMediaItem[] = getCampaignEmbeds(
 const stateCampaignMedia: ArchiveMediaItem[] = [
   ...getLocalCampaignVideos(),
   ...getCampaignEmbeds(stateCampaignEmbeds, [
+    ...getGeneratedMediaIds("libby-mettam-photo", libbyMettamPhotoFiles),
     "jonathan-huston-door-knocking",
     ...jonathanHustonExampleReelIds,
     ...getGeneratedMediaIds("jonathan-huston-photo", jonathanHustonPhotoFiles),
