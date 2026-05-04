@@ -1652,7 +1652,7 @@ const federalCandidateArchives: ArchiveCandidate[] = [
     eyebrow: "2025",
     summary: "Field photography and local campaign coverage.",
     previews: {
-      all: mediaUrl("/media/claire-moody/_DSC1582.jpg"),
+      all: mediaUrl("/media/claire-moody/claire-moody-thumbnail.jpg"),
     },
     media: getCampaignEmbeds(federalCampaignEmbeds, [
       ...getGeneratedMediaIds("claire-moody-photo", claireMoodyPhotoFiles),
